@@ -1,0 +1,21 @@
+#_performance {
+  .titleContainer {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: space-around;
+    font-size: .9rem;
+    align-items: center;
+    .title{
+      margin-right: 15%;
+    }
+  }
+  .container {
+    .card {
+      .pic {
+        background-size: cover;
+        background-image: url("../../picture/card.jpg");
+        opacity: 0.5;
+      }
+    }
+  }
+}
