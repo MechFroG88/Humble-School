@@ -13,7 +13,8 @@
     .card {
       .pic {
         background-size: cover;
-        background-image: url("../../picture/card.jpg");
+        background-image: url("/../../picture/card.jpg");
+        height:30vh;
         opacity: 0.5;
       }
     }

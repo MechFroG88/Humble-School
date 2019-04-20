@@ -6,7 +6,7 @@
         <button class="btn btn-primary">English</button>
         <button class="btn btn-primary">Chinese</button>
       </div>
-      <button class="btn nextBtn" @click="$router.push('/performance')">Next</button>
+      <button class="btn nextBtn" @click="$router.push('/3d')">Next</button>
 
     </div>
   </div>

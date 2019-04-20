@@ -21,5 +21,10 @@ export default new Router({
       name: 'performance',
       component: () => import('./pages/performance.vue'),
     },
+    {
+      path: '/3d',
+      name: '3d',
+      component: () => import('./pages/3d.vue'),
+    },
   ],
 });
