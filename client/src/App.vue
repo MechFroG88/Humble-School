@@ -4,6 +4,17 @@
   </div>
 </template>
 
+<<<<<<< HEAD
+=======
+<script>
+import './vendor/three.js';
+import './vendor/OrbitControls.js';
+
+export default {
+  
+}
+</script>
+>>>>>>> 7493dde771e83d05c7ff0fdf29fa2c58c71fdfa6
 
 
 <style lang="scss">
