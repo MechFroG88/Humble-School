@@ -19,9 +19,9 @@
 <script>
 import { ArrowLeftIcon } from 'vue-feather-icons'
   export default {
-   components: {
-     ArrowLeftIcon
-   }
+    components: {
+      ArrowLeftIcon
+    }
   }
 </script>
 
