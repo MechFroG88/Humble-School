@@ -7,7 +7,7 @@
     margin-left: .3rem;
     margin-right: .3rem;
     margin-bottom: .3rem;
-    height:40%;  
+    height:42%;  
     border-radius: 0 0 .5rem .5rem ;
 
     .modal-header {
@@ -43,9 +43,14 @@
     }
     .modal-body {
       padding-top: .3rem;
-      padding: left 0.8rem;
       text-align: left;
       font-weight: 300;
+    }
+    .modal-footer {
+      align-items: center;
+      height: 10%;
+      padding-left: 1.3rem;
+      display: flex;
     }
   }
 }
