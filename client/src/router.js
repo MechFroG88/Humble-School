@@ -31,5 +31,10 @@ export default new Router({
       name: 'details',
       component: () => import('./pages/details.vue'),
     },
+    {
+      path: '/model',
+      name: 'model',
+      component: () => import('./pages/model.vue'),
+    },
   ],
 });
