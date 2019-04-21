@@ -3,7 +3,7 @@
   <div id="_3d">
     <button class="btn btn-primary" @click="pop">Pop Card</button>
 
-    <modal ref="popUp" class="animated bounceInUp" closable>
+    <modal ref="popUp" class="animated bounceInUp" closable>  
       <div slot="body">
         <div class="title">
           <div class="modal-title h4">VR game</div>
@@ -15,7 +15,7 @@
       </div>
       <div slot="footer">
         <div class="like">
-          <heart-icon class="custom-class"></heart-icon>
+          <heart-icon class="custom-class likeButton" @click="like" :class="{'liked':liked }" ></heart-icon>
           <div class="number">234</div>
           <div class="recommend"> recommended this</div>
         </div>
@@ -36,9 +36,15 @@ export default {
     modal,
     HeartIcon
   },
+  data: () => ({
+    liked:false,
+  }),
   methods: {
     pop() {
       this.$refs.popUp.active = true;
+    },
+    like() {
+      this.liked =! this.liked;
     }
   }
 };

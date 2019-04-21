@@ -22,14 +22,19 @@ export default new Router({
       component: () => import('./pages/performance.vue'),
     },
     {
-      path: '/3d',
+      path: '/3d/',
       name: '3d',
       component: () => import('./pages/3d.vue'),
+    },
+    {
+      path: '/details',
+      name: 'details',
+      component: () => import('./pages/details.vue'),
     },
     {
       path: '/model',
       name: 'model',
       component: () => import('./pages/model.vue'),
-    }
+    },
   ],
 });

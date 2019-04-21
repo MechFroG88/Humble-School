@@ -8,7 +8,7 @@
       <div class="modal-header">
         <div class="pic"></div>
         <slot name="header"/>
-        <maximize-2-icon class="custom-class enlargeButton"></maximize-2-icon>
+        <maximize-2-icon class="custom-class enlargeButton" @click="details"></maximize-2-icon>
       </div>
       <div class="modal-body"> 
         <slot name="body" class="content"/>
@@ -33,6 +33,11 @@ export default {
       default: true,
     },
     title: String,
+  },
+  methods: {
+    details() {
+      this.$router.push('/details');
+    }
   },
   data: () => ({
     active: false,
