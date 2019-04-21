@@ -1,5 +1,5 @@
 <template>
-  <div id="_details">
+  <div id="_details" >
     <div class="pic"></div>
     <x-icon class="custom-class closeButton" @click="close"></x-icon>
     <div class="container">
