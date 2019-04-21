@@ -6,9 +6,7 @@
 import '../vendor/three.js';
 import '../vendor/three.min.js';
 import '../vendor/OrbitControls.js';
-import '../vendor/OBJLoader';
-
-// import model from '../model/chkl.obj';
+import '../vendor/OBJLoader.js';
 
 export default {
   data: () => ({
@@ -42,13 +40,11 @@ export default {
         console.log( item, loaded, total );
       };
 
-      console.log(model);
-
       this.loader = new THREE.OBJLoader( manager );
-      // this.loader.load( model, function ( object ) {
-      //   this.object.rotation.z = Math.PI;
-      //   this.scene.add( this.object );
-      // } );
+      this.loader.load( '../static/model/chkl.obj', function ( object ) {
+        this.object.rotation.z = Math.PI;
+        this.scene.add( this.object );
+      } );
 
       this.renderer.render( this.scene, this.camera );
     },
