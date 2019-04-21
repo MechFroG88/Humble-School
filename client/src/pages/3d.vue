@@ -3,7 +3,7 @@
   <div id="_3d">
     <button class="btn btn-primary" @click="pop">Pop Card</button>
 
-    <modal ref="popUp" class="animated bounceInUp" closable>
+    <modal ref="popUp" class="animated bounceInUp" closable>  
       <div slot="body">
         <div class="title">
            <div class="modal-title h4">VR game</div>
