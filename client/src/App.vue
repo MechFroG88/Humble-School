@@ -4,7 +4,11 @@
   </div>
 </template>
 
-
+<script>
+import './vendor/three.js';
+import './vendor/three.min.js';
+import './vendor/OrbitControls.js';
+</script>
 
 <style lang="scss">
 #app {
