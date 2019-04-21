@@ -26,5 +26,10 @@ export default new Router({
       name: '3d',
       component: () => import('./pages/3d.vue'),
     },
+    {
+      path: '/model',
+      name: 'model',
+      component: () => import('./pages/model.vue'),
+    }
   ],
 });
