@@ -7,13 +7,12 @@
         display: flex;
         align-items: center;
         margin-bottom: .2rem;
-       .chip {
+        .chip {
           margin-left: .8rem;
-          border: .05rem solid #2D4059 ;
+          border: .03rem solid #2D4059;
           border-radius: .2rem;
-          background-color: rgba(0,0,0,.05);
-        
-       }
+          background-color: rgba(0, 0, 0, .05);
+        }
       }
       .time {
         font-weight: 400;

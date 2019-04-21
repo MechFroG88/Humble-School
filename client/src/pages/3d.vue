@@ -7,7 +7,7 @@
       <div slot="body">
         <div class="title">
           <div class="modal-title h4">VR game</div>
-        <span class="chip">电脑学会</span>
+          <span class="chip">电脑学会</span>
         </div>
       
         <div class="place">中华楼停车场</div>
@@ -27,9 +27,12 @@
 </template>
 
 <script>
+import '../vendor/three.js';
+import '../vendor/three.min.js';
+import '../vendor/OrbitControls.js';
+import '../vendor/OBJLoader'
 
 import modal from '@/components/modal';
-import '../vendor/OBJLoader'
 import { HeartIcon } from 'vue-feather-icons'
 
 export default {
