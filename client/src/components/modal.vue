@@ -11,7 +11,6 @@
         <maximize-2-icon class="custom-class enlargeButton"></maximize-2-icon>
       </div>
       <div class="modal-body"> 
-        <div class="modal-title h4">{{ title }}</div>
         <slot name="body" class="content"/>
       </div>
       <div class="modal-footer">
