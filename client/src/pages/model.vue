@@ -1,5 +1,7 @@
 <template>
-  
+  <div class="controls">
+    <div class="btn btn-primary"></div>
+  </div>
 </template>
 
 <script>
@@ -7,6 +9,12 @@ import '../vendor/three.js';
 import '../vendor/three.min.js';
 import '../vendor/OrbitControls.js';
 import '../vendor/OBJLoader.js';
+
+import scene from '../static/model/scene.json';
+
+import {
+  ArrowRightIcon, ArrowLeftIcon, ArrowUpIcon, ArrowDownIcon
+} from 'vue-feather-icon';
 
 export default {
   data: () => ({
@@ -35,16 +43,7 @@ export default {
       var ambientLight = new THREE.AmbientLight( 0xcccccc, 0.4 );
       this.scene.add( ambientLight );
 
-      var manager = new THREE.LoadingManager( this.loadModel );
-      manager.onProgress = function ( item, loaded, total ) {
-        console.log( item, loaded, total );
-      };
-
-      this.loader = new THREE.OBJLoader( manager );
-      this.loader.load( '../static/model/chkl.obj', function ( object ) {
-        this.object.rotation.z = Math.PI;
-        this.scene.add( this.object );
-      } );
+      this.loadModel();
 
       this.renderer.render( this.scene, this.camera );
     },
@@ -52,10 +51,8 @@ export default {
       
     },
     loadModel() {
-      // this.object.traverse( function ( child ) {
-      //   if ( child.isMesh ) child.material.map = texture;
-      // } );
-      // this.object.position.y = - 95;
+      this.loader = new THREE.ObjectLoader();
+      this.object = this.loader.parse( scene );
       this.scene.add( this.object );
     },
   }

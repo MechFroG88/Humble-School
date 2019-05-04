@@ -28,7 +28,7 @@
 
 <script>
 import modal from '@/components/modal';
-import { HeartIcon } from 'vue-feather-icons'
+import { HeartIcon } from 'vue-feather-icons';
 
 export default {
   name: 'home',
