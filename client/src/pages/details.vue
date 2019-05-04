@@ -1,7 +1,7 @@
 <template>
   <div id="_details" >
     <div class="pic"></div>
-    <x-icon class="custom-class closeButton" @click="close"></x-icon>
+    <span class="icon-x custom-class closeButton" @click="close"></span>
     <div class="container">
       <div class="title">
         <div class="modal-title h4">VR game</div>
@@ -19,12 +19,7 @@
 </template>
 
 <script>
-import { XIcon } from 'vue-feather-icons'
-
 export default {
-  components: {
-    XIcon
-  },
   methods: {
     close() {
       this.$router.push('/3d')

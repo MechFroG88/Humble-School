@@ -1,6 +1,8 @@
 <template>
   <div class="controls">
-    <div class="btn btn-primary"></div>
+    <div class="control-panel">
+      <div class="btn btn-primary"><i class="icon-chevron-right"></i></div>
+    </div>
   </div>
 </template>
 
@@ -11,10 +13,6 @@ import '../vendor/OrbitControls.js';
 import '../vendor/OBJLoader.js';
 
 import scene from '../static/model/scene.json';
-
-import {
-  ArrowRightIcon, ArrowLeftIcon, ArrowUpIcon, ArrowDownIcon
-} from 'vue-feather-icon';
 
 export default {
   data: () => ({

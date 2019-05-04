@@ -8,7 +8,7 @@
       <div class="modal-header">
         <div class="pic"></div>
         <slot name="header"/>
-        <maximize-2-icon class="custom-class enlargeButton" @click="details"></maximize-2-icon>
+        <span class="icon-maximize-2 custom-class enlargeButton" @click="details"></span>
       </div>
       <div class="modal-body"> 
         <slot name="body" class="content"/>
@@ -21,12 +21,7 @@
 </template> 
 
 <script>
-import { Maximize2Icon } from 'vue-feather-icons'
-
 export default {
-  components: {
-    Maximize2Icon,
-  },
   props: {
     closable: {
       type: Boolean,

@@ -15,11 +15,10 @@
       </div>
       <div slot="footer">
         <div class="like">
-          <heart-icon class="custom-class likeButton" @click="like" :class="{'liked':liked }" ></heart-icon>
+          <span class="icon-heart1 custom-class likeButton" :class="{ 'liked': liked }" @click="like"></span>
           <div class="number">234</div>
-          <div class="recommend"> recommended this</div>
+          <div class="recommend">recommended this</div>
         </div>
-        
       </div>
     </modal>
   </div>
@@ -28,16 +27,14 @@
 
 <script>
 import modal from '@/components/modal';
-import { HeartIcon } from 'vue-feather-icons';
 
 export default {
   name: 'home',
   components: {
     modal,
-    HeartIcon
   },
   data: () => ({
-    liked:false,
+    liked: false,
   }),
   methods: {
     pop() {
