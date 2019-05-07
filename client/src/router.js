@@ -9,28 +9,28 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: { name: 'language' },
+      redirect: { name: 'model' },
     },
-    {
-      path: '/language',
-      name: 'language',
-      component: () => import('./pages/language.vue'),
-    },
-    {
-      path: '/performance',
-      name: 'performance',
-      component: () => import('./pages/performance.vue'),
-    },
-    {
-      path: '/3d/',
-      name: '3d',
-      component: () => import('./pages/3d.vue'),
-    },
-    {
-      path: '/details',
-      name: 'details',
-      component: () => import('./pages/details.vue'),
-    },
+    // {
+    //   path: '/language',
+    //   name: 'language',
+    //   component: () => import('./pages/language.vue'),
+    // },
+    // {
+    //   path: '/performance',
+    //   name: 'performance',
+    //   component: () => import('./pages/performance.vue'),
+    // },
+    // {
+    //   path: '/3d/',
+    //   name: '3d',
+    //   component: () => import('./pages/3d.vue'),
+    // },
+    // {
+    //   path: '/details',
+    //   name: 'details',
+    //   component: () => import('./pages/details.vue'),
+    // },
     {
       path: '/model',
       name: 'model',
