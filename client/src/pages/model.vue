@@ -13,7 +13,6 @@ import '../vendor/OrbitControls.js';
 import '../vendor/TrackballControls.js';
 import '../vendor/OBJLoader.js';
 
-// import * as dat from '../vendor/dat.gui.min.js';
 import Stats from '../vendor/stats.js';
 
 import sceneObj from '../static/model/scene.json';
@@ -25,7 +24,10 @@ export default {
   },
   data: () => ({
     isOrbit: false,
-    radius: 5000,
+    radius: 250,
+    XOffset: -1800,
+    ZOffset: 150,
+    depressionHeight: 150,
     theta: 0,
   }),
   methods: {
@@ -33,12 +35,37 @@ export default {
       this.scene = new THREE.Scene();
       this.scene.background = new THREE.Color(0xdddddd);
 
+      /// normal camera ///
       this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 5000 );
       this.camera.position.set(-1800, 1500, -1200);
       this.camera.lookAt( this.scene.position );
       this.scene.add( this.camera );
+      /// normal camera ///
 
-      this.renderer = new THREE.WebGLRenderer();
+      /// cinematic camera ///
+      this.cinematic = new THREE.CinematicCamera( 80, window.innerWidth / window.innerHeight, 0.1, 5000 );
+      this.cinematic.position.set( 0, 270, 0 );
+
+      this.effectController = {
+        focalLength: 15,
+        fstop: 2.8,
+        showFocus: false,
+        focalDepth: 2
+      };
+
+      for ( var e in this.effectController ) {
+        if ( e in this.cinematic.postprocessing.bokeh_uniforms ) {
+          this.cinematic.postprocessing.bokeh_uniforms[ e ].value = this.effectController[ e ];
+        }
+      }
+      this.cinematic.postprocessing.bokeh_uniforms[ 'znear' ].value = this.cinematic.near;
+      this.cinematic.postprocessing.bokeh_uniforms[ 'zfar' ].value = this.cinematic.far;
+      this.cinematic.setLens( this.effectController.focalLength, this.cinematic.frameHeight, this.effectController.fstop, this.cinematic.coc );
+      this.effectController[ 'focalDepth' ] = this.cinematic.postprocessing.bokeh_uniforms[ 'focalDepth' ].value;
+      /// cinematic camera ///
+
+      this.renderer = new THREE.WebGLRenderer( { antialias: true } );
+      this.renderer.setPixelRatio( window.devicePixelRatio );
       this.renderer.setSize( window.innerWidth, window.innerHeight );
       document.body.appendChild( this.renderer.domElement );
 
@@ -84,13 +111,13 @@ export default {
       event.preventDefault();
       this.raycaster.setFromCamera( this.mouse, this.camera );
       this.intersects = this.raycaster.intersectObjects( this.scene.children[2].children[0].children );
-      console.log(this.intersects);
     },
     render() {
-      if (!this.isOrbit) this.camera.updateMatrixWorld();
-      this.raycaster.setFromCamera( this.mouse, this.camera );
+      this.camera.updateMatrixWorld();
+      if (this.isOrbit) this.raycaster.setFromCamera( this.mouse, this.cinematic );
+      else this.raycaster.setFromCamera( this.mouse, this.camera );
       this.intersects = this.raycaster.intersectObjects( this.scene.children[2].children[0].children );
-      if ( this.intersects.length > 0 ) {
+      if ( this.intersects.length > 0 && !this.isOrbit) {
         if (this.isOrbit) {
           var targetDistance = this.intersects[0].distance;
 					this.cinematic.focusAt( targetDistance );
@@ -107,22 +134,15 @@ export default {
       }
         
       if (this.isOrbit) {
-        this.theta += 0.1;
-				this.cinematic.position.x = this.radius * Math.sin( this.theta * Math.PI / 180 );
-				this.cinematic.position.y = this.radius * Math.sin( this.theta * Math.PI / 180 );
-				this.cinematic.position.z = this.radius * Math.cos( this.theta * Math.PI / 180 );
-        this.cinematic.lookAt( this.scene.position );
-        console.log(this.cinematic.position);
+        this.theta += 0.3;
+				this.cinematic.position.x = this.XOffset + (this.radius * Math.cos( this.theta * Math.PI / 180 ));
+				this.cinematic.position.z = this.ZOffset + (this.radius * Math.sin( this.theta * Math.PI / 180 ));
+        let direction = this.cinematic.getWorldDirection(); 
+        direction.x = this.XOffset; direction.y = this.cinematic.position.y - this.depressionHeight; direction.z = this.ZOffset;
+        this.cinematic.lookAt( direction );
         this.cinematic.updateMatrixWorld();
-        if ( this.cinematic.postprocessing.enabled ) {
-          this.cinematic.renderCinematic( this.scene, this.renderer, this.cinematic );
-				} else {
-					this.scene.overrideMaterial = null;
-					this.renderer.clear();
-					this.renderer.render( this.scene, this.cinematic );
-				}
+        this.renderer.render( this.scene, this.cinematic );
       }
-
       if (!this.isOrbit) this.renderer.render( this.scene, this.camera );
     },
     animate() {
@@ -140,38 +160,8 @@ export default {
       if (!this.isOrbit) {
         this.isOrbit = true;
         this.selected = this.scene.getObjectByName("E_2_4", true);
-        this.cinematic = new THREE.CinematicCamera( 60, window.innerWidth / window.innerHeight, 1, 1000 );
-        this.cinematic.setLens( 2 );
-        this.cinematic.position.set( 0, 0, 0 );
-
-        this.effectController = {
-					focalLength: 15,
-					fstop: 2.8,
-					showFocus: false,
-					focalDepth: 3
-        };
-
-        var matChanger = () => {
-          for ( var e in this.effectController ) {
-            if ( e in this.cinematic.postprocessing.bokeh_uniforms ) {
-              this.cinematic.postprocessing.bokeh_uniforms[ e ].value = this.effectController[ e ];
-            }
-          }
-          this.cinematic.postprocessing.bokeh_uniforms[ 'znear' ].value = this.cinematic.near;
-          this.cinematic.postprocessing.bokeh_uniforms[ 'zfar' ].value = this.cinematic.far;
-          this.cinematic.setLens( this.effectController.focalLength, this.cinematic.frameHeight, this.effectController.fstop, this.cinematic.coc );
-          this.effectController[ 'focalDepth' ] = this.cinematic.postprocessing.bokeh_uniforms[ 'focalDepth' ].value;
-        };
-
-        // var gui = new dat.GUI();
-				// gui.add( effectController, 'focalLength', 1, 135, 0.01 ).onChange( matChanger );
-				// gui.add( effectController, 'fstop', 1.8, 22, 0.01 ).onChange( matChanger );
-				// gui.add( effectController, 'focalDepth', 0.1, 100, 0.001 ).onChange( matChanger );
-        // gui.add( effectController, 'showFocus', true ).onChange( matChanger );
-        
-				matChanger();
       } else {
-        location.reload();
+        this.isOrbit = false;
       }
       console.log(this.selected);
     },
@@ -182,8 +172,7 @@ export default {
 <style>
 .btn {
   position: absolute;
-  top: 1rem;
-  left: 50%;
-  transform: translateX(-50%);
+  top: .35rem;
+  left: 4.5rem;
 }
 </style>
