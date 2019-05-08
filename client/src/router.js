@@ -9,20 +9,20 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: { name: 'model' },
+      redirect: { name: 'language' },
     },
     {
       path: '/language',
       name: 'language',
       component: () => import('./pages/language.vue'),
     },
+    // {
+    //   path: '/performance',
+    //   name: 'performance',
+    //   component: () => import('./pages/performance.vue'),
+    // },
     {
-      path: '/performance',
-      name: 'performance',
-      component: () => import('./pages/performance.vue'),
-    },
-    {
-      path: '/3d/',
+      path: '/3d',
       name: '3d',
       component: () => import('./pages/3d.vue'),
     },
