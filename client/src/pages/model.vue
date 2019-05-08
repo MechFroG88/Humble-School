@@ -24,17 +24,17 @@ export default {
   },
   data: () => ({
     isOrbit: false,
-    radius: 250,
+    radius: 350,
     cinematicHeight: 270,
     XOffset: -1800,
     ZOffset: 150,
-    depressionHeight: 150,
+    depressionHeight: 180,
     theta: 0,
   }),
   methods: {
     init() {
       this.scene = new THREE.Scene();
-      this.scene.background = new THREE.Color(0xdddddd);
+      this.scene.background = new THREE.Color(0xeeeeee);
 
       /// normal camera ///
       this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 5000 );
@@ -83,7 +83,7 @@ export default {
       this.stats = new Stats();
       document.body.appendChild( this.stats.dom );
 
-      this.ambientLight = new THREE.AmbientLight( 0xFFFFFF, 0.15 );
+      this.ambientLight = new THREE.AmbientLight( 0xFFFFFF, 0.6 );
       this.scene.add( this.ambientLight );
 
       this.loadModel();
@@ -91,7 +91,8 @@ export default {
 
       window.addEventListener( 'resize', this.onWindowResize, false );
       window.addEventListener( 'mousemove', this.onMouseMove, false );
-      window.addEventListener( 'click', this.onMouseClick, false);
+      window.addEventListener( 'click', this.onMouseClick, false );
+      window.addEventListener( 'keydown', this.keyIsPressed, false );
     },
     onWindowResize() {
       if (this.isOrbit) {
@@ -110,19 +111,30 @@ export default {
     },
     onMouseClick(event) {
       event.preventDefault();
-      if (this.intersects.length > 0 && this.intersects[0].object.name.includes('E') && !this.isOrbit) {
+      console.log(this.intersects[0]);
+      if (this.intersects.length > 0 && !this.isOrbit 
+      && (this.intersects[0].object.name.includes('A_')
+      || this.intersects[0].object.name.includes('B_')
+      || this.intersects[0].object.name.includes('C_')
+      || this.intersects[0].object.name.includes('D_')
+      || this.intersects[0].object.name.includes('E_')
+      || this.intersects[0].object.name.includes('F_'))) {
         this.isOrbit = true;
         this.XOffset = this.intersects[0].point.x; this.ZOffset = this.intersects[0].point.z;
         this.cinematic.position.set( 0, this.intersects[0].point.y + this.depressionHeight, 0 );
-        this.render();
-        console.log(this.XOffset, this.cinematicHeight, this.ZOffset);
-        console.log(this.intersects[0]);
+      }
+    },
+    keyIsPressed(event) {
+      if (event.keyCode == 27) {
+        this.isOrbit = false;
+      }
+      if (event.keyCode == 32) {
+        this.camera.position.set(-1400, 1500, 1800);
       }
     },
     render() {
       this.camera.updateMatrixWorld();
-      if (this.isOrbit) this.raycaster.setFromCamera( this.mouse, this.cinematic );
-      else this.raycaster.setFromCamera( this.mouse, this.camera );
+      this.raycaster.setFromCamera( this.mouse, this.camera );
       this.intersects = this.raycaster.intersectObjects( this.scene.children[2].children[0].children );
       if ( this.intersects.length > 0 && !this.isOrbit) {
         if ( this.INTERSECTED != this.intersects[0].object ) {
@@ -157,12 +169,20 @@ export default {
     loadModel() {
       this.loader = new THREE.ObjectLoader();
       this.object = this.loader.parse( sceneObj );
+      // this.scene.children.forEach(child => {
+      //   if (child.children.length > 0) {
+      //     child.children[0].children.forEach(c => {
+      //       // c.material.transparent = true;
+      //       // c.material.opacity = 0.3;
+      //       console.table(c.material);
+      //     })
+      //   }
+      // })
+      console.log(this.object);
       this.scene.add( this.object );
     },
     orbit() {
       this.isOrbit = !this.isOrbit;
-      // this.selected = this.scene.getObjectByName("E_2_4", true);
-      // console.log(this.selected);
     },
   }
 }
