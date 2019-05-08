@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <div class="btn btn-lg btn-primary" @click="orbit">Try me out!</div>
-  </div>
+
 </template>
 
 <script>
@@ -24,6 +22,7 @@ export default {
   },
   data: () => ({
     isOrbit: false,
+    selected: false,
     radius: 350,
     cinematicHeight: 270,
     XOffset: -1800,
@@ -112,24 +111,43 @@ export default {
     onMouseClick(event) {
       event.preventDefault();
       console.log(this.intersects[0]);
-      if (this.intersects.length > 0 && !this.isOrbit 
-      && (this.intersects[0].object.name.includes('A_')
-      || this.intersects[0].object.name.includes('B_')
-      || this.intersects[0].object.name.includes('C_')
-      || this.intersects[0].object.name.includes('D_')
-      || this.intersects[0].object.name.includes('E_')
-      || this.intersects[0].object.name.includes('F_'))) {
-        this.isOrbit = true;
-        this.XOffset = this.intersects[0].point.x; this.ZOffset = this.intersects[0].point.z;
-        this.cinematic.position.set( 0, this.intersects[0].point.y + this.depressionHeight, 0 );
+      if (this.intersects.length > 0) {
+        while (this.intersects[0].object.name.includes('Outside')
+        || (!this.intersects[0].object.name.includes('A_')
+        && !this.intersects[0].object.name.includes('B_')
+        && !this.intersects[0].object.name.includes('C_')
+        && !this.intersects[0].object.name.includes('D_')
+        && !this.intersects[0].object.name.includes('E_')
+        && !this.intersects[0].object.name.includes('F_'))) {
+          this.intersects.shift();
+          if (this.intersects.length == 0) break;
+        }
+      }
+      if (!this.isOrbit) {
+        this.clicked = this.intersects[0];
+        if (this.clicked
+        && !this.clicked.object.name.includes('Outside')
+        && (this.clicked.object.name.includes('A_')
+        || this.clicked.object.name.includes('B_')
+        || this.clicked.object.name.includes('C_')
+        || this.clicked.object.name.includes('D_')
+        || this.clicked.object.name.includes('E_')
+        || this.clicked.object.name.includes('F_'))) {
+          this.isOrbit = true; this.theta = 0;
+          this.XOffset = this.clicked.point.x; this.ZOffset = this.clicked.point.z;
+          this.cinematic.position.set( 0, this.clicked.point.y + this.depressionHeight, 0 )
+          this.clicked.object.material.emissive = new THREE.Color( 0xff0000 );
+          this.clicked.object.material.color.setHex( 0xff0000 );
+        }
       }
     },
     keyIsPressed(event) {
       if (event.keyCode == 27) {
         this.isOrbit = false;
+        this.clicked.object.material.color.setHex( 0xB3B3B3 );
       }
       if (event.keyCode == 32) {
-        this.camera.position.set(-1400, 1500, 1800);
+        this.camera.position.set(-1700, 1400, 1400);
       }
     },
     render() {
@@ -139,9 +157,35 @@ export default {
       if ( this.intersects.length > 0 && !this.isOrbit) {
         if ( this.INTERSECTED != this.intersects[0].object ) {
           if ( this.INTERSECTED ) this.INTERSECTED.material.emissive.setHex( this.INTERSECTED.currentHex );
-          this.INTERSECTED = this.intersects[0].object;
-          this.INTERSECTED.currentHex = this.INTERSECTED.material.emissive.getHex();
-          this.INTERSECTED.material.emissive.setHex( 0xff0000 );
+          if (!this.intersects[0].object.name.includes('Outside')
+          && (this.intersects[0].object.name.includes('A_')
+          || this.intersects[0].object.name.includes('B_')
+          || this.intersects[0].object.name.includes('C_')
+          || this.intersects[0].object.name.includes('D_')
+          || this.intersects[0].object.name.includes('E_')
+          || this.intersects[0].object.name.includes('F_'))) {
+            this.selected = true;
+            this.INTERSECTED = this.intersects[0].object;
+            this.INTERSECTED.currentHex = this.INTERSECTED.material.emissive.getHex();
+            this.INTERSECTED.material.emissive.setHex( 0xff0000 );
+          }
+          if (!this.selected) {
+            while ((this.intersects[0].object.name.includes('Outside')
+            || (!this.intersects[0].object.name.includes('A_')
+            && !this.intersects[0].object.name.includes('B_')
+            && !this.intersects[0].object.name.includes('C_')
+            && !this.intersects[0].object.name.includes('D_')
+            && !this.intersects[0].object.name.includes('E_')
+            && !this.intersects[0].object.name.includes('F_')))) {
+              this.intersects.shift();
+              if (this.intersects.length == 0) break;
+            }
+            if (this.intersects.length > 0) {
+              this.INTERSECTED = this.intersects[0].object;
+              this.INTERSECTED.currentHex = this.INTERSECTED.material.emissive.getHex();
+              this.INTERSECTED.material.emissive.setHex( 0xff0000 );
+            }
+          }
         }
       } else {
         if ( this.INTERSECTED ) this.INTERSECTED.material.emissive.setHex( this.INTERSECTED.currentHex );
@@ -169,20 +213,22 @@ export default {
     loadModel() {
       this.loader = new THREE.ObjectLoader();
       this.object = this.loader.parse( sceneObj );
-      // this.scene.children.forEach(child => {
-      //   if (child.children.length > 0) {
-      //     child.children[0].children.forEach(c => {
-      //       // c.material.transparent = true;
-      //       // c.material.opacity = 0.3;
-      //       console.table(c.material);
-      //     })
-      //   }
-      // })
-      console.log(this.object);
+      this.object.children[0].children.forEach(child => {
+        if (child.material) {
+          if (toString(child.material.transparent)) child.material.transparent = true;
+          child.material.opacity = 0.3;
+        }
+        if ((child.name.includes('A_')
+        || child.name.includes('B_') 
+        || child.name.includes('C_')
+        || child.name.includes('D_')
+        || child.name.includes('E_')
+        || child.name.includes('F_')) && !child.name.includes('Outside')) {
+          child.material.opacity = 0.5;
+          child.material.color.r = .7; child.material.color.g = .7; child.material.color.b = .7;
+        }
+      })
       this.scene.add( this.object );
-    },
-    orbit() {
-      this.isOrbit = !this.isOrbit;
     },
   }
 }
