@@ -25,6 +25,7 @@ export default {
   data: () => ({
     isOrbit: false,
     radius: 250,
+    cinematicHeight: 270,
     XOffset: -1800,
     ZOffset: 150,
     depressionHeight: 150,
@@ -37,14 +38,14 @@ export default {
 
       /// normal camera ///
       this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 5000 );
-      this.camera.position.set(-1800, 1500, -1200);
+      this.camera.position.set(-1400, 1500, 1800);
       this.camera.lookAt( this.scene.position );
       this.scene.add( this.camera );
       /// normal camera ///
 
       /// cinematic camera ///
       this.cinematic = new THREE.CinematicCamera( 80, window.innerWidth / window.innerHeight, 0.1, 5000 );
-      this.cinematic.position.set( 0, 270, 0 );
+      this.cinematic.position.set( 0, this.cinematicHeight, 0 );
 
       this.effectController = {
         focalLength: 15,
@@ -109,8 +110,14 @@ export default {
     },
     onMouseClick(event) {
       event.preventDefault();
-      this.raycaster.setFromCamera( this.mouse, this.camera );
-      this.intersects = this.raycaster.intersectObjects( this.scene.children[2].children[0].children );
+      if (this.intersects.length > 0 && this.intersects[0].object.name.includes('E') && !this.isOrbit) {
+        this.isOrbit = true;
+        this.XOffset = this.intersects[0].point.x; this.ZOffset = this.intersects[0].point.z;
+        this.cinematic.position.set( 0, this.intersects[0].point.y + this.depressionHeight, 0 );
+        this.render();
+        console.log(this.XOffset, this.cinematicHeight, this.ZOffset);
+        console.log(this.intersects[0]);
+      }
     },
     render() {
       this.camera.updateMatrixWorld();
@@ -118,10 +125,6 @@ export default {
       else this.raycaster.setFromCamera( this.mouse, this.camera );
       this.intersects = this.raycaster.intersectObjects( this.scene.children[2].children[0].children );
       if ( this.intersects.length > 0 && !this.isOrbit) {
-        if (this.isOrbit) {
-          var targetDistance = this.intersects[0].distance;
-					this.cinematic.focusAt( targetDistance );
-        }
         if ( this.INTERSECTED != this.intersects[0].object ) {
           if ( this.INTERSECTED ) this.INTERSECTED.material.emissive.setHex( this.INTERSECTED.currentHex );
           this.INTERSECTED = this.intersects[0].object;
@@ -157,13 +160,9 @@ export default {
       this.scene.add( this.object );
     },
     orbit() {
-      if (!this.isOrbit) {
-        this.isOrbit = true;
-        this.selected = this.scene.getObjectByName("E_2_4", true);
-      } else {
-        this.isOrbit = false;
-      }
-      console.log(this.selected);
+      this.isOrbit = !this.isOrbit;
+      // this.selected = this.scene.getObjectByName("E_2_4", true);
+      // console.log(this.selected);
     },
   }
 }
