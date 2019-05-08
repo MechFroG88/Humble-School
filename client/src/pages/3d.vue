@@ -1,7 +1,7 @@
 <template>
   
   <div id="_3d">
-    <button class="btn btn-primary" @click="pop">Pop Card</button>
+    <button class="btn btn-primary" style="margin:1rem" @click="pop">Pop Card</button>
 
     <modal ref="popUp" class="animated bounceInUp" closable>  
       <div slot="body">
