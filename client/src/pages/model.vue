@@ -1,5 +1,5 @@
 <template>
-
+  <div id="log" class="log"></div>
 </template>
 
 <script>
@@ -13,7 +13,7 @@ import '../vendor/OBJLoader.js';
 
 import Stats from '../vendor/stats.js';
 
-import sceneObj from '../static/model/scene.json';
+import sceneObj from '../static/model/scene_again.json';
 
 export default {
   mounted() {
@@ -21,9 +21,12 @@ export default {
     this.animate();
   },
   data: () => ({
+    accu: 0,
     isOrbit: false,
+    high: false,
     selected: false,
     radius: 350,
+    rotateSpeed: 0.3,
     cinematicHeight: 270,
     XOffset: -1800,
     ZOffset: 150,
@@ -74,7 +77,7 @@ export default {
       this.controls.enableDamping = true;
       this.controls.dampingFactor = 1.55;
       this.controls.screenSpacePanning = false;
-      this.controls.maxPolarAngle = 5 * Math.PI / 11;
+      this.controls.maxPolarAngle = 6 * Math.PI / 13;
 
       this.mouse = new THREE.Vector2(), this.INTERSECTED;
       this.raycaster = new THREE.Raycaster();
@@ -82,8 +85,24 @@ export default {
       this.stats = new Stats();
       document.body.appendChild( this.stats.dom );
 
-      this.ambientLight = new THREE.AmbientLight( 0xFFFFFF, 0.6 );
+      this.ambientLight = new THREE.AmbientLight( 0xFFFFFF, 0.5 );
       this.scene.add( this.ambientLight );
+
+      this.pointLight1 = new THREE.PointLight( 0xFFFFFF, .2 );
+      this.pointLight1.position.set(3000, 5000, 3000);
+      this.scene.add( this.pointLight1 );
+
+      this.pointLight2 = new THREE.PointLight( 0xFFFFFF, .2 );
+      this.pointLight2.position.set(-3000, 5000, 3000);
+      this.scene.add( this.pointLight2 );
+
+      this.pointLight3 = new THREE.PointLight( 0xFFFFFF, .2 );
+      this.pointLight3.position.set(3000, 5000, -3000);
+      this.scene.add( this.pointLight3 );
+
+      this.pointLight4 = new THREE.PointLight( 0xFFFFFF, .2 );
+      this.pointLight4.position.set(-3000, 5000, -3000);
+      this.scene.add( this.pointLight4 );
 
       this.loadModel();
       this.render();
@@ -92,6 +111,12 @@ export default {
       window.addEventListener( 'mousemove', this.onMouseMove, false );
       window.addEventListener( 'click', this.onMouseClick, false );
       window.addEventListener( 'keydown', this.keyIsPressed, false );
+      
+      // mobile events
+      window.addEventListener("touchstart", this.touchStart, false);
+      window.addEventListener("touchend", this.touchEnd, false);
+      window.addEventListener("touchcancel", this.touchCancel, false);
+      window.addEventListener("touchmove", this.touchMove, false);
     },
     onWindowResize() {
       if (this.isOrbit) {
@@ -110,41 +135,32 @@ export default {
     },
     onMouseClick(event) {
       event.preventDefault();
-      console.log(this.intersects[0]);
-      if (this.intersects.length > 0) {
-        while (this.intersects[0].object.name.includes('Outside')
-        || (!this.intersects[0].object.name.includes('A_')
-        && !this.intersects[0].object.name.includes('B_')
-        && !this.intersects[0].object.name.includes('C_')
-        && !this.intersects[0].object.name.includes('D_')
-        && !this.intersects[0].object.name.includes('E_')
-        && !this.intersects[0].object.name.includes('F_'))) {
-          this.intersects.shift();
-          if (this.intersects.length == 0) break;
-        }
-      }
-      if (!this.isOrbit) {
+      console.log(this.intersects[0], this.accu);
+      if (!this.isOrbit && this.accu <=3) {
         this.clicked = this.intersects[0];
-        if (this.clicked
-        && !this.clicked.object.name.includes('Outside')
-        && (this.clicked.object.name.includes('A_')
-        || this.clicked.object.name.includes('B_')
-        || this.clicked.object.name.includes('C_')
-        || this.clicked.object.name.includes('D_')
-        || this.clicked.object.name.includes('E_')
-        || this.clicked.object.name.includes('F_'))) {
+        if (this.clicked && this.clicked.object.name.includes('Location')) {
           this.isOrbit = true; this.theta = 0;
           this.XOffset = this.clicked.point.x; this.ZOffset = this.clicked.point.z;
           this.cinematic.position.set( 0, this.clicked.point.y + this.depressionHeight, 0 )
           this.clicked.object.material.emissive = new THREE.Color( 0xff0000 );
           this.clicked.object.material.color.setHex( 0xff0000 );
+          if (this.clicked.object.name == 'Location_67') this.high = true;
+          else this.high = false;
         }
       }
+    },
+    log(msg) {
+      var p = document.getElementById('log');
+      p.innerHTML = msg + "\n" + p.innerHTML;
+    },
+    touchStart(event) {
+      event.preventDefault();
+      this.log(event);
     },
     keyIsPressed(event) {
       if (event.keyCode == 27) {
         this.isOrbit = false;
-        this.clicked.object.material.color.setHex( 0xB3B3B3 );
+        this.clicked.object.material.color.setHex( 0xDBDBDB );
       }
       if (event.keyCode == 32) {
         this.camera.position.set(-1700, 1400, 1400);
@@ -153,34 +169,23 @@ export default {
     render() {
       this.camera.updateMatrixWorld();
       this.raycaster.setFromCamera( this.mouse, this.camera );
-      this.intersects = this.raycaster.intersectObjects( this.scene.children[2].children[0].children );
+      this.intersects = this.raycaster.intersectObjects( this.scene.children[6].children[0].children );
       if ( this.intersects.length > 0 && !this.isOrbit) {
         if ( this.INTERSECTED != this.intersects[0].object ) {
           if ( this.INTERSECTED ) this.INTERSECTED.material.emissive.setHex( this.INTERSECTED.currentHex );
-          if (!this.intersects[0].object.name.includes('Outside')
-          && (this.intersects[0].object.name.includes('A_')
-          || this.intersects[0].object.name.includes('B_')
-          || this.intersects[0].object.name.includes('C_')
-          || this.intersects[0].object.name.includes('D_')
-          || this.intersects[0].object.name.includes('E_')
-          || this.intersects[0].object.name.includes('F_'))) {
+          if (this.intersects[0].object.name.includes('Location')) {
             this.selected = true;
             this.INTERSECTED = this.intersects[0].object;
             this.INTERSECTED.currentHex = this.INTERSECTED.material.emissive.getHex();
             this.INTERSECTED.material.emissive.setHex( 0xff0000 );
           }
           if (!this.selected) {
-            while ((this.intersects[0].object.name.includes('Outside')
-            || (!this.intersects[0].object.name.includes('A_')
-            && !this.intersects[0].object.name.includes('B_')
-            && !this.intersects[0].object.name.includes('C_')
-            && !this.intersects[0].object.name.includes('D_')
-            && !this.intersects[0].object.name.includes('E_')
-            && !this.intersects[0].object.name.includes('F_')))) {
-              this.intersects.shift();
-              if (this.intersects.length == 0) break;
+            this.accu = 0;
+            while (!this.intersects[0].object.name.includes('Location')) {
+              this.intersects.shift(); this.accu++;
+              if (this.intersects.length == 0 || this.accu > 3) break;
             }
-            if (this.intersects.length > 0) {
+            if (this.intersects.length > 0 && this.accu <= 3) {
               this.INTERSECTED = this.intersects[0].object;
               this.INTERSECTED.currentHex = this.INTERSECTED.material.emissive.getHex();
               this.INTERSECTED.material.emissive.setHex( 0xff0000 );
@@ -193,7 +198,7 @@ export default {
       }
         
       if (this.isOrbit) {
-        this.theta += 0.3;
+        this.theta += this.rotateSpeed;
 				this.cinematic.position.x = this.XOffset + (this.radius * Math.cos( this.theta * Math.PI / 180 ));
 				this.cinematic.position.z = this.ZOffset + (this.radius * Math.sin( this.theta * Math.PI / 180 ));
         let direction = this.cinematic.getWorldDirection(); 
@@ -216,16 +221,12 @@ export default {
       this.object.children[0].children.forEach(child => {
         if (child.material) {
           if (toString(child.material.transparent)) child.material.transparent = true;
-          child.material.opacity = 0.3;
+          child.material.opacity = .5;
+          child.material.color.r = 1.3; child.material.color.g = 1.3; child.material.color.b = 1.3;
         }
-        if ((child.name.includes('A_')
-        || child.name.includes('B_') 
-        || child.name.includes('C_')
-        || child.name.includes('D_')
-        || child.name.includes('E_')
-        || child.name.includes('F_')) && !child.name.includes('Outside')) {
-          child.material.opacity = 0.5;
-          child.material.color.r = .7; child.material.color.g = .7; child.material.color.b = .7;
+        if (child.name.includes('Location')) {
+          child.material.opacity = .4;
+          child.material.color.r = 1; child.material.color.g = 1; child.material.color.b = 1;
         }
       })
       this.scene.add( this.object );
@@ -235,7 +236,7 @@ export default {
 </script>
 
 <style>
-.btn {
+.log {
   position: absolute;
   top: .35rem;
   left: 4.5rem;
