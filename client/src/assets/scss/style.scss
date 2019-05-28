@@ -1,12 +1,20 @@
 @import 'variables';
 
 // pages
-@import 'pages/language';
+@import 'pages/home';
+@import 'pages/login';
 @import 'pages/performance';
 @import 'pages/3d';
 @import 'pages/details';
+@import 'pages/admin/group';
+@import 'pages/admin/users';
+
+//layout
+@import 'layouts/sidebar';
 
 // components
 @import 'components/modal';
+@import 'components/tables.scss';
+@import 'components/popup.scss';
 
 @import url('https://fonts.googleapis.com/css?family=Noto+Sans');

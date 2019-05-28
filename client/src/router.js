@@ -9,12 +9,38 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: { name: 'language' },
+      redirect: { name: 'home' },
     },
     {
-      path: '/language',
-      name: 'language',
-      component: () => import('./pages/language.vue'),
+      path: '/home',
+      name: 'home',
+      component: () => import('./pages/home.vue'),
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import('./pages/login.vue'),
+    },
+    {
+      path: '/admin/',
+      name: 'admin',
+      component: () => import('./pages/homepage.vue'),
+      children: [
+        {
+          path: '',
+          redirect: { name: 'group' },
+        },
+        {
+          path: 'group',
+          name: 'group',
+          component: () => import('./pages/admin/group.vue'),
+        },
+        {
+          path: 'users',
+          name: 'users',
+          component: () => import('./pages/admin/users.vue'),
+        },
+      ],
     },
     // {
     //   path: '/performance',
