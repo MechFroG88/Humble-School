@@ -30,18 +30,10 @@ paths:
             username:
               type: "string"
               example: "admin"
-            cn_name:
-              type: "string"
-              example: "陈科锦"
             password:
               type: "string"
               format: "password"
               example: "edrtfyuihgfdtser"
-            type:
-              type: "integer"
-              description: "User type\n
-              0 : administrator\n
-              1 : user"
 
       responses:
         200:
@@ -66,14 +58,9 @@ paths:
                 id:
                   type: "integer"
                   example: "1"
-                cn_name:
+                username:
                   type: "string"
-                  example: "陈科锦"
-                type:
-                  type: "integer"
-                  description: "User type\n
-                  0 : administrator\n
-                  1 : user"
+                  example: "admin"
         401:
           description: "Unauthorized"
         400:
