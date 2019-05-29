@@ -85,7 +85,10 @@ export default {
     },
     addUser() {
       this.loading = true;
-      createUser(this.user).then((msg) => {
+      createUser({
+        username:this.user.username,
+        password:this.user.password,
+        }).then((msg) => {
         this.$refs.add.active = false;
         this.loading = false;
         this.notification('成功添加用户', 'success');
