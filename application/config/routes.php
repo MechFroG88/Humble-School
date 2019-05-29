@@ -13,4 +13,4 @@ $route['user']['POST']                       = 'User/create';
 $route['user/login']['POST']                 = 'User/login';
 $route['user']['GET']                        = 'User/get';
 $route['user/logout']['POST']                = 'User/logout';
-$route['user/(:num)']['DELETE']              = 'User/delete/$1';
+$route['user/delete/(:num)']['POST']                = 'User/delete/$1';

@@ -50,8 +50,11 @@ class User_model extends HS_Model{
      */
     public function create($data)
     {
-        $this->insert($data);
-        return 404;
+        if($this->form_validation->validate($this->register_rules, $data)){
+            $this->insert($data);
+            return 200;
+        }
+        return 400;
     }
 
     /**
