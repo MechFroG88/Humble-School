@@ -1,5 +1,5 @@
 export const users_column = [
-  { name: '名字', field: 'cn_name' },
+  { name: '名字', field: 'username' },
   { name: '操作', field: 'action' },
 ];
 export const group_column = [

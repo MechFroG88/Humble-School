@@ -17,18 +17,12 @@
         </div>
       </div>
       <div class="footer">
-        <div class="user c-hand" :class="{'loading loading-lg': loading}">
+        <div class="user c-hand">
           <div class="popover popover-top">
             <i class="icon icon-user mr-2"></i>
-            <span class="popover-container">
-              {{username}}
-            </span>
           </div>
-          <span class="username">{{username}}</span>
         </div>
         <div>
-          <i class="icon icon-settings mr-2 c-hand"
-          @click="$router.push('/settings')"></i>
           <i class="icon icon-log-out ml-2 c-hand"
           @click="logout()"></i>
         </div>
@@ -41,7 +35,7 @@
 </template>
 
 <script>
-// import { userLogout, getCurrentUser } from '@/api/user';
+import { userLogout} from '@/api/user';
 
 export default {
   props: {
@@ -49,19 +43,7 @@ export default {
   },
   data: () => ({
     active: '',
-    targets: [],
-    username: '',
-    loading: true,
   }),
-  mounted() {
-    this.active = this.data[0].list[0].target.name;
-    getCurrentUser().then(({ data }) => {
-      this.loading = false;
-      this.username = data.cn_name;
-    }).catch((err) => {
-      console.log(err);
-    });
-  },
   methods: {
     logout() {
       userLogout().then(() => {
@@ -80,18 +62,6 @@ export default {
         console.log(err);
       });
     },
-  },
-  watch: {
-    $route(to, from) {
-      this.active = to.name;
-      if (from.name == 'login' && to.name != 'login') {
-        getCurrentUser().then(({ data }) => {
-          this.username = data.cn_name;
-        }).catch((err) => {
-          console.log(err);
-        })
-      }
-    }
   },
 };
 </script>

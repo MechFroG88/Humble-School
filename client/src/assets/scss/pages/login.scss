@@ -26,7 +26,7 @@
           border: none;
           margin-left: .1rem;
           &:focus {
-            outline: none;
+            box-shadow: none;
           }
         }
         label {

@@ -3,7 +3,7 @@
     <sidebar :data="sidebar">
       <router-view/>
     </sidebar>
-    
+    <flash-message></flash-message>
   </div>
 </template>
 

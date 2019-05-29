@@ -70,7 +70,8 @@ export default {
   methods: {
     getAll() {
       getAllUsers().then(({ data }) => {
-        this.data = data;
+        this.data = data.data;
+        console.log(data);
         this.$refs.table.is_loading = false;
       }).catch((err) => {
         this.notification('数据读取失败！请重试！', 'error');
@@ -85,10 +86,7 @@ export default {
     },
     addUser() {
       this.loading = true;
-      createUser({
-        username:this.user.username,
-        password:this.user.password,
-        }).then((msg) => {
+      createUser(this.user).then((msg) => {
         this.$refs.add.active = false;
         this.loading = false;
         this.notification('成功添加用户', 'success');

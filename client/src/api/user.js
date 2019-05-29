@@ -30,3 +30,10 @@ export function userLogout(data) {
     data
   });
 }
+
+export function deleteUser(userId) {
+  return request({
+    url: `/user/${userId}`,
+    method: 'DELETE',
+  })
+}
