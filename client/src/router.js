@@ -40,6 +40,11 @@ export default new Router({
           name: 'users',
           component: () => import('./pages/admin/users.vue'),
         },
+        {
+          path: 'groupDetails',
+          name: 'groupDetails',
+          component: () => import('./pages/admin/groupDetails.vue'),
+        },
       ],
     },
     // {

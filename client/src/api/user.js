@@ -31,9 +31,16 @@ export function userLogout(data) {
   });
 }
 
+// export function deleteUser() {
+//   return request({
+//     url: '/user',
+//     method: 'DELETE',
+//   })
+// }
+
 export function deleteUser(userId) {
   return request({
-    url: `/user/${userId}`,
-    method: 'DELETE',
+    url: `/user/delete/${userId}`,
+    method: 'POST',
   })
 }

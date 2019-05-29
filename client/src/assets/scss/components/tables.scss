@@ -16,29 +16,29 @@
             font-size: 1rem;
           }
         }
-        .input-group {
-          float: right;
-          input {
-            border-color: rgba(#2D4059, .25);
-            border-radius: .15rem;
-            @media screen and (max-width: $size-xl) {
-              padding-right: 0;
-              &::placeholder {
-                font-size: .5rem;
-              }
-            }
-            &::placeholder {
-              color: grey;
-              font-size: $font-size-sm;
-              @media screen and (max-width: $size-xl) {
-                font-size: .6rem;
-              }
-            }
-          }
-          .form-icon {
-            color: $primary-color;
-          }
-        }
+        // .input-group {
+        //   float: right;
+        //   input {
+        //     border-color: rgba(#2D4059, .25);
+        //     border-radius: .15rem;
+        //     @media screen and (max-width: $size-xl) {
+        //       padding-right: 0;
+        //       &::placeholder {
+        //         font-size: .5rem;
+        //       }
+        //     }
+        //     &::placeholder {
+        //       color: grey;
+        //       font-size: $font-size-sm;
+        //       @media screen and (max-width: $size-xl) {
+        //         font-size: .6rem;
+        //       }
+        //     }
+        //   }
+        //   .form-icon {
+        //     color: $primary-color;
+        //   }
+        // }
       }
     }
 
@@ -58,7 +58,9 @@
           font-size: .75rem;
         }
         &:first-child {
-          padding-left: 1.2rem;
+          padding-left: 2rem;
+          padding-right: 5rem;
+
         }
       }
     }
@@ -67,7 +69,7 @@
       height: 2.5rem;
       td {
         &:first-child {
-          padding: 0 1.2rem;
+          padding: 0 2rem;
         }
         @media screen and (max-width: 1024px) {
           font-size: $font-size-sm;
