@@ -1,0 +1,39 @@
+#_groupDetails {
+  .column{
+    padding: 1.5rem;
+    text-align: left;
+    transform: translateX(16%);
+    height: 100vh;
+    background-color:white; 
+    border-radius: .3rem;
+    label {
+      font-size:.65rem;
+      color: #ababab;
+      display: block;
+    }
+    .title {
+      color: $primary-color;
+      font-size: 1.3rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+    .groupName ,.classGroup,.theme,.details,.pic {
+      margin-bottom: 1rem;
+    }
+    .pic {
+      .btn{
+        margin-top: .5rem;
+        padding-left: 1.7rem;
+        padding-right: 1.7rem;
+        border-radius: .15rem;
+        font-size: $font-size-sm;
+        font-weight: 200;
+        box-shadow: 0 1px 8px rgba($primary-color, 0.7);
+        &:active {
+          box-shadow: 0 .3px .5px rgba($primary-color, 0.7) !important;
+        }
+        
+      }
+    }
+  }
+}

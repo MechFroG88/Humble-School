@@ -3,8 +3,9 @@
     <div class="btn btn-primary addBtn"
     style="margin-bottom: 3.8rem;"
     @click="open">新增</div>
+    <div class="btn btn-primary addBtn" style="margin-bottom:1rem" @click="$router.push('/admin/groupDetails')">details</div>
 
-    <groupTable class="table" title ref="table" :columns="group" :tableData="data" width="40">
+    <groupTable class="table" title ref="table" :columns="group" :tableData="data" width="50" navbar="搜寻学会名称">
       <template slot="title">团体管理</template>
       <template slot="action" slot-scope="{ data }" class="btn btn-primary addBtn">
         <div class="btn btn-primary addBtn" @click="openCmodal(data.id)">删除</div>
