@@ -21,13 +21,13 @@ export default {
     this.animate();
   },
   data: () => ({
-    accu: 0,
     isOrbit: false,
     high: false,
-    selected: false,
+    far: false,
+    inside: false,
     radius: 350,
     rotateSpeed: 0.3,
-    cinematicHeight: 270,
+    cinematicHeight: 500,
     XOffset: -1800,
     ZOffset: 150,
     depressionHeight: 180,
@@ -118,16 +118,6 @@ export default {
       window.addEventListener("touchcancel", this.touchCancel, false);
       window.addEventListener("touchmove", this.touchMove, false);
     },
-    onWindowResize() {
-      if (this.isOrbit) {
-        this.cinematic.aspect = window.innerWidth / window.innerHeight;
-				this.cinematic.updateProjectionMatrix();
-      } else {
-        this.camera.aspect = window.innerWidth / window.innerHeight;
-        this.camera.updateProjectionMatrix();
-      }
-      this.renderer.setSize( window.innerWidth, window.innerHeight );
-    },
     onMouseMove(event) {
       event.preventDefault();
       this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
@@ -135,17 +125,18 @@ export default {
     },
     onMouseClick(event) {
       event.preventDefault();
-      console.log(this.intersects[0], this.accu);
-      if (!this.isOrbit && this.accu <=3) {
-        this.clicked = this.intersects[0];
+      if (!this.isOrbit) {
+        this.clicked = this.inside ? this.intersects[1] : this.intersects[0];
+        console.log(this.clicked);
         if (this.clicked && this.clicked.object.name.includes('Location')) {
           this.isOrbit = true; this.theta = 0;
           this.XOffset = this.clicked.point.x; this.ZOffset = this.clicked.point.z;
           this.cinematic.position.set( 0, this.clicked.point.y + this.depressionHeight, 0 )
           this.clicked.object.material.emissive = new THREE.Color( 0xff0000 );
           this.clicked.object.material.color.setHex( 0xff0000 );
-          if (this.clicked.object.name == 'Location_67') this.high = true;
-          else this.high = false;
+          if (this.clicked.object.name == 'Location_67') { this.high = true; this.cinematic.position.set( 0, this.cinematicHeight + 800, 0 ); }
+          else if (this.clicked.object.name == 'Location_165') { this.far = true; this.cinematic.position.set( 0, this.cinematicHeight + 1000, 0 ); }
+          else { this.high = false; this.far = false; }
         }
       }
     },
@@ -164,6 +155,7 @@ export default {
       }
       if (event.keyCode == 32) {
         this.camera.position.set(-1700, 1400, 1400);
+        this.camera.lookAt( this.scene.position );
       }
     },
     render() {
@@ -171,25 +163,19 @@ export default {
       this.raycaster.setFromCamera( this.mouse, this.camera );
       this.intersects = this.raycaster.intersectObjects( this.scene.children[6].children[0].children );
       if ( this.intersects.length > 0 && !this.isOrbit) {
-        if ( this.INTERSECTED != this.intersects[0].object ) {
+        if ( this.INTERSECTED != this.intersects[0].object && this.intersects[0].object.name != 'Land' ) {
           if ( this.INTERSECTED ) this.INTERSECTED.material.emissive.setHex( this.INTERSECTED.currentHex );
           if (this.intersects[0].object.name.includes('Location')) {
-            this.selected = true;
+            this.inside = false;
             this.INTERSECTED = this.intersects[0].object;
             this.INTERSECTED.currentHex = this.INTERSECTED.material.emissive.getHex();
             this.INTERSECTED.material.emissive.setHex( 0xff0000 );
           }
-          if (!this.selected) {
-            this.accu = 0;
-            while (!this.intersects[0].object.name.includes('Location')) {
-              this.intersects.shift(); this.accu++;
-              if (this.intersects.length == 0 || this.accu > 3) break;
-            }
-            if (this.intersects.length > 0 && this.accu <= 3) {
-              this.INTERSECTED = this.intersects[0].object;
-              this.INTERSECTED.currentHex = this.INTERSECTED.material.emissive.getHex();
-              this.INTERSECTED.material.emissive.setHex( 0xff0000 );
-            }
+          else if (this.intersects[1].object.name.includes('Location')) {
+            this.inside = true;
+            this.INTERSECTED = this.intersects[1].object;
+            this.INTERSECTED.currentHex = this.INTERSECTED.material.emissive.getHex();
+            this.INTERSECTED.material.emissive.setHex( 0xff0000 );
           }
         }
       } else {
@@ -199,10 +185,24 @@ export default {
         
       if (this.isOrbit) {
         this.theta += this.rotateSpeed;
-				this.cinematic.position.x = this.XOffset + (this.radius * Math.cos( this.theta * Math.PI / 180 ));
-				this.cinematic.position.z = this.ZOffset + (this.radius * Math.sin( this.theta * Math.PI / 180 ));
         let direction = this.cinematic.getWorldDirection(); 
-        direction.x = this.XOffset; direction.y = this.cinematic.position.y - this.depressionHeight; direction.z = this.ZOffset;
+
+        if (this.high) {
+          this.cinematic.position.x = this.XOffset + ((this.radius + 50) * Math.cos( this.theta * Math.PI / 180 ));
+          this.cinematic.position.z = this.ZOffset + ((this.radius + 50) * Math.sin( this.theta * Math.PI / 180 ));
+          direction.x = this.XOffset; direction.y = this.cinematic.position.y - this.depressionHeight - 800; direction.z = this.ZOffset;
+        }
+        else if (this.far) {
+          this.cinematic.position.x = this.XOffset + ((this.radius + 350) * Math.cos( this.theta * Math.PI / 180 ));
+          this.cinematic.position.z = this.ZOffset + ((this.radius + 350) * Math.sin( this.theta * Math.PI / 180 ));
+          direction.x = this.XOffset; direction.y = this.cinematic.position.y - this.depressionHeight - 1000; direction.z = this.ZOffset;
+        }
+        else {
+          this.cinematic.position.x = this.XOffset + (this.radius * Math.cos( this.theta * Math.PI / 180 ));
+          this.cinematic.position.z = this.ZOffset + (this.radius * Math.sin( this.theta * Math.PI / 180 ));
+          direction.x = this.XOffset; direction.y = this.cinematic.position.y - this.depressionHeight; direction.z = this.ZOffset;
+        }
+
         this.cinematic.lookAt( direction );
         this.cinematic.updateMatrixWorld();
         this.renderer.render( this.scene, this.cinematic );
@@ -221,15 +221,28 @@ export default {
       this.object.children[0].children.forEach(child => {
         if (child.material) {
           if (toString(child.material.transparent)) child.material.transparent = true;
-          child.material.opacity = .5;
-          child.material.color.r = 1.3; child.material.color.g = 1.3; child.material.color.b = 1.3;
+          child.material.opacity = 1;
+          child.material.color.r = 1.2; child.material.color.g = 1.2; child.material.color.b = 1.2;
         }
         if (child.name.includes('Location')) {
-          child.material.opacity = .4;
-          child.material.color.r = 1; child.material.color.g = 1; child.material.color.b = 1;
+          child.material.opacity = .7;
+          child.material.color.r = .9; child.material.color.g = .9; child.material.color.b = .9;
+          // render all faces in transparent container objects
+          if (child.material.depthTest) child.material.depthTest = false;
+          child.renderOrder = 100;
         }
       })
       this.scene.add( this.object );
+    },
+    onWindowResize() {
+      if (this.isOrbit) {
+        this.cinematic.aspect = window.innerWidth / window.innerHeight;
+				this.cinematic.updateProjectionMatrix();
+      } else {
+        this.camera.aspect = window.innerWidth / window.innerHeight;
+        this.camera.updateProjectionMatrix();
+      }
+      this.renderer.setSize( window.innerWidth, window.innerHeight );
     },
   }
 }
