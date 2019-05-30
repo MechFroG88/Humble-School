@@ -26,7 +26,7 @@ export default {
     far: false,
     inside: false,
     radius: 350,
-    rotateSpeed: 0.3,
+    rotateSpeed: 0.25,
     cinematicHeight: 500,
     XOffset: -1800,
     ZOffset: 150,
@@ -38,34 +38,7 @@ export default {
       this.scene = new THREE.Scene();
       this.scene.background = new THREE.Color(0xeeeeee);
 
-      /// normal camera ///
-      this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 5000 );
-      this.camera.position.set(-1400, 1500, 1800);
-      this.camera.lookAt( this.scene.position );
-      this.scene.add( this.camera );
-      /// normal camera ///
-
-      /// cinematic camera ///
-      this.cinematic = new THREE.CinematicCamera( 80, window.innerWidth / window.innerHeight, 0.1, 5000 );
-      this.cinematic.position.set( 0, this.cinematicHeight, 0 );
-
-      this.effectController = {
-        focalLength: 15,
-        fstop: 2.8,
-        showFocus: false,
-        focalDepth: 2
-      };
-
-      for ( var e in this.effectController ) {
-        if ( e in this.cinematic.postprocessing.bokeh_uniforms ) {
-          this.cinematic.postprocessing.bokeh_uniforms[ e ].value = this.effectController[ e ];
-        }
-      }
-      this.cinematic.postprocessing.bokeh_uniforms[ 'znear' ].value = this.cinematic.near;
-      this.cinematic.postprocessing.bokeh_uniforms[ 'zfar' ].value = this.cinematic.far;
-      this.cinematic.setLens( this.effectController.focalLength, this.cinematic.frameHeight, this.effectController.fstop, this.cinematic.coc );
-      this.effectController[ 'focalDepth' ] = this.cinematic.postprocessing.bokeh_uniforms[ 'focalDepth' ].value;
-      /// cinematic camera ///
+      this.addCamera();
 
       this.renderer = new THREE.WebGLRenderer( { antialias: true } );
       this.renderer.setPixelRatio( window.devicePixelRatio );
@@ -85,31 +58,14 @@ export default {
       this.stats = new Stats();
       document.body.appendChild( this.stats.dom );
 
-      this.ambientLight = new THREE.AmbientLight( 0xFFFFFF, 0.5 );
-      this.scene.add( this.ambientLight );
-
-      this.pointLight1 = new THREE.PointLight( 0xFFFFFF, .2 );
-      this.pointLight1.position.set(3000, 5000, 3000);
-      this.scene.add( this.pointLight1 );
-
-      this.pointLight2 = new THREE.PointLight( 0xFFFFFF, .2 );
-      this.pointLight2.position.set(-3000, 5000, 3000);
-      this.scene.add( this.pointLight2 );
-
-      this.pointLight3 = new THREE.PointLight( 0xFFFFFF, .2 );
-      this.pointLight3.position.set(3000, 5000, -3000);
-      this.scene.add( this.pointLight3 );
-
-      this.pointLight4 = new THREE.PointLight( 0xFFFFFF, .2 );
-      this.pointLight4.position.set(-3000, 5000, -3000);
-      this.scene.add( this.pointLight4 );
+      this.addLight();
 
       this.loadModel();
       this.render();
 
       window.addEventListener( 'resize', this.onWindowResize, false );
       window.addEventListener( 'mousemove', this.onMouseMove, false );
-      window.addEventListener( 'click', this.onMouseClick, false );
+      window.addEventListener( 'mousedown', this.onMouseClick, false );
       window.addEventListener( 'keydown', this.keyIsPressed, false );
       
       // mobile events
@@ -126,13 +82,14 @@ export default {
     onMouseClick(event) {
       event.preventDefault();
       if (!this.isOrbit) {
-        this.clicked = this.inside ? this.intersects[1] : this.intersects[0];
-        console.log(this.clicked);
-        if (this.clicked && this.clicked.object.name.includes('Location')) {
+        if (this.intersects[0].object.name.includes('Location')) { this.clicked = this.intersects[0]; }
+        else if (this.intersects[1].object.name.includes('Location')) { this.clicked = this.intersects[1]; }
+        if (this.clicked) {
           this.isOrbit = true; this.theta = 0;
           this.XOffset = this.clicked.point.x; this.ZOffset = this.clicked.point.z;
           this.cinematic.position.set( 0, this.clicked.point.y + this.depressionHeight, 0 )
           this.clicked.object.material.emissive = new THREE.Color( 0xff0000 );
+          this.clicked.object.material.opacity = .75;
           this.clicked.object.material.color.setHex( 0xff0000 );
           if (this.clicked.object.name == 'Location_67') { this.high = true; this.cinematic.position.set( 0, this.cinematicHeight + 800, 0 ); }
           else if (this.clicked.object.name == 'Location_165') { this.far = true; this.cinematic.position.set( 0, this.cinematicHeight + 1000, 0 ); }
@@ -152,6 +109,7 @@ export default {
       if (event.keyCode == 27) {
         this.isOrbit = false;
         this.clicked.object.material.color.setHex( 0xDBDBDB );
+        this.clicked.object.material.opacity = .3;
       }
       if (event.keyCode == 32) {
         this.camera.position.set(-1700, 1400, 1400);
@@ -209,6 +167,56 @@ export default {
       }
       if (!this.isOrbit) this.renderer.render( this.scene, this.camera );
     },
+    addCamera() {
+      /// normal camera ///
+      this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 5000 );
+      this.camera.position.set(-1400, 1500, 1800);
+      this.camera.lookAt( this.scene.position );
+      this.scene.add( this.camera );
+      /// normal camera ///
+
+      /// cinematic camera ///
+      this.cinematic = new THREE.CinematicCamera( 80, window.innerWidth / window.innerHeight, 0.1, 5000 );
+      this.cinematic.position.set( 0, this.cinematicHeight, 0 );
+
+      this.effectController = {
+        focalLength: 15,
+        fstop: 2.8,
+        showFocus: false,
+        focalDepth: 2
+      };
+
+      for ( var e in this.effectController ) {
+        if ( e in this.cinematic.postprocessing.bokeh_uniforms ) {
+          this.cinematic.postprocessing.bokeh_uniforms[ e ].value = this.effectController[ e ];
+        }
+      }
+      this.cinematic.postprocessing.bokeh_uniforms[ 'znear' ].value = this.cinematic.near;
+      this.cinematic.postprocessing.bokeh_uniforms[ 'zfar' ].value = this.cinematic.far;
+      this.cinematic.setLens( this.effectController.focalLength, this.cinematic.frameHeight, this.effectController.fstop, this.cinematic.coc );
+      this.effectController[ 'focalDepth' ] = this.cinematic.postprocessing.bokeh_uniforms[ 'focalDepth' ].value;
+      /// cinematic camera ///
+    },
+    addLight() {
+      this.ambientLight = new THREE.AmbientLight( 0xFFFFFF, 0.5 );
+      this.scene.add( this.ambientLight );
+
+      this.pointLight1 = new THREE.PointLight( 0xFFFFFF, .2 );
+      this.pointLight1.position.set(3000, 5000, 3000);
+      this.scene.add( this.pointLight1 );
+
+      this.pointLight2 = new THREE.PointLight( 0xFFFFFF, .2 );
+      this.pointLight2.position.set(-3000, 5000, 3000);
+      this.scene.add( this.pointLight2 );
+
+      this.pointLight3 = new THREE.PointLight( 0xFFFFFF, .2 );
+      this.pointLight3.position.set(3000, 5000, -3000);
+      this.scene.add( this.pointLight3 );
+
+      this.pointLight4 = new THREE.PointLight( 0xFFFFFF, .2 );
+      this.pointLight4.position.set(-3000, 5000, -3000);
+      this.scene.add( this.pointLight4 );
+    },
     animate() {
       requestAnimationFrame( this.animate );
       this.controls.update();
@@ -221,14 +229,15 @@ export default {
       this.object.children[0].children.forEach(child => {
         if (child.material) {
           if (toString(child.material.transparent)) child.material.transparent = true;
-          child.material.opacity = 1;
+          child.material.opacity = .5;
           child.material.color.r = 1.2; child.material.color.g = 1.2; child.material.color.b = 1.2;
         }
         if (child.name.includes('Location')) {
-          child.material.opacity = .7;
-          child.material.color.r = .9; child.material.color.g = .9; child.material.color.b = .9;
+          // if (toString(child.material.transparent)) child.material.transparent = false;
+          child.material.opacity = .3;
+          child.material.color.r = .8; child.material.color.g = .8; child.material.color.b = .8;
           // render all faces in transparent container objects
-          if (child.material.depthTest) child.material.depthTest = false;
+          child.material.depthTest = false;
           child.renderOrder = 100;
         }
       })
