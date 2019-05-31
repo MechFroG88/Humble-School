@@ -28,6 +28,21 @@ class Upstream
         return $this;
     }
 
+    public function classes()
+    {
+
+        $this->db->column("class_id")      ->bigint(20)  ->primary()->unique()->autoIncrement()
+                 ->column("theme")         ->varchar(20) 
+                 ->column("society")       ->varchar(20)
+                 ->column("cn_class")      ->varchar(20)
+                 ->column("en_class")      ->varchar(40)
+                 ->column("details")       ->text()    
+                 ->column("picture")       ->text()
+                 ->create("classes");
+
+        return $this;
+    }
+
 }
 
 $up = new Upstream();
