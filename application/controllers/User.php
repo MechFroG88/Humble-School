@@ -68,7 +68,12 @@ class User extends HS_Controller{
     public function delete($user_id)
     {
 		if ($this->auth->is_logged_in()){
-			$this->json("Deleted Succesfully.", $this->auth->delete($user_id));
+            $response = $this->auth->delete($user_id);
+            if ($response == 200){
+                $this->json("Deleted Succesfully.",$response);
+            } else {
+                $this->error($response);
+            }
 		} else {
 			$this->error(401);
 		}
