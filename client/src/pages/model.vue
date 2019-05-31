@@ -82,6 +82,8 @@ export default {
     onMouseClick(event) {
       event.preventDefault();
       if (!this.isOrbit) {
+        console.log(this.intersects[0].object);
+        console.log('object', this.scene.children[6].children[0].children);
         if (this.intersects[0].object.name.includes('Location')) { this.clicked = this.intersects[0]; }
         else if (this.intersects[1].object.name.includes('Location')) { this.clicked = this.intersects[1]; }
         if (this.clicked) {
@@ -94,6 +96,11 @@ export default {
           if (this.clicked.object.name == 'Location_67') { this.high = true; this.cinematic.position.set( 0, this.cinematicHeight + 800, 0 ); }
           else if (this.clicked.object.name == 'Location_165') { this.far = true; this.cinematic.position.set( 0, this.cinematicHeight + 1000, 0 ); }
           else { this.high = false; this.far = false; }
+
+          // set other locations to transparent
+          this.scene.children[6].children[0].children.forEach((el) => {
+            if (el.name.includes('Location') && el.name != this.clicked.object.name) { el.material.opacity = 0; }
+          })
         }
       }
     },
@@ -109,7 +116,9 @@ export default {
       if (event.keyCode == 27) {
         this.isOrbit = false;
         this.clicked.object.material.color.setHex( 0xDBDBDB );
-        this.clicked.object.material.opacity = .3;
+        this.scene.children[6].children[0].children.forEach((el) => {
+          if (el.name.includes('Location')) { el.material.opacity = .3; }
+        })
       }
       if (event.keyCode == 32) {
         this.camera.position.set(-1700, 1400, 1400);
