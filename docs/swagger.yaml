@@ -106,7 +106,9 @@ paths:
           description: "Unauthorized"
         400:
           description: "Validation Error"
-    delete:
+
+  /user/delete/{id}:
+    post:
       tags:
       - "Users"
       summary: "Delete user"
