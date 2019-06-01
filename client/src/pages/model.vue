@@ -1,5 +1,11 @@
 <template>
-  <div id="log" class="log"></div>
+  <div id="_model" class="model-container">
+    <div id="log" class="log"></div>
+    <!-- <div class="message-pointer" v-if="isOrbit"></div> -->
+    <div class="float message-container" v-if="isOrbit">
+      This is a message.
+    </div>
+  </div>
 </template>
 
 <script>
@@ -83,11 +89,10 @@ export default {
       event.preventDefault();
       if (!this.isOrbit) {
         console.log(this.intersects[0].object);
-        console.log('object', this.scene.children[6].children[0].children);
         if (this.intersects[0].object.name.includes('Location')) { this.clicked = this.intersects[0]; }
         else if (this.intersects[1].object.name.includes('Location')) { this.clicked = this.intersects[1]; }
-        if (this.clicked) {
-          this.isOrbit = true; this.theta = 0;
+        if (this.clicked && (this.intersects[0].object.name.includes('Location') || this.intersects[1].object.name.includes('Location'))) {
+          this.isOrbit = true; this.theta = 100 * Math.random();
           this.XOffset = this.clicked.point.x; this.ZOffset = this.clicked.point.z;
           this.cinematic.position.set( 0, this.clicked.point.y + this.depressionHeight, 0 )
           this.clicked.object.material.emissive = new THREE.Color( 0xff0000 );
@@ -272,4 +277,28 @@ export default {
   top: .35rem;
   left: 4.5rem;
 }
+.message-container {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  min-width: 25%;
+  min-height: 20%;
+  opacity: .8;
+  transform: translate(-50%, -50%);
+  background-color: #424242;
+  color: #898989;
+  font-size: 1rem;
+  border-color: #ddd;
+  border-radius: .1rem;
+  box-shadow: 0 0 1.2rem rgba(71, 71, 71, 0.3);
+}
+/* .message-pointer {
+  position: absolute;
+  transform: rotate(-45deg);
+  border: 1px solid #000;
+  height: 0;
+  width: 6rem;
+  top: 43%;
+  left: 50%;
+} */
 </style>
