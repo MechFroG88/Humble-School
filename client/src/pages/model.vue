@@ -1,8 +1,7 @@
 <template>
   <div id="_model" class="model-container">
     <div id="log" class="log"></div>
-    <!-- <div class="message-pointer" v-if="isOrbit"></div> -->
-    <div class="float message-container" v-if="isOrbit">
+    <div class="message-container" v-if="isOrbit">
       This is a message.
     </div>
   </div>
@@ -291,14 +290,20 @@ export default {
   border-color: #ddd;
   border-radius: .1rem;
   box-shadow: 0 0 1.2rem rgba(71, 71, 71, 0.3);
+
+  /* css animation */
+  -webkit-transform: translateY(-50px);
+  -webkit-animation: slideDown 300ms 1 ease;
+  -moz-transform:    translateY(-50px);
+  -moz-animation:    slideDown 300ms 1 ease;
+
 }
-/* .message-pointer {
-  position: absolute;
-  transform: rotate(-45deg);
-  border: 1px solid #000;
-  height: 0;
-  width: 6rem;
-  top: 43%;
-  left: 50%;
-} */
+@-webkit-keyframes slideDown {
+  0%, 100% { top: -50%; }
+  10%, 90% { top: 20%; }
+}
+@-moz-keyframes slideDown {
+    0%, 100% { top: -50%; }
+    10%, 90% { top: 20%; }
+}
 </style>
