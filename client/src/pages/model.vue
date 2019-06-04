@@ -83,7 +83,6 @@ export default {
       event.preventDefault();
       if (!this.isOrbit) {
         console.log(this.intersects[0].object);
-        console.log('object', this.scene.children[6].children[0].children);
         if (this.intersects[0].object.name.includes('Location')) { this.clicked = this.intersects[0]; }
         else if (this.intersects[1].object.name.includes('Location')) { this.clicked = this.intersects[1]; }
         if (this.clicked) {
@@ -123,6 +122,7 @@ export default {
       if (event.keyCode == 32) {
         this.camera.position.set(-1700, 1400, 1400);
         this.camera.lookAt( this.scene.position );
+        this.camera.updateProjectionMatrix();
       }
     },
     render() {
@@ -210,19 +210,19 @@ export default {
       this.ambientLight = new THREE.AmbientLight( 0xFFFFFF, 0.5 );
       this.scene.add( this.ambientLight );
 
-      this.pointLight1 = new THREE.PointLight( 0xFFFFFF, .2 );
+      this.pointLight1 = new THREE.PointLight( 0xFFFFFF, .12 );
       this.pointLight1.position.set(3000, 5000, 3000);
       this.scene.add( this.pointLight1 );
 
-      this.pointLight2 = new THREE.PointLight( 0xFFFFFF, .2 );
+      this.pointLight2 = new THREE.PointLight( 0xFFFFFF, .12 );
       this.pointLight2.position.set(-3000, 5000, 3000);
       this.scene.add( this.pointLight2 );
 
-      this.pointLight3 = new THREE.PointLight( 0xFFFFFF, .2 );
+      this.pointLight3 = new THREE.PointLight( 0xFFFFFF, .12 );
       this.pointLight3.position.set(3000, 5000, -3000);
       this.scene.add( this.pointLight3 );
 
-      this.pointLight4 = new THREE.PointLight( 0xFFFFFF, .2 );
+      this.pointLight4 = new THREE.PointLight( 0xFFFFFF, .12 );
       this.pointLight4.position.set(-3000, 5000, -3000);
       this.scene.add( this.pointLight4 );
     },
@@ -239,12 +239,12 @@ export default {
         if (child.material) {
           if (toString(child.material.transparent)) child.material.transparent = true;
           child.material.opacity = .5;
-          child.material.color.r = 1.2; child.material.color.g = 1.2; child.material.color.b = 1.2;
+          child.material.color.r = 1.3; child.material.color.g = 1.3; child.material.color.b = 1.3;
         }
         if (child.name.includes('Location')) {
           // if (toString(child.material.transparent)) child.material.transparent = false;
           child.material.opacity = .3;
-          child.material.color.r = .8; child.material.color.g = .8; child.material.color.b = .8;
+          child.material.color.r = .85; child.material.color.g = .85; child.material.color.b = .85;
           // render all faces in transparent container objects
           child.material.depthTest = false;
           child.renderOrder = 100;
