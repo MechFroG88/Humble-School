@@ -1,5 +1,10 @@
 <template>
-  <div id="log" class="log"></div>
+  <div id="_model">
+    <div class="dis">
+      <input type="checkbox" class="mr-2" v-model="hideLocation"><i>Disable location</i>
+    </div>
+    <div id="log" class="log"></div>
+  </div>
 </template>
 
 <script>
@@ -21,6 +26,7 @@ export default {
     this.animate();
   },
   data: () => ({
+    hideLocation: false,
     isOrbit: false,
     high: false,
     far: false,
@@ -127,52 +133,56 @@ export default {
     },
     render() {
       this.camera.updateMatrixWorld();
-      this.raycaster.setFromCamera( this.mouse, this.camera );
-      this.intersects = this.raycaster.intersectObjects( this.scene.children[6].children[0].children );
-      if ( this.intersects.length > 0 && !this.isOrbit) {
-        if ( this.INTERSECTED != this.intersects[0].object && this.intersects[0].object.name != 'Land' ) {
+      if (!this.hideLocation) {
+        this.raycaster.setFromCamera( this.mouse, this.camera );
+        this.intersects = this.raycaster.intersectObjects( this.scene.children[6].children[0].children );
+        if ( this.intersects.length > 0 && !this.isOrbit) {
+          if ( this.INTERSECTED != this.intersects[0].object && this.intersects[0].object.name != 'Land' ) {
+            if ( this.INTERSECTED ) this.INTERSECTED.material.emissive.setHex( this.INTERSECTED.currentHex );
+            if (this.intersects[0].object.name.includes('Location')) {
+              this.inside = false;
+              this.INTERSECTED = this.intersects[0].object;
+              this.INTERSECTED.currentHex = this.INTERSECTED.material.emissive.getHex();
+              this.INTERSECTED.material.emissive.setHex( 0xff0000 );
+            }
+            else if (this.intersects[1].object.name.includes('Location')) {
+              this.inside = true;
+              this.INTERSECTED = this.intersects[1].object;
+              this.INTERSECTED.currentHex = this.INTERSECTED.material.emissive.getHex();
+              this.INTERSECTED.material.emissive.setHex( 0xff0000 );
+            }
+          }
+        } else {
           if ( this.INTERSECTED ) this.INTERSECTED.material.emissive.setHex( this.INTERSECTED.currentHex );
-          if (this.intersects[0].object.name.includes('Location')) {
-            this.inside = false;
-            this.INTERSECTED = this.intersects[0].object;
-            this.INTERSECTED.currentHex = this.INTERSECTED.material.emissive.getHex();
-            this.INTERSECTED.material.emissive.setHex( 0xff0000 );
+          this.INTERSECTED = null;
+        }
+          
+        if (this.isOrbit) {
+          this.theta += this.rotateSpeed;
+          let direction = this.cinematic.getWorldDirection(); 
+  
+          if (this.high) {
+            this.cinematic.position.x = this.XOffset + ((this.radius + 50) * Math.cos( this.theta * Math.PI / 180 ));
+            this.cinematic.position.z = this.ZOffset + ((this.radius + 50) * Math.sin( this.theta * Math.PI / 180 ));
+            direction.x = this.XOffset; direction.y = this.cinematic.position.y - this.depressionHeight - 800; direction.z = this.ZOffset;
           }
-          else if (this.intersects[1].object.name.includes('Location')) {
-            this.inside = true;
-            this.INTERSECTED = this.intersects[1].object;
-            this.INTERSECTED.currentHex = this.INTERSECTED.material.emissive.getHex();
-            this.INTERSECTED.material.emissive.setHex( 0xff0000 );
+          else if (this.far) {
+            this.cinematic.position.x = this.XOffset + ((this.radius + 350) * Math.cos( this.theta * Math.PI / 180 ));
+            this.cinematic.position.z = this.ZOffset + ((this.radius + 350) * Math.sin( this.theta * Math.PI / 180 ));
+            direction.x = this.XOffset; direction.y = this.cinematic.position.y - this.depressionHeight - 1000; direction.z = this.ZOffset;
           }
+          else {
+            this.cinematic.position.x = this.XOffset + (this.radius * Math.cos( this.theta * Math.PI / 180 ));
+            this.cinematic.position.z = this.ZOffset + (this.radius * Math.sin( this.theta * Math.PI / 180 ));
+            direction.x = this.XOffset; direction.y = this.cinematic.position.y - this.depressionHeight; direction.z = this.ZOffset;
+          }
+  
+          this.cinematic.lookAt( direction );
+          this.cinematic.updateMatrixWorld();
+          this.renderer.render( this.scene, this.cinematic );
         }
       } else {
-        if ( this.INTERSECTED ) this.INTERSECTED.material.emissive.setHex( this.INTERSECTED.currentHex );
-        this.INTERSECTED = null;
-      }
-        
-      if (this.isOrbit) {
-        this.theta += this.rotateSpeed;
-        let direction = this.cinematic.getWorldDirection(); 
 
-        if (this.high) {
-          this.cinematic.position.x = this.XOffset + ((this.radius + 50) * Math.cos( this.theta * Math.PI / 180 ));
-          this.cinematic.position.z = this.ZOffset + ((this.radius + 50) * Math.sin( this.theta * Math.PI / 180 ));
-          direction.x = this.XOffset; direction.y = this.cinematic.position.y - this.depressionHeight - 800; direction.z = this.ZOffset;
-        }
-        else if (this.far) {
-          this.cinematic.position.x = this.XOffset + ((this.radius + 350) * Math.cos( this.theta * Math.PI / 180 ));
-          this.cinematic.position.z = this.ZOffset + ((this.radius + 350) * Math.sin( this.theta * Math.PI / 180 ));
-          direction.x = this.XOffset; direction.y = this.cinematic.position.y - this.depressionHeight - 1000; direction.z = this.ZOffset;
-        }
-        else {
-          this.cinematic.position.x = this.XOffset + (this.radius * Math.cos( this.theta * Math.PI / 180 ));
-          this.cinematic.position.z = this.ZOffset + (this.radius * Math.sin( this.theta * Math.PI / 180 ));
-          direction.x = this.XOffset; direction.y = this.cinematic.position.y - this.depressionHeight; direction.z = this.ZOffset;
-        }
-
-        this.cinematic.lookAt( direction );
-        this.cinematic.updateMatrixWorld();
-        this.renderer.render( this.scene, this.cinematic );
       }
       if (!this.isOrbit) this.renderer.render( this.scene, this.camera );
     },
@@ -235,6 +245,10 @@ export default {
     loadModel() {
       this.loader = new THREE.ObjectLoader();
       this.object = this.loader.parse( sceneObj );
+      this.colorChild();
+      this.scene.add( this.object );
+    },
+    colorChild() {
       this.object.children[0].children.forEach(child => {
         if (child.material) {
           if (toString(child.material.transparent)) child.material.transparent = true;
@@ -250,7 +264,17 @@ export default {
           child.renderOrder = 100;
         }
       })
-      this.scene.add( this.object );
+    },
+    decolorChild() {
+      this.object.children[0].children.forEach(child => {
+        if (child.material) {
+          if (toString(child.material.transparent)) child.material.transparent = true;
+          child.material.opacity = .5;
+          child.material.color.r = 1.3; child.material.color.g = 1.3; child.material.color.b = 1.3;
+          child.material.depthTest = true;
+          child.renderOrder = 0;
+        }
+      })
     },
     onWindowResize() {
       if (this.isOrbit) {
@@ -262,6 +286,12 @@ export default {
       }
       this.renderer.setSize( window.innerWidth, window.innerHeight );
     },
+  },
+  watch: {
+    hideLocation: function() {
+      if (this.hideLocation) { this.decolorChild(); }
+      else { this.colorChild(); }
+    }
   }
 }
 </script>
@@ -271,5 +301,10 @@ export default {
   position: absolute;
   top: .35rem;
   left: 4.5rem;
+}
+.dis {
+  position: absolute;
+  top: 3rem;
+  left: 1rem;
 }
 </style>
