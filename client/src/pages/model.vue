@@ -1,9 +1,12 @@
 <template>
-  <div id="_model">
+  <div id="_model" class="model-container">
     <div class="dis">
       <input type="checkbox" class="mr-2" v-model="hideLocation"><i>Disable location</i>
     </div>
     <div id="log" class="log"></div>
+    <div class="message-container" v-if="isOrbit">
+      This is a message.
+    </div>
   </div>
 </template>
 
@@ -91,8 +94,8 @@ export default {
         console.log(this.intersects[0].object);
         if (this.intersects[0].object.name.includes('Location')) { this.clicked = this.intersects[0]; }
         else if (this.intersects[1].object.name.includes('Location')) { this.clicked = this.intersects[1]; }
-        if (this.clicked) {
-          this.isOrbit = true; this.theta = 0;
+        if (this.clicked && (this.intersects[0].object.name.includes('Location') || this.intersects[1].object.name.includes('Location'))) {
+          this.isOrbit = true; this.theta = 100 * Math.random();
           this.XOffset = this.clicked.point.x; this.ZOffset = this.clicked.point.z;
           this.cinematic.position.set( 0, this.clicked.point.y + this.depressionHeight, 0 )
           this.clicked.object.material.emissive = new THREE.Color( 0xff0000 );
@@ -306,5 +309,35 @@ export default {
   position: absolute;
   top: 3rem;
   left: 1rem;
+}
+.message-container {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  min-width: 25%;
+  min-height: 20%;
+  opacity: .8;
+  transform: translate(-50%, -50%);
+  background-color: #424242;
+  color: #898989;
+  font-size: 1rem;
+  border-color: #ddd;
+  border-radius: .1rem;
+  box-shadow: 0 0 1.2rem rgba(71, 71, 71, 0.3);
+
+  /* css animation */
+  -webkit-transform: translateY(-50px);
+  -webkit-animation: slideDown 300ms 1 ease;
+  -moz-transform:    translateY(-50px);
+  -moz-animation:    slideDown 300ms 1 ease;
+
+}
+@-webkit-keyframes slideDown {
+  0%, 100% { top: -50%; }
+  10%, 90% { top: 20%; }
+}
+@-moz-keyframes slideDown {
+    0%, 100% { top: -50%; }
+    10%, 90% { top: 20%; }
 }
 </style>
