@@ -228,18 +228,11 @@ paths:
                 example: "computer society"
               picture:
                 type: "string"
-<<<<<<< HEAD
-                example: "vr.jpg"
-              detail:
-                type: "string"
-                example: "welcome!"
-=======
                 example: "vr.jpg/potato"
               detail:
                 type: "string"
                 example: "Welcome to VR World!"
 
->>>>>>> 0f44d025d3f12417d2c1afeb75f3f7798b0f95f6
         401:  
           description: "Unauthorized"
         400:
