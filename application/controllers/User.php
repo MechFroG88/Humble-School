@@ -12,10 +12,13 @@ class User extends HS_Controller{
     {
 		if ($this->auth->is_logged_in()){
 			$data = $this->input->post();
-			$this->json("Added Succesfully", $this->auth->create($data));
-		} else {
-			$this->error(401);
-		}
+			$response = $this->auth->create($data);
+            if ($response == 200){
+                $this->json("Added Succesfully.",$response);
+            } else {
+                $this->error($response);
+            }
+        }
 	}
 	
     /**
