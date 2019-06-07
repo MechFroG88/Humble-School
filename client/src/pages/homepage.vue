@@ -31,12 +31,16 @@ export default {
 </script>
 
 <style lang="scss">
-.flash {
+#_homepage{
+  .flash {
   position: absolute;
   left: 50%;
   top: 5%;
   transform: translateX(-50%);
   max-width: 60%;
 }
+}
+
+
 </style>
 

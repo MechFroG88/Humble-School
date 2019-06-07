@@ -23,7 +23,6 @@ export default new Router({
     },
     {
       path: '/admin/',
-      name: 'admin',
       component: () => import('./pages/homepage.vue'),
       children: [
         {
