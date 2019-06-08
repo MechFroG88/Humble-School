@@ -3,6 +3,6 @@ export const users_column = [
   { name: '操作', field: 'action' },
 ];
 export const group_column = [
-  { name: '团体名称', field: 'society' },
+  { name: '团体名称', field: 'society', search: true },
   { name: '操作', field: 'action' },
 ];

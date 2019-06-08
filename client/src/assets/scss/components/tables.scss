@@ -17,7 +17,6 @@
           }
         }
         .input-group {
-          
           float: right;
           input {
             border-color: rgba(#2D4059, .25);
@@ -31,9 +30,6 @@
             &::placeholder {
               color:$text-gray;
               font-size: $font-size-sm;
-              @media screen and (max-width: $size-xl) {
-                font-size: .6rem;
-              }
             }
           }
           .form-icon {
@@ -61,29 +57,23 @@
         &:first-child {
           padding-left: 2rem;
           padding-right: 2rem;
-
         }
+      }
+      .col_action > div {
+       display: flex;
+       justify-content: flex-start; 
       }
     }
     
     .table_columns {
       height: 2.5rem;
       td {
-        &:first-child {
-          padding: 0 2rem;
-        }
         @media screen and (max-width: 1024px) {
           font-size: $font-size-sm;
         }
-        font-size: $font-size-lg;
         font-weight: 300;
         color: lighten(grey, 8%);
       }
-    }
-
-    .table_columns td {
-      font-weight: 300;
-      color: lighten(grey, 8%);
     }
   }
 

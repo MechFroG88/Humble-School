@@ -4,10 +4,10 @@
     style="margin-bottom: 3.8rem;"
     @click="open">新增</div>
 
-    <userTable class="table" title ref="table" :columns="users" :tableData="data" width="40">
+    <userTable class="table" title ref="table" :columns="users" :tableData="data" width="100">
       <template slot="title">用户管理</template>
       <template slot="action" slot-scope="{ data }" class="btn btn-primary addBtn">
-        <div class="btn btn-primary addBtn" @click="openCmodal(data.user_id)">删除</div>
+        <div class="btn btn-primary deleteBtn" @click="openCmodal(data.user_id)">删除</div>
       </template>
     </userTable>
 
