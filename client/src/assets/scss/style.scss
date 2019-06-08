@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans');
+
 @import 'variables';
 
 // pages
@@ -18,4 +20,7 @@
 @import 'components/tables.scss';
 @import 'components/popup.scss';
 
-@import url('https://fonts.googleapis.com/css?family=Noto+Sans');
+body {
+  // overflow-y: hidden;
+  height: 100vh;
+}

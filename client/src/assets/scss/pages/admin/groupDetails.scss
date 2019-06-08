@@ -3,7 +3,7 @@
     padding: 1.5rem;
     text-align: left;
     transform: translateX(16%);
-    height: 100vh;
+    height: auto;
     background-color:white; 
     border-radius: .3rem;
     label {
@@ -20,8 +20,10 @@
     .groupName ,.classGroup,.theme,.details,.pic {
       margin-bottom: 1rem;
     }
-    .pic {
+    .pic ,.submit{
       .btn{
+        margin-right:0 !important;
+        color: white;
         margin-top: .5rem;
         padding-left: 1.7rem;
         padding-right: 1.7rem;
@@ -32,6 +34,18 @@
         &:active {
           box-shadow: 0 .3px .5px rgba($primary-color, 0.7) !important;
         }
+        
+      }
+    }
+    .submit {
+      text-align: right; 
+    }
+    .pic {
+      .btn{
+        width: 8rem;
+      }
+      input{
+        display: none;
         
       }
     }

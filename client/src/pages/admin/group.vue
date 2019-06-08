@@ -3,7 +3,6 @@
     <div class="btn btn-primary addBtn"
     style="margin-bottom: 3.8rem;"
     @click="open">新增</div>
-    <div class="btn btn-primary addBtn" style="margin-bottom:1rem" @click="$router.push('/admin/groupDetails')">details</div>
 
     <groupTable class="table" title ref="table" :columns="group" :tableData="data" width="50" navbar="搜寻学会名称">
       <template slot="title">团体管理</template>
@@ -32,17 +31,22 @@
       </div>
     </modal>
 
+     <cmodal ref="cancel" :trigger="removeClass"></cmodal>
+
   </div>
 </template>
 
 <script>
 import groupTable from '@/components/tables';
 import modal from '@/components/popup';
+import cmodal from '@/components/confirm';
 import { group_column } from '@/api/tableColumns';
+import { getAllClass, deleteClass } from '@/api/class';
 
 export default {
   components: {
     groupTable,
+    cmodal,
     modal,
   },
   data: () => ({
@@ -50,15 +54,34 @@ export default {
     loading: false,
     groupName: '',
     data: [],
+    deleteId: '',
   }),
-  //  mounted() {
-  //   this.getAll();
-  // },
+   mounted() {
+    this.getAll();
+  },
   methods: {
+    getAll() {
+      getAllClass().then(({ data }) => {
+        this.data = data.data;
+        this.$refs.table.is_loading = false;
+      }).catch((err) => {
+        this.notification('数据读取失败！请重试！', 'error');
+        console.log(err);
+      });
+    },
+    removeClass() {
+      deleteClass(this.deleteId).then((msg) => {
+        this.$refs.cancel.active = false;
+        this.notification('成功删除学会', 'success');
+        this.getAll();
+      }).catch((err) => {
+        this.notification('操作失败！请重试！', 'error');
+        console.log(err);
+      })
+    },
     open() {
     this.$nextTick(() => {
-      this.$refs.form.reset();
-      this.$refs.add.active = true;
+      this.$router.push('/admin/groupDetails');
       })
     },
   }
