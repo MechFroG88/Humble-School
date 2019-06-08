@@ -114,6 +114,7 @@ export default {
     },
     touchStart(event) {
       event.preventDefault();
+      console.log(event);
       this.log(event);
     },
     keyIsPressed(event) {
