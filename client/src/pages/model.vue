@@ -4,9 +4,23 @@
       <input type="checkbox" class="mr-2" v-model="hideLocation"><i>Disable location</i>
     </div>
     <div id="log" class="log"></div>
-    <div class="message-container" v-if="isOrbit">
-      This is a message.
-    </div>
+
+    <modal  ref="popUp" class="animated bounceInUp" closable :classId="`${ group.id }`" >
+      <div slot="pic" class="pic" :style="`background-image: ${group.picture}`"></div> 
+      
+      <div slot="body">
+        <div class="title">
+          <div class="modal-title h4">{{ group.theme }}</div>
+          <span class="chip">{{ group.society }}</span>
+        </div>
+      
+        <div class="place">{{ group.cn_class }}</div>
+        <div class="time">3pm-5pm</div>
+      </div>
+      <div slot="footer">
+      </div>
+    </modal>
+
   </div>
 </template>
 
@@ -23,12 +37,28 @@ import Stats from '../vendor/stats.js';
 
 import sceneObj from '../static/model/scene_again.json';
 
+import modal from '@/components/modal';
+import { getClass } from '@/api/class';
+
 export default {
+  components: {
+    modal,
+  },
   mounted() {
     this.init();
     this.animate();
   },
   data: () => ({
+
+    group: {
+      cn_class: '',
+      en_class: '',
+      theme: '',
+      society: '',
+      picture: '',
+      detail: ''
+    },
+
     hideLocation: false,
     isOrbit: false,
     high: false,
@@ -43,6 +73,17 @@ export default {
     theta: 0,
   }),
   methods: {
+
+    pop(id) {
+      this.$refs.popUp.active = true;
+      getClass(id).then(({ data }) => {
+          this.group = data.data[0];
+        }).catch((err) => {
+          this.notification('数据读取失败！请重试！', 'error');
+          console.log(err);
+        });
+    },
+
     init() {
       this.scene = new THREE.Scene();
       this.scene.background = new THREE.Color(0xeeeeee);
@@ -95,6 +136,7 @@ export default {
         if (this.intersects[0].object.name.includes('Location')) { this.clicked = this.intersects[0]; }
         else if (this.intersects[1].object.name.includes('Location')) { this.clicked = this.intersects[1]; }
         if (this.clicked && (this.intersects[0].object.name.includes('Location') || this.intersects[1].object.name.includes('Location'))) {
+          this.pop(this.clicked.object.name.slice(9));
           this.isOrbit = true; this.theta = 100 * Math.random();
           this.XOffset = this.clicked.point.x; this.ZOffset = this.clicked.point.z;
           this.cinematic.position.set( 0, this.clicked.point.y + this.depressionHeight, 0 )
@@ -310,35 +352,5 @@ export default {
   position: absolute;
   top: 3rem;
   left: 1rem;
-}
-.message-container {
-  position: absolute;
-  top: 20%;
-  left: 50%;
-  min-width: 25%;
-  min-height: 20%;
-  opacity: .8;
-  transform: translate(-50%, -50%);
-  background-color: #424242;
-  color: #898989;
-  font-size: 1rem;
-  border-color: #ddd;
-  border-radius: .1rem;
-  box-shadow: 0 0 1.2rem rgba(71, 71, 71, 0.3);
-
-  /* css animation */
-  -webkit-transform: translateY(-50px);
-  -webkit-animation: slideDown 300ms 1 ease;
-  -moz-transform:    translateY(-50px);
-  -moz-animation:    slideDown 300ms 1 ease;
-
-}
-@-webkit-keyframes slideDown {
-  0%, 100% { top: -50%; }
-  10%, 90% { top: 20%; }
-}
-@-moz-keyframes slideDown {
-    0%, 100% { top: -50%; }
-    10%, 90% { top: 20%; }
 }
 </style>

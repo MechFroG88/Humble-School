@@ -6,9 +6,9 @@
     @click="active = false"/>
     <div class="modal-container">
       <div class="modal-header">
-        <div class="pic"></div>
+        <slot name="pic" class="pic"/>
         <slot name="header"/>
-        <span class="icon-maximize-2 custom-class enlargeButton" @click="details"></span>
+        <span name="icon" class="icon-maximize-2 custom-class enlargeButton" @click="details"></span>
       </div>
       <div class="modal-body"> 
         <slot name="body" class="content"/>
@@ -23,6 +23,7 @@
 <script>
 export default {
   props: {
+    classId: String,
     closable: {
       type: Boolean,
       default: true,
@@ -31,7 +32,7 @@ export default {
   },
   methods: {
     details() {
-      this.$router.push('/details');
+      this.$router.push(`/details/${this.classId}`);
     }
   },
   data: () => ({
