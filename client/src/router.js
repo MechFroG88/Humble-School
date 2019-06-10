@@ -53,12 +53,12 @@ export default new Router({
     //   component: () => import('./pages/performance.vue'),
     // },
     {
-      path: '/3d',
+      path: '/3d/:id?',
       name: '3d',
       component: () => import('./pages/3d.vue'),
     },
     {
-      path: '/details',
+      path: '/details/:id?',
       name: 'details',
       component: () => import('./pages/details.vue'),
     },
