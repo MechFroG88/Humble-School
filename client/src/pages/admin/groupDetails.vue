@@ -9,11 +9,11 @@
       <div class="classGroup">
         <div class="form-group">
           <label class="form-label" for="cn_class">地点（华）</label>
-          <input class="form-input" type="text" id="cn_class" placeholder="请输入活动地点" v-model="group.cn_name">
+          <input class="form-input" type="text" id="cn_class" placeholder="请输入活动地点" v-model="group.cn_class">
         </div>
         <div class="form-group">
           <label class="form-label" for="en_class">地点（英）</label>
-          <input class="form-input" type="text" id="en_class" placeholder="请输入活动地点" v-model="group.en_name">
+          <input class="form-input" type="text" id="en_class" placeholder="请输入活动地点" v-model="group.en_class">
         </div>
       </div>
       <div class="form-group theme">
@@ -21,20 +21,20 @@
         <input class="form-input" type="text" id="theme" placeholder="请输入活动主题" v-model="group.theme">
       </div>
       <div class="form-group details">
-        <label class="form-label" for="details">活动详情</label>
-        <textarea class="form-input" id="details" placeholder="请输入活动详情" rows="5" v-model="group.details"></textarea>
+        <label class="form-label" for="detail">活动详情</label>
+        <textarea class="form-input" id="detail" placeholder="请输入活动详情" rows="5" v-model="group.detail"></textarea>
       </div>
       <div class="form-group pic">
         <label>封面照片</label>
         <label  class="btn btn-primary" for="pic" >上传封面照片</label>
-        <input  type="file" id="pic" >
+        <input  type="file" id="pic" ref="file" @change="handleFileUpload">
       </div>
      
       <div class="submit">
-         <div class="btn btn-primary " @click="openCmodal" >提交</div>
+         <div class="btn btn-primary " @click="$refs.cancel.active = true" >提交</div>
       </div>
 
-      <cmodal ref="cancel" :trigger="addClass"></cmodal>
+      <cmodal ref="cancel" :trigger="submit"></cmodal>
 
     </div>
   </div>
@@ -57,18 +57,23 @@ export default {
       theme: '',
       society: '',
       picture: '',
-      details: ''
+      detail: ''
     }
   }),
   mounted() {
-    // this.getAll();
+    if (this.$route.params.action == 'edit') {
+      // get with id
+        getClass(this.$route.params.id).then(({ data }) => {
+          this.group = data.data[0];
+          // console.log(this.group);
+        }).catch((err) => {
+          this.notification('数据读取失败！请重试！', 'error');
+          console.log(err);
+        });
+    }
   },
   methods: {
-    getAll() {
-      getClass()
-    },
     addClass() {
-      this.loading = true;
       createClass(this.group).then((msg) => {
         this.$router.push('/admin/group')
         this.notification('成功添加学会', 'success');
@@ -77,9 +82,27 @@ export default {
         console.log(err);
       });
     },
-     openCmodal() {
-      this.$refs.cancel.active = true;
+    updateClass() {
+      updateClass(this.group.class_id, this.group).then((msg) => {
+        this.$router.push('/admin/group')
+        this.notification('成功编辑学会资料','success');
+      }).catch((err) => {
+        this.notification('操作失败！请重试！', 'error');
+        console.log(err);
+      });
     },
+    handleFileUpload(event) {
+      this.group.picture = event.target.files[0].name;
+    },
+    submit() {
+      if (this.$route.params.action == 'edit') {
+        this.updateClass();
+      }
+      else {
+        this.addClass();
+      }
+    }
+
   }
 
 }

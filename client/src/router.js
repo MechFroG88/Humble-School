@@ -41,7 +41,7 @@ export default new Router({
           component: () => import('./pages/admin/users.vue'),
         },
         {
-          path: 'groupDetails',
+          path: 'groupDetails/:action/:id?', //when create there is no id, but when edit there is
           name: 'groupDetails',
           component: () => import('./pages/admin/groupDetails.vue'),
         },

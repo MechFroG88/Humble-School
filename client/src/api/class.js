@@ -17,21 +17,22 @@ export function getAllClass() {
 
 export function getClass(classId) {
   return request({
-    url: `/class${classId}`,
+    url: `/class/${classId}`,
     method: 'GET'
   });
 }
 
-export function updateClass(classId) {
+export function updateClass(classId, data) {
   return request({
-    url: `/class${classId}`,
-    method: 'POST'
+    url: `/class/${classId}`,
+    method: 'POST',
+    data
   });
 }
 
 export function deleteClass(classId) {
   return request({
-    url: `/user/delete/${classId}`,
+    url: `/class/delete/${classId}`,
     method: 'POST',
   })
 }

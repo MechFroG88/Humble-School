@@ -4,10 +4,13 @@
     style="margin-bottom: 3.8rem;"
     @click="open">新增</div>
 
-    <groupTable class="table" title ref="table" :columns="group" :tableData="data" width="50" navbar="搜寻学会名称">
+    <groupTable class="table" title ref="table" :columns="group" :tableData="data" width="100" navbar="搜寻学会名称">
       <template slot="title">团体管理</template>
-      <template slot="action" slot-scope="{ data }" class="btn btn-primary addBtn">
-        <div class="btn btn-primary addBtn" @click="openCmodal(data.id)">删除</div>
+      <template slot="action" slot-scope="{ data }">
+        <div>
+          <div class="btn btn-primary addBtn" @click="openCmodal(data.class_id)">删除</div>
+          <div class="btn btn-primary editBtn" @click="edit(data)">编辑</div>
+        </div>
       </template>
     </groupTable>
 
@@ -62,7 +65,9 @@ export default {
   methods: {
     getAll() {
       getAllClass().then(({ data }) => {
-        this.data = data.data;
+        this.data = data.data; // that's why you should always console.log no matter what
+        console.log(this.data);
+        this.groupName = data.data.society;
         this.$refs.table.is_loading = false;
       }).catch((err) => {
         this.notification('数据读取失败！请重试！', 'error');
@@ -81,9 +86,18 @@ export default {
     },
     open() {
     this.$nextTick(() => {
-      this.$router.push('/admin/groupDetails');
+      this.$router.push('/admin/groupDetails/create');
       })
     },
+    openCmodal(id) {
+      this.deleteId = id;
+      this.$refs.cancel.active = true;
+    },
+    edit(data) {
+      console.log(data);
+      this.$router.push(`/admin/groupDetails/edit/${data.class_id}`);
+
+    }
   }
 
 
