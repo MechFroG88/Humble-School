@@ -119,10 +119,10 @@ export default {
       window.addEventListener( 'keydown', this.keyIsPressed, false );
       
       // mobile events
-      window.addEventListener("touchstart", this.touchStart, false);
-      window.addEventListener("touchend", this.touchEnd, false);
-      window.addEventListener("touchcancel", this.touchCancel, false);
-      window.addEventListener("touchmove", this.touchMove, false);
+      window.addEventListener( "touchstart", this.touchStart, false );
+      window.addEventListener( "touchend", this.touchEnd, false );
+      window.addEventListener( "touchcancel", this.touchCancel, false );
+      window.addEventListener( "touchmove", this.touchMove, false );
     },
     onMouseMove(event) {
       event.preventDefault();
@@ -158,23 +158,29 @@ export default {
       var p = document.getElementById('log');
       p.innerHTML = msg + "\n" + p.innerHTML;
     },
-    touchStart(event) {
+    touchStart(ev) {
       event.preventDefault();
-      console.log(event);
-      this.log(event);
+      for (var i=0; i < ev.targetTouches.length; i++) {
+        this.log(`${ev.clientX}, ${ev.clientY}`);
+      }
     },
     keyIsPressed(event) {
-      if (event.keyCode == 27) {
-        this.isOrbit = false;
-        this.clicked.object.material.color.setHex( 0xDBDBDB );
-        this.scene.children[6].children[0].children.forEach((el) => {
-          if (el.name.includes('Location')) { el.material.opacity = .3; }
-        })
-      }
-      if (event.keyCode == 32) {
-        this.camera.position.set(-1700, 1400, 1400);
-        this.camera.lookAt( this.scene.position );
-        this.camera.updateProjectionMatrix();
+      switch (event.keyCode) {
+        case 27:
+          this.isOrbit = false;
+          this.clicked.object.material.color.setHex( 0xDBDBDB );
+          this.scene.children[6].children[0].children.forEach((el) => {
+            if (el.name.includes('Location')) { el.material.opacity = .3; }
+          })
+          break;
+        case 32:
+          this.camera.position.set(-1700, 1400, 1400);
+          this.camera.lookAt( this.scene.position );
+          this.camera.updateProjectionMatrix();
+          break;
+        case 67:
+          console.log("click");
+          document.body.children[1].click();
       }
     },
     render() {
@@ -205,7 +211,7 @@ export default {
           
         if (this.isOrbit) {
           this.theta += this.rotateSpeed;
-          let direction = this.cinematic.getWorldDirection(); 
+          let direction = this.cinematic.getWorldDirection(new THREE.Vector3(0, 0, 0)); 
   
           if (this.high) {
             this.cinematic.position.x = this.XOffset + ((this.radius + 50) * Math.cos( this.theta * Math.PI / 180 ));
