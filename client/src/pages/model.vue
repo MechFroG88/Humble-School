@@ -150,17 +150,19 @@ export default {
         if ( this.intersects.length > 0 && !this.isOrbit) {
           if ( this.INTERSECTED != this.intersects[0].object && this.intersects[0].object.name != 'Land' ) {
             if ( this.INTERSECTED ) this.INTERSECTED.material.emissive.setHex( this.INTERSECTED.currentHex );
-            if (this.intersects[0].object.name.includes('Location')) {
-              this.inside = false;
-              this.INTERSECTED = this.intersects[0].object;
-              this.INTERSECTED.currentHex = this.INTERSECTED.material.emissive.getHex();
-              this.INTERSECTED.material.emissive.setHex( 0xff0000 );
-            }
-            else if (this.intersects[1].object.name.includes('Location')) {
-              this.inside = true;
-              this.INTERSECTED = this.intersects[1].object;
-              this.INTERSECTED.currentHex = this.INTERSECTED.material.emissive.getHex();
-              this.INTERSECTED.material.emissive.setHex( 0xff0000 );
+            if (this.intersects[0].object && this.intersects[0].object.name != 'Land') {
+              if (this.intersects[0].object.name.includes('Location')) {
+                this.inside = false;
+                this.INTERSECTED = this.intersects[0].object;
+                this.INTERSECTED.currentHex = this.INTERSECTED.material.emissive.getHex();
+                this.INTERSECTED.material.emissive.setHex( 0xff0000 );
+              }
+              else if (this.intersects[1].object.name.includes('Location')) {
+                this.inside = true;
+                this.INTERSECTED = this.intersects[1].object;
+                this.INTERSECTED.currentHex = this.INTERSECTED.material.emissive.getHex();
+                this.INTERSECTED.material.emissive.setHex( 0xff0000 );
+              }
             }
           }
         } else {
