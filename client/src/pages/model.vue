@@ -78,10 +78,10 @@ export default {
       window.addEventListener( 'keydown', this.keyIsPressed, false );
       
       // mobile events
-      window.addEventListener("touchstart", this.touchStart, false);
-      window.addEventListener("touchend", this.touchEnd, false);
-      window.addEventListener("touchcancel", this.touchCancel, false);
-      window.addEventListener("touchmove", this.touchMove, false);
+      window.addEventListener( "touchstart", this.touchStart, false );
+      window.addEventListener( "touchend", this.touchEnd, false );
+      window.addEventListener( "touchcancel", this.touchCancel, false );
+      window.addEventListener( "touchmove", this.touchMove, false );
     },
     onMouseMove(event) {
       event.preventDefault();
@@ -90,25 +90,26 @@ export default {
     },
     onMouseClick(event) {
       event.preventDefault();
-      if (!this.isOrbit) {
-        console.log(this.intersects[0].object);
-        if (this.intersects[0].object.name.includes('Location')) { this.clicked = this.intersects[0]; }
-        else if (this.intersects[1].object.name.includes('Location')) { this.clicked = this.intersects[1]; }
-        if (this.clicked && (this.intersects[0].object.name.includes('Location') || this.intersects[1].object.name.includes('Location'))) {
-          this.isOrbit = true; this.theta = 100 * Math.random();
-          this.XOffset = this.clicked.point.x; this.ZOffset = this.clicked.point.z;
-          this.cinematic.position.set( 0, this.clicked.point.y + this.depressionHeight, 0 )
-          this.clicked.object.material.emissive = new THREE.Color( 0xff0000 );
-          this.clicked.object.material.opacity = .75;
-          this.clicked.object.material.color.setHex( 0xff0000 );
-          if (this.clicked.object.name == 'Location_67') { this.high = true; this.cinematic.position.set( 0, this.cinematicHeight + 800, 0 ); }
-          else if (this.clicked.object.name == 'Location_165') { this.far = true; this.cinematic.position.set( 0, this.cinematicHeight + 1000, 0 ); }
-          else { this.high = false; this.far = false; }
-
-          // set other locations to transparent
-          this.scene.children[6].children[0].children.forEach((el) => {
-            if (el.name.includes('Location') && el.name != this.clicked.object.name) { el.material.opacity = 0; }
-          })
+      if (this.intersects[0] && !this.hideLocation) {
+        if (!this.isOrbit && this.intersects[0].object && this.intersects[0].object.name != 'Land') {
+          if (this.intersects[0].object.name.includes('Location')) { this.clicked = this.intersects[0]; }
+          else if (this.intersects[1].object.name.includes('Location')) { this.clicked = this.intersects[1]; }
+          if (this.clicked && (this.intersects[0].object.name.includes('Location') || this.intersects[1].object.name.includes('Location'))) {
+            this.isOrbit = true; this.theta = 100 * Math.random();
+            this.XOffset = this.clicked.point.x; this.ZOffset = this.clicked.point.z;
+            this.cinematic.position.set( 0, this.clicked.point.y + this.depressionHeight, 0 )
+            this.clicked.object.material.emissive = new THREE.Color( 0xff0000 );
+            this.clicked.object.material.opacity = .75;
+            this.clicked.object.material.color.setHex( 0xff0000 );
+            if (this.clicked.object.name == 'Location_67') { this.high = true; this.cinematic.position.set( 0, this.cinematicHeight + 800, 0 ); }
+            else if (this.clicked.object.name == 'Location_165') { this.far = true; this.cinematic.position.set( 0, this.cinematicHeight + 1000, 0 ); }
+            else { this.high = false; this.far = false; }
+  
+            // set other locations to transparent
+            this.scene.children[6].children[0].children.forEach((el) => {
+              if (el.name.includes('Location') && el.name != this.clicked.object.name) { el.material.opacity = 0; }
+            })
+          }
         }
       }
     },
@@ -116,23 +117,29 @@ export default {
       var p = document.getElementById('log');
       p.innerHTML = msg + "\n" + p.innerHTML;
     },
-    touchStart(event) {
+    touchStart(ev) {
       event.preventDefault();
-      console.log(event);
-      this.log(event);
+      for (var i=0; i < ev.targetTouches.length; i++) {
+        this.log(`${ev.clientX}, ${ev.clientY}`);
+      }
     },
     keyIsPressed(event) {
-      if (event.keyCode == 27) {
-        this.isOrbit = false;
-        this.clicked.object.material.color.setHex( 0xDBDBDB );
-        this.scene.children[6].children[0].children.forEach((el) => {
-          if (el.name.includes('Location')) { el.material.opacity = .3; }
-        })
-      }
-      if (event.keyCode == 32) {
-        this.camera.position.set(-1700, 1400, 1400);
-        this.camera.lookAt( this.scene.position );
-        this.camera.updateProjectionMatrix();
+      switch (event.keyCode) {
+        case 27:
+          this.isOrbit = false;
+          this.clicked.object.material.color.setHex( 0xDBDBDB );
+          this.scene.children[6].children[0].children.forEach((el) => {
+            if (el.name.includes('Location')) { el.material.opacity = .3; }
+          })
+          break;
+        case 32:
+          this.camera.position.set(-1700, 1400, 1400);
+          this.camera.lookAt( this.scene.position );
+          this.camera.updateProjectionMatrix();
+          break;
+        case 67:
+          console.log("click");
+          document.body.children[1].click();
       }
     },
     render() {
@@ -163,7 +170,7 @@ export default {
           
         if (this.isOrbit) {
           this.theta += this.rotateSpeed;
-          let direction = this.cinematic.getWorldDirection(); 
+          let direction = this.cinematic.getWorldDirection(new THREE.Vector3(0, 0, 0)); 
   
           if (this.high) {
             this.cinematic.position.x = this.XOffset + ((this.radius + 50) * Math.cos( this.theta * Math.PI / 180 ));
@@ -313,7 +320,6 @@ export default {
 }
 .message-container {
   position: absolute;
-  top: 20%;
   left: 50%;
   min-width: 25%;
   min-height: 20%;
@@ -327,18 +333,16 @@ export default {
   box-shadow: 0 0 1.2rem rgba(71, 71, 71, 0.3);
 
   /* css animation */
-  -webkit-transform: translateY(-50px);
-  -webkit-animation: slideDown 300ms 1 ease;
-  -moz-transform:    translateY(-50px);
-  -moz-animation:    slideDown 300ms 1 ease;
+  -webkit-animation: slideDown 500ms linear forwards;
+  -moz-animation:    slideDown 500ms linear forwards;
 
 }
 @-webkit-keyframes slideDown {
-  0%, 100% { top: -50%; }
-  10%, 90% { top: 20%; }
+  from { top: -50%; }
+  to { top: 20%; }
 }
 @-moz-keyframes slideDown {
-    0%, 100% { top: -50%; }
-    10%, 90% { top: 20%; }
+    from { top: -50%; }
+    to { top: 20%; }
 }
 </style>
