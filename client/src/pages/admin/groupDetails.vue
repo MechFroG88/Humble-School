@@ -92,7 +92,7 @@ export default {
       });
     },
     handleFileUpload(event) {
-      this.group.picture = event.target.files[0].name;
+      this.group.picture = event.target.files[0];
     },
     submit() {
       if (this.$route.params.action == 'edit') {

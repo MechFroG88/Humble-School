@@ -1,6 +1,5 @@
 <template>
   <div id="_homepage">
-    <flash-message class="flash"></flash-message>
     <sidebar :data="sidebar">      
       <router-view/>
     </sidebar>
@@ -30,17 +29,5 @@ export default {
 };
 </script>
 
-<style lang="scss">
-#_homepage{
-  .flash {
-  position: absolute;
-  left: 50%;
-  top: 5%;
-  transform: translateX(-50%);
-  max-width: 60%;
-}
-}
 
-
-</style>
 

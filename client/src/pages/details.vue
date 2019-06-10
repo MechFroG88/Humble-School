@@ -8,7 +8,7 @@
         <span class="chip">{{ group.society }}</span>
       </div>
       <div class="place">{{ group.cn_class }}</div>
-      <div class="time">3pm-5pm</div>
+      
       <div class="content">{{ group.details }}</div>
     </div>
     
