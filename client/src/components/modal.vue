@@ -2,8 +2,8 @@
   <div id="_modal" class="modal" :class="[
     active ? 'active' : ''
   ]">
-    <a class="modal-overlay" aria-label="Close"
-    @click="active = false"/>
+    <!-- <a class="modal-overlay" aria-label="Close"
+    @click="active = false"/> -->
     <div class="modal-container">
       <div class="modal-header">
         <slot name="pic" class="pic"/>

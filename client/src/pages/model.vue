@@ -4,7 +4,7 @@
     <div class="dis">
       <input type="checkbox" class="mr-2" v-model="hideLocation"><i>Disable location</i>
     </div>
-    <div class="btn btn-primary cancel" v-if="isOrbit" @click="cancelView">Go Back</div>
+    <div class="btn btn-primary cancel" v-if="isOrbit" @click="cancelView" style="z-index:2">Go Back</div>
     <div id="log" class="log"></div>
 
     <modal  ref="popUp" class="animated bounceInUp" closable :classId="`${ group.class_id }`" >
@@ -337,6 +337,7 @@ export default {
       this.renderer.setSize( window.innerWidth, window.innerHeight );
     },
     cancelView() {
+      this.$refs.popUp.active = false;
       this.isOrbit = false;
       this.clicked.object.material.color.setHex( 0xDBDBDB );
       this.scene.children[6].children[0].children.forEach((el) => {

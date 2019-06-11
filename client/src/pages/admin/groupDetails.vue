@@ -56,9 +56,9 @@ export default {
       en_class: '',
       theme: '',
       society: '',
-      picture: '',
+      picture: null,
       detail: ''
-    }
+    },
   }),
   mounted() {
     if (this.$route.params.action == 'edit') {
@@ -74,6 +74,8 @@ export default {
   },
   methods: {
     addClass() {
+      let formData = new FormData();
+      formData.append('image',this.group.picture)
       createClass(this.group).then((msg) => {
         this.$router.push('/admin/group')
         this.notification('成功添加学会', 'success');

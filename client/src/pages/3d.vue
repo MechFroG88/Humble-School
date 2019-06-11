@@ -1,6 +1,6 @@
 <template>
   <div id="_3d">
-    <button class="btn btn-primary" style="margin:1rem" @click="pop">Pop Card</button>
+    <button class="btn btn-primary" style="margin:1rem" @click="pop(3)">Pop Card</button>
 
     <modal ref="popUp" class="animated bounceInUp" closable :classId="`${ group.id }`" >
       <div slot="pic" class="pic" :style="`background-image: ${group.picture}`"></div> 
@@ -12,7 +12,8 @@
         </div>
       
         <div class="place">{{ group.cn_class }}</div>
-        <div class="time">3pm-5pm</div>
+        <div class="place">{{ group.en_class }}</div>
+        
       </div>
       <div slot="footer">
       </div>
@@ -43,10 +44,11 @@ export default {
     }
   }),
   methods: {
-    pop() {
+    pop(id) {
       this.$refs.popUp.active = true;
-      getClass(this.$route.params.id).then(({ data }) => {
+      getClass(id).then(({ data }) => {
           this.group = data.data[0];
+          this.group.picture = url("../../static/card.jpg");
         }).catch((err) => {
           this.notification('数据读取失败！请重试！', 'error');
           console.log(err);
