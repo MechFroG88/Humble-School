@@ -4,24 +4,26 @@
     <div class="dis">
       <input type="checkbox" class="mr-2" v-model="hideLocation"><i>Disable location</i>
     </div>
-    <div class="btn btn-primary cancel" v-if="isOrbit" @click="cancelView" style="z-index:2">Go Back</div>
+    <div class="btn btn-primary cancel" v-if="isOrbit" @click="cancelView" >Go Back</div>
     <div id="log" class="log"></div>
 
-    <modal  ref="popUp" class="animated bounceInUp" closable :classId="`${ group.class_id }`" >
-      <div slot="pic" class="pic" :style="`background-image: ${group.picture}`"></div> 
-      
-      <div slot="body">
+    <card ref="popUp" class="animated bounceInUp card"  :classId="`${ group.id }`" :image="url" >
+      <div slot="image">
+        <img src="../static/card.jpg" class="img-responsive">
+      </div>
+      <div slot="header">
         <div class="title">
-          <div class="modal-title h4">{{ group.theme }}</div>
-          <span class="chip">{{ group.society }}</span>
+          <div class="modal-title h4">十万个为什么</div>
+          <span class="chip">华文学会</span>
         </div>
-      
-        <div class="place">{{ group.cn_class }}</div>
-        <div class="place">{{ group.en_class }}</div>
+      </div>
+      <div slot="body">
+        <div class="place">初一忠</div>
+        <div class="place">1zhong</div>
       </div>
       <div slot="footer">
       </div>
-    </modal>
+    </card>
 
   </div>
 </template>
@@ -39,24 +41,24 @@ import Stats from '../vendor/stats.js';
 
 import sceneObj from '../static/model/scene_again.json';
 
-import modal from '@/components/modal';
+import card from '@/components/modal';
 import { getClass } from '@/api/class';
 
 export default {
   components: {
-    modal,
+    card,
   },
   mounted() {
     this.init();
     this.animate();
   },
   data: () => ({
+    url: '',
     group: {
       cn_class: '',
       en_class: '',
       theme: '',
       society: '',
-      picture: '',
       detail: ''
     },
     hideLocation: false,
@@ -75,9 +77,11 @@ export default {
   methods: {
     pop(id) {
       console.log(id);
+      this.$refs.popUp.active = true;
       getClass(id).then(({ data }) => {
         this.$refs.popUp.active = true;
         this.group = data.data[0];
+        this.url="../static/card.jpg";
         console.log(this.group);
       }).catch((err) => {
         this.notification('数据读取失败！请重试！', 'error');
@@ -290,7 +294,6 @@ export default {
       requestAnimationFrame( this.animate );
       this.controls.update();
       this.render();
-      this.stats.update();
     },
     loadModel() {
       this.loader = new THREE.ObjectLoader();

@@ -1,8 +1,6 @@
-#_3d{
-  #_modal{
-    .modal-body {
-      margin-left: .5rem;
-      margin-right: .5rem;
+#_model{
+  .card{
+    .card-header {
       .title {
         display: flex;
         align-items: center;
@@ -14,22 +12,9 @@
           background-color: rgba(0, 0, 0, .05);
         }
       }
-      .time {
-        font-weight: 400;
-      }
     }
-
-    .modal-footer {
-      .like {
-        margin: 0;
-        width: 110%;
-        display: flex;
-        justify-content: space-around;
-        .liked {
-          color:$primary-color;
-        }
-      
-      }
+    .card-body {
+      margin-left: .2rem;
     }
   }
 }
