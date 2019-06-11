@@ -1,12 +1,13 @@
 <template>
   <div id="_model" class="model-container">
+    
     <div class="dis">
       <input type="checkbox" class="mr-2" v-model="hideLocation"><i>Disable location</i>
     </div>
     <div class="btn btn-primary cancel" v-if="isOrbit" @click="cancelView">Go Back</div>
     <div id="log" class="log"></div>
 
-    <modal  ref="popUp" class="animated bounceInUp" closable :classId="`${ group.id }`" >
+    <modal  ref="popUp" class="animated bounceInUp" closable :classId="`${ group.class_id }`" >
       <div slot="pic" class="pic" :style="`background-image: ${group.picture}`"></div> 
       
       <div slot="body">
@@ -16,7 +17,7 @@
         </div>
       
         <div class="place">{{ group.cn_class }}</div>
-        <div class="time">3pm-5pm</div>
+        <div class="place">{{ group.en_class }}</div>
       </div>
       <div slot="footer">
       </div>
@@ -50,7 +51,6 @@ export default {
     this.animate();
   },
   data: () => ({
-
     group: {
       cn_class: '',
       en_class: '',
@@ -59,7 +59,6 @@ export default {
       picture: '',
       detail: ''
     },
-
     hideLocation: false,
     isOrbit: false,
     high: false,
@@ -74,17 +73,17 @@ export default {
     theta: 0,
   }),
   methods: {
-
     pop(id) {
-      this.$refs.popUp.active = true;
+      console.log(id);
       getClass(id).then(({ data }) => {
-          this.group = data.data[0];
-        }).catch((err) => {
-          this.notification('数据读取失败！请重试！', 'error');
-          console.log(err);
-        });
+        this.$refs.popUp.active = true;
+        this.group = data.data[0];
+        console.log(this.group);
+      }).catch((err) => {
+        this.notification('数据读取失败！请重试！', 'error');
+        console.log(err);
+      });
     },
-
     init() {
       this.scene = new THREE.Scene();
       this.scene.background = new THREE.Color(0xeeeeee);
@@ -129,26 +128,29 @@ export default {
     },
     onMouseClick(event) {
       event.preventDefault();
-      if (!this.isOrbit) {
-        console.log(this.intersects[0].object);
-        if (this.intersects[0].object.name.includes('Location')) { this.clicked = this.intersects[0]; }
-        else if (this.intersects[1].object.name.includes('Location')) { this.clicked = this.intersects[1]; }
-        if (this.clicked && (this.intersects[0].object.name.includes('Location') || this.intersects[1].object.name.includes('Location'))) {
-          this.pop(this.clicked.object.name.slice(9));
-          this.isOrbit = true; this.theta = 100 * Math.random();
-          this.XOffset = this.clicked.point.x; this.ZOffset = this.clicked.point.z;
-          this.cinematic.position.set( 0, this.clicked.point.y + this.depressionHeight, 0 )
-          this.clicked.object.material.emissive = new THREE.Color( 0xff0000 );
-          this.clicked.object.material.opacity = .75;
-          this.clicked.object.material.color.setHex( 0xff0000 );
-          if (this.clicked.object.name == 'Location_67') { this.high = true; this.cinematic.position.set( 0, this.cinematicHeight + 800, 0 ); }
-          else if (this.clicked.object.name == 'Location_165') { this.far = true; this.cinematic.position.set( 0, this.cinematicHeight + 1000, 0 ); }
-          else { this.high = false; this.far = false; }
-
-          // set other locations to transparent
-          this.scene.children[6].children[0].children.forEach((el) => {
-            if (el.name.includes('Location') && el.name != this.clicked.object.name) { el.material.opacity = 0; }
-          })
+      if (this.intersects[0] && !this.hideLocation) {
+        if (!this.isOrbit && this.intersects[0].object && this.intersects[0].object.name != 'Land') {
+          if (this.intersects[0].object.name.includes('Location')) { this.clicked = this.intersects[0]; }
+          else if (this.intersects[1].object.name.includes('Location')) { this.clicked = this.intersects[1]; }
+          if (this.clicked && (this.intersects[0].object.name.includes('Location') || this.intersects[1].object.name.includes('Location'))) {
+            console.log(this.clicked.object.name);
+            //location5
+            this.pop(this.clicked.object.name.slice(9));
+            this.isOrbit = true; this.theta = 100 * Math.random();
+            this.XOffset = this.clicked.point.x; this.ZOffset = this.clicked.point.z;
+            this.cinematic.position.set( 0, this.clicked.point.y + this.depressionHeight, 0 )
+            this.clicked.object.material.emissive = new THREE.Color( 0xff0000 );
+            this.clicked.object.material.opacity = .75;
+            this.clicked.object.material.color.setHex( 0xff0000 );
+            if (this.clicked.object.name == 'Location_67') { this.high = true; this.cinematic.position.set( 0, this.cinematicHeight + 800, 0 ); }
+            else if (this.clicked.object.name == 'Location_165') { this.far = true; this.cinematic.position.set( 0, this.cinematicHeight + 1000, 0 ); }
+            else { this.high = false; this.far = false; }
+  
+            // set other locations to transparent
+            this.scene.children[6].children[0].children.forEach((el) => {
+              if (el.name.includes('Location') && el.name != this.clicked.object.name) { el.material.opacity = 0; }
+            })
+          }
         }
       }
     },
