@@ -56,7 +56,7 @@ export default {
     card,
   },
   data: () => ({
-    url: '',
+    url: URL,
     group: {
       cn_class: '',
       en_class: '',
@@ -69,6 +69,7 @@ export default {
   methods: {
     pop(id) {
       this.$refs.popUp.active = true;
+      this.url='../static/card.jpg';
       getClass(id).then(({ data }) => {
           this.group = data.data[0];
           this.url="../static/card.jpg";
