@@ -3,6 +3,7 @@
     <div class="dis">
       <input type="checkbox" class="mr-2" v-model="hideLocation"><i>Disable location</i>
     </div>
+    <div class="btn btn-primary cancel" v-if="isOrbit" @click="cancelView">Go Back</div>
     <div id="log" class="log"></div>
 
     <modal  ref="popUp" class="animated bounceInUp" closable :classId="`${ group.id }`" >
@@ -105,9 +106,6 @@ export default {
       this.mouse = new THREE.Vector2(), this.INTERSECTED;
       this.raycaster = new THREE.Raycaster();
 
-      this.stats = new Stats();
-      document.body.appendChild( this.stats.dom );
-
       this.addLight();
 
       this.loadModel();
@@ -167,11 +165,7 @@ export default {
     keyIsPressed(event) {
       switch (event.keyCode) {
         case 27:
-          this.isOrbit = false;
-          this.clicked.object.material.color.setHex( 0xDBDBDB );
-          this.scene.children[6].children[0].children.forEach((el) => {
-            if (el.name.includes('Location')) { el.material.opacity = .3; }
-          })
+          this.cancelView();
           break;
         case 32:
           this.camera.position.set(-1700, 1400, 1400);
@@ -340,6 +334,13 @@ export default {
       }
       this.renderer.setSize( window.innerWidth, window.innerHeight );
     },
+    cancelView() {
+      this.isOrbit = false;
+      this.clicked.object.material.color.setHex( 0xDBDBDB );
+      this.scene.children[6].children[0].children.forEach((el) => {
+        if (el.name.includes('Location')) { el.material.opacity = .3; }
+      })
+    },
   },
   watch: {
     hideLocation: function() {
@@ -358,7 +359,13 @@ export default {
 }
 .dis {
   position: absolute;
-  top: 3rem;
+  top: 1rem;
   left: 1rem;
+}
+.cancel {
+  position : absolute;
+  top: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
 }
 </style>
