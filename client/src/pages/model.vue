@@ -95,6 +95,9 @@ export default {
         console.log(this.group);
       }).catch((err) => {
         this.notification('数据读取失败！请重试！', 'error');
+        if (error.response.status === 401) {
+          router.push('/home')
+        }
         console.log(err);
       });
     },
