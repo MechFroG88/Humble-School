@@ -173,9 +173,9 @@ export default {
       p.innerHTML = msg + "\n" + p.innerHTML;
     },
     touchStart(ev) {
-      event.preventDefault();
+      // event.preventDefault();
       for (var i=0; i < ev.targetTouches.length; i++) {
-        this.log(`${ev.clientX}, ${ev.clientY}`);
+        this.log(`${ev.targetTouches[i].clientX}, ${ev.targetTouches[i].clientY}`);
       }
     },
     keyIsPressed(event) {
@@ -188,9 +188,6 @@ export default {
           this.camera.lookAt( this.scene.position );
           this.camera.updateProjectionMatrix();
           break;
-        case 67:
-          console.log("click");
-          document.body.children[1].click();
       }
     },
     render() {
