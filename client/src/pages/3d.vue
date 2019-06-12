@@ -25,7 +25,7 @@
 
     <card ref="popUp" class="animated bounceInUp card"  :classId="`${ group.id }`" :image="url" >
       <div slot="image">
-        <img src="../static/card.jpg" class="img-responsive">
+        <img src="../static/card.jpg" class="img-responsive" v-if="classId == 3">
       </div>
       <div slot="header">
         <div class="title">
@@ -56,7 +56,7 @@ export default {
     card,
   },
   data: () => ({
-    url: URL,
+    url: '',
     group: {
       cn_class: '',
       en_class: '',
@@ -64,12 +64,13 @@ export default {
       society: '',
       picture: '',
       detail: ''
-    }
+    },
+    classId: 3,
   }),
   methods: {
     pop(id) {
       this.$refs.popUp.active = true;
-      this.url='../static/card.jpg';
+      this.url="../static/card.jpg";
       getClass(id).then(({ data }) => {
           this.group = data.data[0];
           this.url="../static/card.jpg";
