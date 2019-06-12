@@ -7,19 +7,32 @@
     <div class="btn btn-primary cancel" v-if="isOrbit" @click="cancelView" >Go Back</div>
     <div id="log" class="log"></div>
 
-    <card ref="popUp" class="animated bounceInUp card"  :classId="`${ group.id }`" :image="url" >
+    <card ref="popUp" class="animated bounceInUp card"  :classId="`${ group.id }`" >
       <div slot="image">
-        <img src="../static/card.jpg" class="img-responsive">
+        <!-- 国字楼 //-->
+        <img src="../static/guozilou.jpeg" class="img-responsive" v-if="group.id <= 67">
+        <!-- 学生楼 //-->
+        <img src="../static/xueshenglou.jpeg" class="img-responsive" v-else-if="group.id <= 93">
+        <!-- 食堂大楼，商科大楼 -->
+        <!-- <img src="../static/shitangdalou.jpg" class="img-responsive" v-if="group.id <= 126"> -->
+        <!-- 新楼 -->
+        <!-- <img src="../static/xinlou.jpg" class="img-responsive" v-if="group.id <= 147"> -->
+        <!-- 工艺喽 -->
+        <!-- <img src="../static/gongyilou.jpg" class="img-responsive" v-if="group.id <= 157"> -->
+        <!-- 新场 //-->
+        <img src="../static/xinchang.jpeg" class="img-responsive" v-if="group.id <= 164">
+        <!-- 中华广场 -->
+        <!-- <img src="../static/guangchang.jpg" class="img-responsive" v-if="group.id == 165"> -->
       </div>
       <div slot="header">
         <div class="title">
-          <div class="modal-title h4">十万个为什么</div>
-          <span class="chip">华文学会</span>
+          <div class="modal-title h4">{{ group.theme }}</div>
+          <span class="chip">{{ group.society }}</span>
         </div>
       </div>
       <div slot="body">
-        <div class="place">初一忠</div>
-        <div class="place">1zhong</div>
+        <div class="place">{{ group.cn_class }}</div>
+        <div class="place">{{ group.en_class }}</div>
       </div>
       <div slot="footer">
       </div>
@@ -53,7 +66,6 @@ export default {
     this.animate();
   },
   data: () => ({
-    url: '',
     group: {
       cn_class: '',
       en_class: '',
@@ -77,11 +89,9 @@ export default {
   methods: {
     pop(id) {
       console.log(id);
-      this.$refs.popUp.active = true;
       getClass(id).then(({ data }) => {
         this.$refs.popUp.active = true;
         this.group = data.data[0];
-        this.url="../static/card.jpg";
         console.log(this.group);
       }).catch((err) => {
         this.notification('数据读取失败！请重试！', 'error');

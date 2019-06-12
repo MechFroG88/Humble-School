@@ -25,7 +25,21 @@
 
     <card ref="popUp" class="animated bounceInUp card"  :classId="`${ group.id }`" :image="url" >
       <div slot="image">
-        <img src="../static/card.jpg" class="img-responsive" v-if="classId == 3">
+        <!-- 国字楼 -->
+        <img src="../static/guozilou.jpeg" class="img-responsive" v-if="classId <= 67">
+        <!-- 学生楼 -->
+        <img src="../static/xueshenglou.jpeg" class="img-responsive" v-else-if="classId <= 93">
+        <!-- 食堂大楼，商科大楼 -->
+        <img src="../static/card.jpg" class="img-responsive" v-if="classId <= 126">
+        <!-- 新楼 -->
+        <img src="../static/card.jpg" class="img-responsive" v-if="classId <= 147">
+        <!-- 工艺喽 -->
+        <img src="../static/card.jpg" class="img-responsive" v-if="classId <= 157">
+        <!-- 新场 -->
+        <img src="../static/card.jpg" class="img-responsive" v-if="classId <= 164">
+        <!-- 中华广场 -->
+        <img src="../static/card.jpg" class="img-responsive" v-if="classId == 165">
+        
       </div>
       <div slot="header">
         <div class="title">

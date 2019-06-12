@@ -3,7 +3,7 @@ import App from './App.vue';
 import router from './router';
 import './assets/scss/style.scss';
 import './assets/scss/icons/style.css';
-import '../node_modules/spectre.css/src/spectre.scss';
+// import './assets/scss/spectre/src/spectre.scss';
 import './dist/animate.css';
 
 // Drop down notifications
