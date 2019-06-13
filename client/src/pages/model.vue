@@ -8,6 +8,12 @@
     <div class="dis">
       <input type="checkbox" class="mr-2" v-model="hideLocation"><i>Disable location</i>
     </div>
+    <div class="color">
+      <div class="input">
+        <input type="checkbox" class="mr-2" v-model="showColor"><i>Show Color Selector</i>
+      </div>
+      <ColorPicker :width="300" :height="300" startColor="#ff0000" @colorChange="onColorChange" v-if="showColor"></ColorPicker>
+    </div>
     <!-- <div class="btn btn-primary cancel" v-if="isOrbit" @click="cancelView" >Go Back</div> -->
     <div id="log" class="log"></div>
 
@@ -60,10 +66,12 @@ import sceneObj from '../static/model/scene_again.json';
 
 import card from '@/components/modal';
 import { getClass } from '@/api/class';
+import ColorPicker from 'vue-color-picker-wheel';
 
 export default {
   components: {
     card,
+    ColorPicker
   },
   mounted() {
     this.init();
@@ -78,6 +86,7 @@ export default {
       detail: ''
     },
     hideLocation: false,
+    showColor: false,
     isOrbit: false,
     high: false,
     far: false,
@@ -195,7 +204,7 @@ export default {
                                     first.screenX, first.screenY, 
                                     first.clientX, first.clientY, false, 
                                     false, false, false, 0/*left*/, null);
-
+      console.log(simulatedEvent);
       first.target.dispatchEvent(simulatedEvent);
       // event.preventDefault();
     },
@@ -321,19 +330,19 @@ export default {
       this.ambientLight = new THREE.AmbientLight( 0x555555, 0.3 );
       this.scene.add( this.ambientLight );
 
-      this.pointLight1 = new THREE.PointLight( 0xFFFFFF, .12 );
+      this.pointLight1 = new THREE.PointLight( 0xFFFFFF, .15 );
       this.pointLight1.position.set(3000, 5000, 3000);
       this.scene.add( this.pointLight1 );
 
-      this.pointLight2 = new THREE.PointLight( 0xFFFFFF, .12 );
+      this.pointLight2 = new THREE.PointLight( 0xFFFFFF, .15 );
       this.pointLight2.position.set(-3000, 5000, 3000);
       this.scene.add( this.pointLight2 );
 
-      this.pointLight3 = new THREE.PointLight( 0xFFFFFF, .12 );
+      this.pointLight3 = new THREE.PointLight( 0xFFFFFF, .15 );
       this.pointLight3.position.set(3000, 5000, -3000);
       this.scene.add( this.pointLight3 );
 
-      this.pointLight4 = new THREE.PointLight( 0xFFFFFF, .12 );
+      this.pointLight4 = new THREE.PointLight( 0xFFFFFF, .15 );
       this.pointLight4.position.set(-3000, 5000, -3000);
       this.scene.add( this.pointLight4 );
     },
@@ -375,6 +384,13 @@ export default {
           child.renderOrder = 0;
         }
       })
+    },
+    onColorChange(color) {
+      var new_color = `0x${color.slice(1)}`;
+      this.pointLight1.color.setHex(new_color);
+      this.pointLight2.color.setHex(new_color);
+      this.pointLight3.color.setHex(new_color);
+      this.pointLight4.color.setHex(new_color);
     },
     onWindowResize() {
       if (this.isOrbit) {
