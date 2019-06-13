@@ -71,7 +71,23 @@ class Class_model extends HS_Model{
                           ->get(T_CLASSES)
                           ->result();
         return $class;
-    }    
+    }   
+    
+    /**
+     * Find class by cn_class OR theme OR society
+     * 
+     * @param int $class_id
+     */
+    public function find($key)
+    {
+        $keyword = $key['key'];
+        $class = $this->db->like('cn_class',$keyword)
+                          ->or_like('theme',$keyword)
+                          ->or_like('society',$keyword)
+                          ->get(T_CLASSES)
+                          ->result();
+        return $class;
+    }
 
     /**
      * Update class

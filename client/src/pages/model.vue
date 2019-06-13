@@ -1,6 +1,6 @@
 <template>
   <div id="_model" class="model-container"  @dblclick="cancelView">
-    <div class="btn btn-sm btn-link"  @click="back">
+    <div class="btn btn-sm btn-primary backBtn"  @click="back()">
       <i class="icon icon-arrow-left1"></i>
       <div>back</div>
     </div>
@@ -8,7 +8,7 @@
     <div class="dis">
       <input type="checkbox" class="mr-2" v-model="hideLocation"><i>Disable location</i>
     </div>
-    <div class="btn btn-primary cancel" v-if="isOrbit" @click="cancelView" >Go Back</div>
+    <!-- <div class="btn btn-primary cancel" v-if="isOrbit" @click="cancelView" >Go Back</div> -->
     <div id="log" class="log"></div>
 
     <card ref="popUp" class="animated bounceInUp card"  :classId="`${ group.class_id }`" >
@@ -100,7 +100,7 @@ export default {
       }).catch((err) => {
         this.notification('数据读取失败！请重试！', 'error');
         if (error.response.status === 401) {
-          router.push('/home')
+          router.push('/model')
         }
         console.log(err);
       });
@@ -377,7 +377,12 @@ export default {
       }
     },
     back() {
-      this.$router.go(-1);
+      if (this.isOrbit) {
+        this.cancelView();
+      }
+      else {
+        this.$router.go(-1);
+      }
     },
   },
   watch: {
