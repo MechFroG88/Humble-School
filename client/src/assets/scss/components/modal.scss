@@ -1,24 +1,23 @@
 #_card {
   position: absolute;
-  
   text-align: left;
   border-radius: .5rem;
   width: 35% !important;
-  height: 13rem ;
+  height: 15rem ;
   left: 60% !important;
   top: 4rem;
+  // overflow: auto;
   
   @media screen and (max-width: 600px) {
     width: 70% !important;
-    height: 12rem ;
+    height: 14rem ;
     left: 15% !important;
     top: 5rem;
   }
   @media screen and (min-width: 1000px) {
-    left:70% !important;
+    left: 70% !important;
     width: 25% !important;
-    height: 16rem;
-    
+    height: 18rem;
   }
   @media screen and (orientation:landscape) {
     width: 50%;
@@ -32,7 +31,7 @@
       @media screen and (max-width: 500px) {
        height: 20vh;
       }
-      @media screen and (max-width: 10  00px) {
+      @media screen and (max-width: 1000px) {
        height: 18vh; 
       }
     }

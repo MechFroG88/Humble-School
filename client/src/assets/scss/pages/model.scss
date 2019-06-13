@@ -3,14 +3,21 @@
     float: right;
     .card-header {
       .title {
-        display: flex;
         align-items: center;
         margin-bottom: .2rem;
+        .modal-title {
+          font-size: 1.2rem;
+          @media screen and (max-width: 600px) {
+            font-size: .9rem;
+          }
+        }
         .chip {
-          margin-left: .8rem;
           border: .03rem solid #2D4059;
           border-radius: .2rem;
           background-color: rgba(0, 0, 0, .05);
+          @media screen and (max-width: 600px) {
+            font-size: .6rem;
+          }
         }
       }
     }
