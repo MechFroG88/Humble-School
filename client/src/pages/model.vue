@@ -1,5 +1,9 @@
 <template>
   <div id="_model" class="model-container">
+    <div class="btn btn-primary btnGroup"  @click="back()">
+      <i class="icon icon-arrow-left1"></i>
+      <div>back</div>
+    </div>
     
     <div class="dis">
       <input type="checkbox" class="mr-2" v-model="hideLocation"><i>Disable location</i>
@@ -359,6 +363,9 @@ export default {
       this.scene.children[6].children[0].children.forEach((el) => {
         if (el.name.includes('Location')) { el.material.opacity = .3; }
       })
+    },
+    back() {
+      window.history.back();
     },
   },
   watch: {

@@ -5,7 +5,8 @@
           $route.name !== 'group' &&
           $route.name !== 'users' &&
           $route.name !== 'groupDetails'&&
-          $route.name !== 'details'">
+          $route.name !== 'details' &&
+          $route.name !== 'model'">
       <i class="icon icon-arrow-left1"></i>
       <div>back</div>
     </div>
@@ -69,8 +70,8 @@ body {
 <script>
 export default {
   methods: {
-     back() {
-      window.history.back();
+    back() {
+    window.history.back();
     }
   }
 }
