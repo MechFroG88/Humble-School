@@ -137,7 +137,7 @@ export default {
       window.addEventListener( 'keydown', this.keyIsPressed, false );
       
       // mobile events
-      window.addEventListener( "touchstart", this.touchStart, false );
+      window.addEventListener( "touchstart", this.touchStart, { passive: false } );
       window.addEventListener( "touchend", this.touchEnd, false );
       window.addEventListener( "touchcancel", this.touchCancel, false );
       window.addEventListener( "touchmove", this.touchMove, false );
@@ -148,6 +148,7 @@ export default {
       this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
     },
     onMouseClick(event) {
+      console.log(event);
       event.preventDefault();
       if (this.intersects[0] && !this.hideLocation) {
         if (!this.isOrbit && this.intersects[0].object && this.intersects[0].object.name != 'Land') {
@@ -179,12 +180,18 @@ export default {
       var p = document.getElementById('log');
       p.innerHTML = msg + "\n" + p.innerHTML;
     },
-    touchStart(ev) {
+    touchStart(event) {
       // event.preventDefault();
       // for (var i=0; i < ev.targetTouches.length; i++) {
       //   this.log(`${ev.targetTouches[i].clientX}, ${ev.targetTouches[i].clientY}`);
       // }
-      console.log(ev.targetTouches[0]);
+      console.log(event, event.touches[0]);
+      event.preventDefault();
+      this.onMouseMove(event.touches[0]);
+      this.onMouseClick();
+    },
+    touchMove(event) {
+      this.onMouseMove(event.targetTouches[0]);
     },
     touchEnd() {
       var timeout;
@@ -215,7 +222,7 @@ export default {
       if (!this.hideLocation) {
         this.raycaster.setFromCamera( this.mouse, this.camera );
         this.intersects = this.raycaster.intersectObjects( this.scene.children[6].children[0].children );
-        console.log(this.scene.children[6].children[0].children);
+        // console.log(this.scene.children[6].children[0].children);
         if ( this.intersects.length > 0 && !this.isOrbit) {
           if ( this.INTERSECTED != this.intersects[0].object && this.intersects[0].object.name != 'Land' ) {
             if ( this.INTERSECTED ) this.INTERSECTED.material.emissive.setHex( this.INTERSECTED.currentHex );
@@ -368,6 +375,7 @@ export default {
       this.renderer.setSize( window.innerWidth, window.innerHeight );
     },
     cancelView() {
+      console.log("Hello");
       if (this.isOrbit) {
         this.$refs.popUp.active = false;
         this.isOrbit = false;
