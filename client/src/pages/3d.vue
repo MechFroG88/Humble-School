@@ -43,7 +43,7 @@
       </div>
       <div slot="header">
         <div class="title">
-          <div class="modal-title h8">十万个为什么</div>
+          <div class="modal-title h8">十万个为什么水水水水水水杀杀杀</div>
           <span class="chip">华文学会</span>
         </div>
       </div>
