@@ -300,24 +300,24 @@ export default {
       /// cinematic camera ///
     },
     addLight() {
-      this.ambientLight = new THREE.AmbientLight( 0xFFFFFF, 0.5 );
+      this.ambientLight = new THREE.AmbientLight( 0X111111, 0.3 );
       this.scene.add( this.ambientLight );
 
-      this.pointLight1 = new THREE.PointLight( 0xFFFFFF, .12 );
-      this.pointLight1.position.set(3000, 5000, 3000);
-      this.scene.add( this.pointLight1 );
+      // this.pointLight1 = new THREE.PointLight( 0xFFFFFF, .12 );
+      // this.pointLight1.position.set(3000, 5000, 3000);
+      // this.scene.add( this.pointLight1 );
 
-      this.pointLight2 = new THREE.PointLight( 0xFFFFFF, .12 );
-      this.pointLight2.position.set(-3000, 5000, 3000);
-      this.scene.add( this.pointLight2 );
+      // this.pointLight2 = new THREE.PointLight( 0xFFFFFF, .12 );
+      // this.pointLight2.position.set(-3000, 5000, 3000);
+      // this.scene.add( this.pointLight2 );
 
-      this.pointLight3 = new THREE.PointLight( 0xFFFFFF, .12 );
-      this.pointLight3.position.set(3000, 5000, -3000);
-      this.scene.add( this.pointLight3 );
+      // this.pointLight3 = new THREE.PointLight( 0xFFFFFF, .12 );
+      // this.pointLight3.position.set(3000, 5000, -3000);
+      // this.scene.add( this.pointLight3 );
 
-      this.pointLight4 = new THREE.PointLight( 0xFFFFFF, .12 );
-      this.pointLight4.position.set(-3000, 5000, -3000);
-      this.scene.add( this.pointLight4 );
+      // this.pointLight4 = new THREE.PointLight( 0xFFFFFF, .12 );
+      // this.pointLight4.position.set(-3000, 5000, -3000);
+      // this.scene.add( this.pointLight4 );
     },
     animate() {
       requestAnimationFrame( this.animate );
