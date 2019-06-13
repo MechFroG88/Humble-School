@@ -28,7 +28,11 @@
 
 <script>
 export default {
-
+  methods: {
+    next() {
+      this.$router.push('/model');
+    },
+  }
 }
 </script>
 
