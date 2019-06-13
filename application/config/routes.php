@@ -23,3 +23,4 @@ $route['class']['GET']                       = 'Classes/get';
 $route['class/(:num)']['GET']                = 'Classes/get_single/$1';
 $route['class/(:num)']['POST']               = 'Classes/update/$1';
 $route['class/delete/(:num)']['POST']        = 'Classes/delete/$1';
+$route['class/find']['POST']                  = 'Classes/find';

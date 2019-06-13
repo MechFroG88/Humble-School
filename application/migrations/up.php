@@ -34,8 +34,8 @@ class Upstream
         $this->db->column("class_id")      ->bigint(20)  ->primary()->unique()->autoIncrement()
                  ->column("cn_class")      ->varchar(20)
                  ->column("en_class")      ->varchar(40) 
-                 ->column("society")       ->varchar(20)      
-                 ->column("theme")         ->varchar(20) 
+                 ->column("society")       ->varchar(50)      
+                 ->column("theme")         ->varchar(60) 
                  ->column("detail")        ->text()
                  ->column("picture")       ->text()
                  ->create("classes");
