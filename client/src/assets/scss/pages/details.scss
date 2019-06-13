@@ -1,7 +1,13 @@
 #_details {
   text-align: left;
-  @media screen and (min-width: 1500px) {
-    width: 50vw;
+  // @media screen and (min-width: 1500px) {
+  //   width: 50vw;
+  // }
+  .detailsContainer {
+    margin: auto;
+    @media screen and (min-width: 2000px) {
+      width: 33vw;
+    }
   }
   .pic{
     background-position: center;
@@ -14,8 +20,8 @@
     @media screen and (min-width: 1200px) {
       height: 55vh;
     }
-    @media screen and (min-width: 1500px) {
-      width: 50vw;
+    @media screen and (min-width: 2000px) {
+      width: 33vw;
     }
     
   }
@@ -36,8 +42,8 @@
     @media screen and (min-width: 1000px) {
       left: 92%;
     }
-    @media screen and (min-width: 1500px) {
-      left: 47%;
+    @media screen and (min-width: 2000px) {
+      left: 63.5%;
     }
   }
   .container {
