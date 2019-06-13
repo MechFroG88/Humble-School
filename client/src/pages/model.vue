@@ -1,27 +1,46 @@
 <template>
-  <div id="_model" class="model-container">
+  <div id="_model" class="model-container"  @dblclick="cancelView">
+    <div class="btn btn-primary backBtn"  @click="back()">
+      <i class="icon icon-arrow-left1"></i>
+      <div>back</div>
+    </div>
     
     <div class="dis">
       <input type="checkbox" class="mr-2" v-model="hideLocation"><i>Disable location</i>
     </div>
-    <div class="btn btn-primary cancel" v-if="isOrbit" @click="cancelView" style="z-index:2">Go Back</div>
+    <!-- <div class="btn btn-primary cancel" v-if="isOrbit" @click="cancelView" >Go Back</div> -->
     <div id="log" class="log"></div>
 
-    <modal  ref="popUp" class="animated bounceInUp" closable :classId="`${ group.class_id }`" >
-      <div slot="pic" class="pic" :style="`background-image: ${group.picture}`"></div> 
-      
-      <div slot="body">
+    <card ref="popUp" class="animated bounceInUp card"  :classId="`${ group.class_id }`" >
+      <div slot="image">
+        <!-- 国字楼 //-->
+        <img src="../static/guozilou.jpeg" class="img-responsive" v-if="group.class_id <= 67">
+        <!-- 学生楼 //-->
+        <img src="../static/xueshenglou.jpeg" class="img-responsive" v-else-if="group.class_id <= 93">
+        <!-- 食堂大楼，商科大楼 -->
+        <img src="../static/shitangdalou.jpeg" class="img-responsive" v-else-if="group.class_id <= 126">
+        <!-- 新楼 -->
+        <img src="../static/xinlou.jpeg" class="img-responsive" v-else-if="group.class_id <= 147">
+        <!-- 工艺喽 -->
+        <img src="../static/gongyilou.jpeg" class="img-responsive" v-else-if="group.class_id <= 157">
+        <!-- 新场 //-->
+        <img src="../static/xinchang.jpeg" class="img-responsive" v-else-if="group.class_id <= 164">
+        <!-- 中华广场 -->
+        <img src="../static/guangchang.jpeg" class="img-responsive" v-else-if="group.class_id == 165"> 
+      </div>
+      <div slot="header">
         <div class="title">
           <div class="modal-title h4">{{ group.theme }}</div>
           <span class="chip">{{ group.society }}</span>
         </div>
-      
+      </div>
+      <div slot="body">
         <div class="place">{{ group.cn_class }}</div>
         <div class="place">{{ group.en_class }}</div>
       </div>
       <div slot="footer">
       </div>
-    </modal>
+    </card>
 
   </div>
 </template>
@@ -39,12 +58,12 @@ import Stats from '../vendor/stats.js';
 
 import sceneObj from '../static/model/scene_again.json';
 
-import modal from '@/components/modal';
+import card from '@/components/modal';
 import { getClass } from '@/api/class';
 
 export default {
   components: {
-    modal,
+    card,
   },
   mounted() {
     this.init();
@@ -56,7 +75,6 @@ export default {
       en_class: '',
       theme: '',
       society: '',
-      picture: '',
       detail: ''
     },
     hideLocation: false,
@@ -81,6 +99,9 @@ export default {
         console.log(this.group);
       }).catch((err) => {
         this.notification('数据读取失败！请重试！', 'error');
+        if (error.response.status === 401) {
+          router.push('/model')
+        }
         console.log(err);
       });
     },
@@ -159,10 +180,23 @@ export default {
       p.innerHTML = msg + "\n" + p.innerHTML;
     },
     touchStart(ev) {
-      event.preventDefault();
-      for (var i=0; i < ev.targetTouches.length; i++) {
-        this.log(`${ev.clientX}, ${ev.clientY}`);
+      // event.preventDefault();
+      // for (var i=0; i < ev.targetTouches.length; i++) {
+      //   this.log(`${ev.targetTouches[i].clientX}, ${ev.targetTouches[i].clientY}`);
+      // }
+      console.log(ev.targetTouches[0]);
+    },
+    touchEnd() {
+      var timeout;
+      var lastTap = 0;
+      var currentTime = new Date().getTime();
+      var tapLength = currentTime - lastTap;
+      clearTimeout(timeout);
+      if (tapLength < 500 && tapLength > 0) {
+          this.cancelView();
+          event.preventDefault();
       }
+      lastTap = currentTime;
     },
     keyIsPressed(event) {
       switch (event.keyCode) {
@@ -174,9 +208,6 @@ export default {
           this.camera.lookAt( this.scene.position );
           this.camera.updateProjectionMatrix();
           break;
-        case 67:
-          console.log("click");
-          document.body.children[1].click();
       }
     },
     render() {
@@ -290,7 +321,6 @@ export default {
       requestAnimationFrame( this.animate );
       this.controls.update();
       this.render();
-      this.stats.update();
     },
     loadModel() {
       this.loader = new THREE.ObjectLoader();
@@ -337,12 +367,23 @@ export default {
       this.renderer.setSize( window.innerWidth, window.innerHeight );
     },
     cancelView() {
-      this.$refs.popUp.active = false;
-      this.isOrbit = false;
-      this.clicked.object.material.color.setHex( 0xDBDBDB );
-      this.scene.children[6].children[0].children.forEach((el) => {
-        if (el.name.includes('Location')) { el.material.opacity = .3; }
-      })
+      if (this.isOrbit) {
+        this.$refs.popUp.active = false;
+        this.isOrbit = false;
+        this.clicked.object.material.color.setHex( 0xDBDBDB );
+        this.scene.children[6].children[0].children.forEach((el) => {
+          if (el.name.includes('Location')) { el.material.opacity = .3; }
+        })
+      }
+    },
+    back() {
+      if (this.isOrbit) {
+        this.cancelView();
+      }
+      else {
+        window.history.back();
+      }
+      
     },
   },
   watch: {

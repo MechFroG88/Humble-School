@@ -1,19 +1,29 @@
 #_details {
   text-align: left;
   .pic{
-    background-size: cover;
+    // background-size: cover !important;
     background-position: center;
-    // background-image: url("../../static/card.jpg");
+    background-repeat: no-repeat;
+    width: 100vw;
     height: 35vh;
+    @media screen and (min-width: 800px) {
+      height: 45vh;
+    }
   }
   .closeButton {
-    width: 1.7em !important;
-    height: 1.7rem !important;
     position: absolute;
-    bottom: 94%;
+    bottom: 93%;
     left: 87%;
     color:white;
     font-size: 1.4rem;
+    @media screen and (min-width: 800px) {
+      bottom: 90%;
+      left: 90%;
+      font-size: 2rem;
+    }
+    @media screen and (min-width: 1000px) {
+      left: 92%;
+    }
   }
   .container {
     width: 90%;

@@ -1,54 +1,47 @@
-#_modal {
-  z-index: 1;
-  .modal-container {
-    padding:0;
-    margin: auto .3rem .3rem;
-    height: 42%;
-    border-radius: .5rem;
-
-    .modal-header {
-      height:50%;
-      margin:0;
-      padding:0;
-      position: relative;
-      .pic {
-        background-size: cover;
-        background-position: center;
-        background-image: '';
-        // height: 20vh;
-        height: 100%;
-        border-radius: .5rem .5rem 0 0;
-      }
-
-      .enlargeButton {
-        margin-top: .5rem;
-        margin-right: .7rem;
-        position: absolute;
-        top: 0;
-        right: 0;
-        color: white;
-        cursor: pointer;
-        font-size: 1.4rem;
-        &:active {
-          background-color: $primary-color;
-          border: none;
-        } 
-      }
-
-      .modal-title {
-        text-align: left;
-      }
+#_card {
+  position: absolute;
+  top:30%;
+  left:30%;
+  text-align: left;
+  width: 35%;
+  border-radius: .5rem;
+  
+  @media screen and (max-width: 500px) {
+    width: 92%;
+    top: 45%;
+    left: 4%;
+  }
+  .card-image {
+    .img-responsive {
+      width: 100%;
+      height: 30vh;
+      border-radius: .5rem .5rem 0 0;
     }
-    .modal-body {
-      padding-top: .3rem;
-      text-align: left;
-      font-weight: 300;
-    }
-    .modal-footer {
-      align-items: center;
-      height: 10%;
-      padding-left: 1.3rem;
-      display: flex;
+    .enlargeButton {
+      margin-top: .5rem;
+      margin-right: .7rem;
+      position: absolute;
+      top: 0;
+      right: 0;
+      color: white;
+      cursor: pointer;
+      font-size: 1.4rem;
+      &:active {
+        background-color: $primary-color;
+        border: none;
+      } 
     }
   }
+  .card-body {
+    padding-top: .3rem;
+    text-align: left;
+    font-weight: 300;
+  }
+  .card-footer {
+    align-items: center;
+    height: 10%;
+    padding-left: 1.3rem;
+    display: flex;
+  }
+  
 }

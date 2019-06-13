@@ -39,8 +39,7 @@ export default {
         // this.notification(' 登入失败 ', 'error');
         console.log(err);
       })
-    }
-    
+    },
   }
 }
 </script>
