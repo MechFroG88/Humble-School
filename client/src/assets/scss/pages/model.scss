@@ -17,14 +17,32 @@
       margin-left: .2rem;
     }
   }
+  .log {
+    position: absolute;
+    top: .35rem;
+    left: 4.5rem;
+  }
+  .dis {
+    position: absolute;
+    top: 4rem;
+    left: 2rem;
+  }
+  .cancel {
+    position : absolute;
+    top: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
   .backBtn {
     position: absolute;
     display: flex !important;
     // margin-left: 7%;
+    left: 2rem;
+    top: 2rem;
     align-items: center;
     // margin-bottom: 4rem;
-    // width: 5rem !important;
-    // height: 2rem !important;
+    width: 5rem !important;
+    height: 2rem !important;
     border-radius: .2rem !important;
     // margin-top: 2rem;
     opacity: .8;
@@ -34,7 +52,7 @@
       // height: 2rem !important;
     }
     .icon {
-      font-size: 1rem;
+      font-size: $font-size;
       margin-right: .5rem;
       margin-left: .3rem;
     }

@@ -148,7 +148,6 @@ export default {
       this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
     },
     onMouseClick(event) {
-      console.log(event);
       event.preventDefault();
       if (this.intersects[0] && !this.hideLocation) {
         if (!this.isOrbit && this.intersects[0].object && this.intersects[0].object.name != 'Land') {
@@ -181,14 +180,9 @@ export default {
       p.innerHTML = msg + "\n" + p.innerHTML;
     },
     touchStart(event) {
-      // event.preventDefault();
-      // for (var i=0; i < ev.targetTouches.length; i++) {
-      //   this.log(`${ev.targetTouches[i].clientX}, ${ev.targetTouches[i].clientY}`);
-      // }
-      console.log(event, event.touches[0]);
       event.preventDefault();
+      console.log(event, event.touches[0]);
       this.onMouseMove(event.touches[0]);
-      this.onMouseClick();
     },
     touchMove(event) {
       this.onMouseMove(event.targetTouches[0]);
@@ -405,22 +399,3 @@ export default {
   }
 }
 </script>
-
-<style>
-.log {
-  position: absolute;
-  top: .35rem;
-  left: 4.5rem;
-}
-.dis {
-  position: absolute;
-  top: 1rem;
-  left: 1rem;
-}
-.cancel {
-  position : absolute;
-  top: 1.5rem;
-  left: 50%;
-  transform: translateX(-50%);
-}
-</style>
