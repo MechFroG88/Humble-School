@@ -30,8 +30,8 @@
       </div>
       <div slot="header">
         <div class="title">
-          <div class="modal-title h4">{{ group.theme }}</div>
-          <span class="chip">{{ group.society }}</span>
+          <div class="modal-title">{{ group.theme }}</div>
+          <div class="chip">{{ group.society }}</div>
         </div>
       </div>
       <div slot="body">
