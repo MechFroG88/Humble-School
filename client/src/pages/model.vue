@@ -1,6 +1,6 @@
 <template>
   <div id="_model" class="model-container"  @dblclick="cancelView">
-    <div class="btn btn-primary btnGroup"  @click="back()">
+    <div class="btn btn-sm btn-link"  @click="back">
       <i class="icon icon-arrow-left1"></i>
       <div>back</div>
     </div>
@@ -377,7 +377,7 @@ export default {
       }
     },
     back() {
-      window.history.back();
+      this.$router.go(-1);
     },
   },
   watch: {
@@ -385,6 +385,9 @@ export default {
       if (this.hideLocation) { this.decolorChild(); }
       else { this.colorChild(); }
     }
+  },
+  beforeDestroy() {
+    location.reload();
   }
 }
 </script>

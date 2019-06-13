@@ -4,16 +4,15 @@
   text-align: left;
   
   .form-group {
-    margin-top: 30% !important;
+    margin-top: 30vh !important;
     margin: auto;
-    width: 60%;
+    width: 60vw;
     @media screen and (max-width: 500px){
-      width: 86%;
-      margin-top: 50% !important; 
+      width: 86vw;
     }
     @media screen and (min-width: 900px){
-      margin-top: 20% !important;
-      width: 30%;
+      margin-top: 20vh !important;
+      width: 40vw;
     }
     .title {
       margin-bottom: 1rem;

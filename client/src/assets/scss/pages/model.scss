@@ -17,22 +17,21 @@
       margin-left: .2rem;
     }
   }
-  .btnGroup {
+  .btn {
     position: absolute;
     display: flex !important;
-    margin-left: 7%;
+    // margin-left: 7%;
     align-items: center;
-    margin-bottom: 4rem;
-    width: 5rem !important;
-    height: 2rem !important;
+    // margin-bottom: 4rem;
+    // width: 5rem !important;
+    // height: 2rem !important;
     border-radius: .2rem !important;
-    margin-top: 2rem;
+    // margin-top: 2rem;
     opacity: .8;
     // box-shadow: 0 .2rem 1rem rgba($color: #ff4e6a, $alpha: 0.6);
-    box-shadow: 0 .2rem 1rem rgba($color: #ff4e6a, $alpha: 0.6);
     @media screen and (orientation:landscape) {
-      width: 5rem;
-      height: 2rem !important;
+      // width: 5rem;
+      // height: 2rem !important;
     }
     .icon {
       font-size: 1rem;
