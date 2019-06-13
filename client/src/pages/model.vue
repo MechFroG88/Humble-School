@@ -99,8 +99,8 @@ export default {
         console.log(this.group);
       }).catch((err) => {
         this.notification('数据读取失败！请重试！', 'error');
-        if (error.response.status === 401) {
-          router.push('/model')
+        if (err.response.status === 401) {
+          this.$router.push('/model');
         }
         console.log(err);
       });
@@ -137,10 +137,10 @@ export default {
       window.addEventListener( 'keydown', this.keyIsPressed, false );
       
       // mobile events
-      window.addEventListener( "touchstart", this.touchStart, { passive: false } );
-      window.addEventListener( "touchend", this.touchEnd, false );
-      window.addEventListener( "touchcancel", this.touchCancel, false );
-      window.addEventListener( "touchmove", this.touchMove, false );
+      window.addEventListener( "touchstart", this.touchHandler, true );
+      window.addEventListener( "touchend", this.touchHandler, true );
+      window.addEventListener( "touchcancel", this.touchHandler, true );
+      window.addEventListener( "touchmove", this.touchHandler, true );
     },
     onMouseMove(event) {
       event.preventDefault();
@@ -179,13 +179,31 @@ export default {
       var p = document.getElementById('log');
       p.innerHTML = msg + "\n" + p.innerHTML;
     },
+    touchHandler(event) {
+      var touches = event.changedTouches,
+        first = touches[0],
+        type = "";
+      switch(event.type) {
+        case "touchstart": type = "mousedown"; break;
+        case "touchmove":  type = "mousemove"; break;        
+        case "touchend":   type = "mouseup";   break;
+        default:           return;
+      }
+
+      var simulatedEvent = document.createEvent("MouseEvent");
+      simulatedEvent.initMouseEvent(type, true, true, window, 1, 
+                                    first.screenX, first.screenY, 
+                                    first.clientX, first.clientY, false, 
+                                    false, false, false, 0/*left*/, null);
+
+      first.target.dispatchEvent(simulatedEvent);
+      // event.preventDefault();
+    },
     touchStart(event) {
       event.preventDefault();
       console.log(event, event.touches[0]);
       this.onMouseMove(event.touches[0]);
-    },
-    touchMove(event) {
-      this.onMouseMove(event.targetTouches[0]);
+      this.onMouseClick()
     },
     touchEnd() {
       var timeout;
@@ -194,8 +212,8 @@ export default {
       var tapLength = currentTime - lastTap;
       clearTimeout(timeout);
       if (tapLength < 500 && tapLength > 0) {
-          this.cancelView();
-          event.preventDefault();
+        this.cancelView();
+        event.preventDefault();
       }
       lastTap = currentTime;
     },
@@ -300,24 +318,24 @@ export default {
       /// cinematic camera ///
     },
     addLight() {
-      this.ambientLight = new THREE.AmbientLight( 0X111111, 0.3 );
+      this.ambientLight = new THREE.AmbientLight( 0x555555, 0.3 );
       this.scene.add( this.ambientLight );
 
-      // this.pointLight1 = new THREE.PointLight( 0xFFFFFF, .12 );
-      // this.pointLight1.position.set(3000, 5000, 3000);
-      // this.scene.add( this.pointLight1 );
+      this.pointLight1 = new THREE.PointLight( 0xFFFFFF, .12 );
+      this.pointLight1.position.set(3000, 5000, 3000);
+      this.scene.add( this.pointLight1 );
 
-      // this.pointLight2 = new THREE.PointLight( 0xFFFFFF, .12 );
-      // this.pointLight2.position.set(-3000, 5000, 3000);
-      // this.scene.add( this.pointLight2 );
+      this.pointLight2 = new THREE.PointLight( 0xFFFFFF, .12 );
+      this.pointLight2.position.set(-3000, 5000, 3000);
+      this.scene.add( this.pointLight2 );
 
-      // this.pointLight3 = new THREE.PointLight( 0xFFFFFF, .12 );
-      // this.pointLight3.position.set(3000, 5000, -3000);
-      // this.scene.add( this.pointLight3 );
+      this.pointLight3 = new THREE.PointLight( 0xFFFFFF, .12 );
+      this.pointLight3.position.set(3000, 5000, -3000);
+      this.scene.add( this.pointLight3 );
 
-      // this.pointLight4 = new THREE.PointLight( 0xFFFFFF, .12 );
-      // this.pointLight4.position.set(-3000, 5000, -3000);
-      // this.scene.add( this.pointLight4 );
+      this.pointLight4 = new THREE.PointLight( 0xFFFFFF, .12 );
+      this.pointLight4.position.set(-3000, 5000, -3000);
+      this.scene.add( this.pointLight4 );
     },
     animate() {
       requestAnimationFrame( this.animate );
