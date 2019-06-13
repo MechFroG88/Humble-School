@@ -1,5 +1,6 @@
-#_model{
+#_3d{
   .card{
+    float: right;
     .card-header {
       .title {
         display: flex;
@@ -47,10 +48,10 @@
     // margin-top: 2rem;
     opacity: .8;
     // box-shadow: 0 .2rem 1rem rgba($color: #ff4e6a, $alpha: 0.6);
-    @media screen and (orientation:landscape) {
-      // width: 5rem;
-      // height: 2rem !important;
-    }
+    // @media screen and (orientation:landscape) {
+    //   width: 5rem;
+    //   height: 2rem !important;
+    // }
     .icon {
       font-size: $font-size;
       margin-right: .5rem;

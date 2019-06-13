@@ -6,7 +6,8 @@
           $route.name !== 'users' &&
           $route.name !== 'groupDetails'&&
           $route.name !== 'details' &&
-          $route.name !== 'model'">
+          $route.name !== 'model' &&
+          $route.name !== 'userManual'">
       <i class="icon icon-arrow-left1"></i>
       <div>back</div>
     </div>
@@ -50,7 +51,12 @@
       margin-left: 7%;
     }
     @media screen and (min-width: 900px){
-      margin-left: 35%;
+      margin-left: 30%;
+    }
+    @media screen and (orientation:landscape) {
+      width: 5rem;
+      margin-left: 7%;
+      height: 2rem !important;
     }
     .icon {
       font-size: 1rem;
@@ -59,6 +65,9 @@
       @media screen and (min-width: 500px) {
         margin-left: 1rem;
       }
+      @media screen and (orientation:landscape) {
+        margin-left: .3rem;
+    }
     }
   }
 }

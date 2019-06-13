@@ -1,0 +1,55 @@
+#_userManual {
+  .container {
+    margin: auto;
+    width: 50%;
+    text-align: left;
+    margin-top: 4rem;
+    @media screen and (max-width:500px) {
+      width: 80%;
+      margin-top: 2rem;
+    }
+    .title {
+      color: $primary-color;
+      font-size: 2.5rem;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      @media screen and (max-width:500px) {
+        font-size: 2rem;
+      }
+    }
+    .mobile ,.desktop{
+      .instructions {
+        font-size: 1.5rem;
+        @media screen and (max-width:500px) {
+          font-size: 1.2rem;
+        }
+        .instruction {
+          margin-top: 1rem;
+        }
+      }
+    }
+    .mobile {
+      @media screen and (min-width:500px) {
+        display: none;
+      }
+    }
+    .desktop {
+      @media screen and (max-width:500px) {
+        display: none;
+      }
+    }
+    .btn {
+      float: right; 
+      width: 6.5rem;
+      border-radius: .2rem;
+      height: 2.5rem;
+      margin-top: 4rem;
+      box-shadow: 0 .2rem 1rem rgba($color: $primary-color, $alpha: 0.6);
+      @media screen and (max-width: 500px){
+        margin-top: 2.5rem;
+        width: 5rem;
+        height: 2rem;
+      }
+    }
+  }
+}

@@ -10,7 +10,12 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: { name: 'model' },
+      redirect: { name: 'userManual' },
+    },
+    {
+      path: '/userManual',
+      name: 'userManual',
+      component: () => import('./pages/userManual.vue'),
     },
     {
       path: '/home',
