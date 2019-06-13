@@ -215,6 +215,7 @@ export default {
       if (!this.hideLocation) {
         this.raycaster.setFromCamera( this.mouse, this.camera );
         this.intersects = this.raycaster.intersectObjects( this.scene.children[6].children[0].children );
+        console.log(this.scene.children[6].children[0].children);
         if ( this.intersects.length > 0 && !this.isOrbit) {
           if ( this.INTERSECTED != this.intersects[0].object && this.intersects[0].object.name != 'Land' ) {
             if ( this.INTERSECTED ) this.INTERSECTED.material.emissive.setHex( this.INTERSECTED.currentHex );
