@@ -1,5 +1,5 @@
 <template>
-  <div id="_model" class="model-container">
+  <div id="_model" class="model-container"  @dblclick="cancelView">
     <div class="btn btn-primary btnGroup"  @click="back()">
       <i class="icon icon-arrow-left1"></i>
       <div>back</div>
@@ -16,17 +16,17 @@
         <!-- 国字楼 //-->
         <img src="../static/guozilou.jpeg" class="img-responsive" v-if="group.class_id <= 67">
         <!-- 学生楼 //-->
-        <img src="../static/xueshenglou.jpeg" class="img-responsive" v-else-if="group.class_id <= 93 && group.class_id > 67">
+        <img src="../static/xueshenglou.jpeg" class="img-responsive" v-else-if="group.class_id <= 93">
         <!-- 食堂大楼，商科大楼 -->
-        <img src="../static/shitangdalou.jpeg" class="img-responsive" v-if="group.class_id <= 126 && group.class_id > 93">
+        <img src="../static/shitangdalou.jpeg" class="img-responsive" v-else-if="group.class_id <= 126">
         <!-- 新楼 -->
-        <img src="../static/xinlou.jpeg" class="img-responsive" v-if="group.class_id <= 147 && group.class_id > 126">
+        <img src="../static/xinlou.jpeg" class="img-responsive" v-else-if="group.class_id <= 147">
         <!-- 工艺喽 -->
-        <img src="../static/gongyilou.jpeg" class="img-responsive" v-if="group.class_id <= 157 && group.class_id > 147">
+        <img src="../static/gongyilou.jpeg" class="img-responsive" v-else-if="group.class_id <= 157">
         <!-- 新场 //-->
-        <img src="../static/xinchang.jpeg" class="img-responsive" v-if="group.class_id <= 164 && group.class_id > 157">
+        <img src="../static/xinchang.jpeg" class="img-responsive" v-else-if="group.class_id <= 164">
         <!-- 中华广场 -->
-        <img src="../static/guangchang.jpeg" class="img-responsive" v-if="group.class_id == 165"> 
+        <img src="../static/guangchang.jpeg" class="img-responsive" v-else-if="group.class_id == 165"> 
       </div>
       <div slot="header">
         <div class="title">
@@ -180,10 +180,23 @@ export default {
       p.innerHTML = msg + "\n" + p.innerHTML;
     },
     touchStart(ev) {
-      event.preventDefault();
-      for (var i=0; i < ev.targetTouches.length; i++) {
-        this.log(`${ev.clientX}, ${ev.clientY}`);
+      // event.preventDefault();
+      // for (var i=0; i < ev.targetTouches.length; i++) {
+      //   this.log(`${ev.targetTouches[i].clientX}, ${ev.targetTouches[i].clientY}`);
+      // }
+      console.log(ev.targetTouches[0]);
+    },
+    touchEnd() {
+      var timeout;
+      var lastTap = 0;
+      var currentTime = new Date().getTime();
+      var tapLength = currentTime - lastTap;
+      clearTimeout(timeout);
+      if (tapLength < 500 && tapLength > 0) {
+          this.cancelView();
+          event.preventDefault();
       }
+      lastTap = currentTime;
     },
     keyIsPressed(event) {
       switch (event.keyCode) {
@@ -195,9 +208,6 @@ export default {
           this.camera.lookAt( this.scene.position );
           this.camera.updateProjectionMatrix();
           break;
-        case 67:
-          console.log("click");
-          document.body.children[1].click();
       }
     },
     render() {
@@ -357,12 +367,14 @@ export default {
       this.renderer.setSize( window.innerWidth, window.innerHeight );
     },
     cancelView() {
-      this.$refs.popUp.active = false;
-      this.isOrbit = false;
-      this.clicked.object.material.color.setHex( 0xDBDBDB );
-      this.scene.children[6].children[0].children.forEach((el) => {
-        if (el.name.includes('Location')) { el.material.opacity = .3; }
-      })
+      if (this.isOrbit) {
+        this.$refs.popUp.active = false;
+        this.isOrbit = false;
+        this.clicked.object.material.color.setHex( 0xDBDBDB );
+        this.scene.children[6].children[0].children.forEach((el) => {
+          if (el.name.includes('Location')) { el.material.opacity = .3; }
+        })
+      }
     },
     back() {
       window.history.back();
