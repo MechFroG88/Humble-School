@@ -1,28 +1,28 @@
 <template>
-  <div id="_modal" class="modal" :class="[
-    active ? 'active' : ''
-  ]">
-    <a class="modal-overlay" aria-label="Close"
-    @click="active = false"/>
-    <div class="modal-container">
-      <div class="modal-header">
-        <div class="pic"></div>
-        <slot name="header"/>
-        <span class="icon-maximize-2 custom-class enlargeButton" @click="details"></span>
-      </div>
-      <div class="modal-body"> 
-        <slot name="body" class="content"/>
-      </div>
-      <div class="modal-footer">
-        <slot name="footer"/>
-      </div>
+  <div class="card" id="_card" v-if="active">
+    <div class="card-image">
+      <slot name="image"/>
+      <span name="icon" class="icon-maximize-2 custom-class enlargeButton" @click="details"></span>
+    </div>
+    <div class="card-header">
+      <slot name="header"/>
+    </div>
+    <div class="card-body">
+      <slot name="body" class="content"/>
+    </div>
+    <div class="card-footer">
+      <slot name="footer"/>
     </div>
   </div>
 </template> 
 
 <script>
+
+
 export default {
   props: {
+    image: String,
+    classId: String,
     closable: {
       type: Boolean,
       default: true,
@@ -31,12 +31,13 @@ export default {
   },
   methods: {
     details() {
-      this.$router.push('/details');
+      this.$router.push(`/details/${this.classId}`);
     }
   },
   data: () => ({
     active: false,
   }),
+ 
 };
 </script>
 

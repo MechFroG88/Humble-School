@@ -6,6 +6,7 @@ $active_group = 'default';
 $query_builder = TRUE;
 
 define("T_USERS", "users");
+define("T_CLASSES", "classes");
 
 $db['default'] = array(
 	'dsn'	=> '',

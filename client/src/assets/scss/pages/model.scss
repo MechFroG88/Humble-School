@@ -1,0 +1,42 @@
+#_model{
+  .card{
+    .card-header {
+      .title {
+        display: flex;
+        align-items: center;
+        margin-bottom: .2rem;
+        .chip {
+          margin-left: .8rem;
+          border: .03rem solid #2D4059;
+          border-radius: .2rem;
+          background-color: rgba(0, 0, 0, .05);
+        }
+      }
+    }
+    .card-body {
+      margin-left: .2rem;
+    }
+  }
+  .backBtn {
+    position: absolute;
+    display: flex !important;
+    // margin-left: 7%;
+    align-items: center;
+    // margin-bottom: 4rem;
+    // width: 5rem !important;
+    // height: 2rem !important;
+    border-radius: .2rem !important;
+    // margin-top: 2rem;
+    opacity: .8;
+    // box-shadow: 0 .2rem 1rem rgba($color: #ff4e6a, $alpha: 0.6);
+    @media screen and (orientation:landscape) {
+      // width: 5rem;
+      // height: 2rem !important;
+    }
+    .icon {
+      font-size: 1rem;
+      margin-right: .5rem;
+      margin-left: .3rem;
+    }
+  }
+}

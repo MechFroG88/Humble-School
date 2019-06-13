@@ -1,12 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=Noto+Sans');
 
-@import 'variables';
+// @import './variables';
+@import 'spectre/src/spectre.scss';
 
 // pages
 @import 'pages/home';
 @import 'pages/login';
 @import 'pages/performance';
-@import 'pages/3d';
+@import 'pages/model';
 @import 'pages/details';
 @import 'pages/admin/group';
 @import 'pages/admin/users';
@@ -21,6 +22,6 @@
 @import 'components/popup.scss';
 
 body {
-  overflow-y: hidden;
+  // overflow-y: hidden;
   height: 100vh;
 }

@@ -1,17 +1,29 @@
 <template>
   <div id="_details" >
-    <div class="pic"></div>
+    <!-- 国字楼 //-->
+        <img src="../static/guozilou.jpeg" class="pic" v-if="group.class_id <= 67">
+        <!-- 学生楼 //-->
+        <img src="../static/xueshenglou.jpeg" class="pic" v-else-if="group.class_id <= 93 && group.class_id > 67">
+        <!-- 食堂大楼，商科大楼 -->
+        <img src="../static/shitangdalou.jpeg" class="pic" v-else-if="group.class_id <= 126 && group.class_id > 93">
+        <!-- 新楼 -->
+        <img src="../static/xinlou.jpeg" class="pic" v-else-if="group.class_id <= 147 && group.class_id > 126">
+        <!-- 工艺喽 -->
+        <img src="../static/gongyilou.jpeg" class="pic" v-else-if="group.class_id <= 157 && group.class_id > 147">
+        <!-- 新场 //-->
+        <img src="../static/xinchang.jpeg" class="pic" v-else-if="group.class_id <= 164 && group.class_id > 157">
+        <!-- 中华广场 -->
+        <img src="../static/guangchang.jpeg" class="pic" v-else-if="group.class_id == 165">
     <span class="icon-x custom-class closeButton" @click="close"></span>
     <div class="container">
       <div class="title">
-        <div class="modal-title h4">VR game</div>
-        <span class="chip">电脑学会</span>
+        <div class="modal-title h4">{{ group.theme}}</div>
+        <span class="chip">{{ group.society }}</span>
       </div>
-      <div class="place">中华楼停车场</div>
-      <div class="time">3pm-5pm</div>
-      <div class="content">
-        于例该区导起期，分即用正带，农孤露起同。 级近别展包观，快包明图自，求E形还。 劳音始件平每器西，今断想规与速量型，果6化前新议。 数阶节教表置直成日，油例院世米发队指她，结陕率医收分料。 间取住都起么称更，面飞风质活资么治，期W给三真场。 育从开满意场子历元，位论问直者物手器共书，基十材现肃马秤口。 物通规压部心全片色接海查，行号率天那计南类省西，片于也V验组敌按如业。
-      </div>
+      <div class="place">{{ group.cn_name }}</div>
+      <div class="place">{{ group.en_name }}</div>
+      
+      <div class="content">{{ group.detail }}</div>
     </div>
     
 
@@ -19,10 +31,30 @@
 </template>
 
 <script>
+
+import { getClass } from '@/api/class';
 export default {
+  data: () => ({
+    group: {
+      cn_class: '',
+      en_class: '',
+      theme: '',
+      society: '',
+      detail: '',
+    }
+  }),
+  mounted() {
+    getClass(this.$route.params.id).then(({ data }) => {
+    this.group = data.data[0];
+    }).catch((err) => {
+      this.notification('数据读取失败！请重试！', 'error');
+      console.log(err);
+    });
+  },
+  
   methods: {
     close() {
-      this.$router.push('/3d')
+      this.$router.push('/model')
     }
   }
 }

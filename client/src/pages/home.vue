@@ -3,7 +3,7 @@
       <div class="container">
         <div class="title">Choose your action</div>
         <button class="btn btn-primary" @click="$router.push('/login')">Login</button>
-        <button class="btn btn-primary" @click="$router.push('/3d')">Map</button>
+        <button class="btn btn-primary" @click="$router.push('/model')">Map</button>
       </div>
   </div>
 </template>

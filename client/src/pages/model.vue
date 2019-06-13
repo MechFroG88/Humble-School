@@ -1,12 +1,47 @@
 <template>
-  <div id="_model" class="model-container">
+  <div id="_model" class="model-container"  @dblclick="cancelView">
+    <div class="btn btn-sm btn-primary backBtn"  @click="back()">
+      <i class="icon icon-arrow-left1"></i>
+      <div>back</div>
+    </div>
+    
     <div class="dis">
       <input type="checkbox" class="mr-2" v-model="hideLocation"><i>Disable location</i>
     </div>
+    <!-- <div class="btn btn-primary cancel" v-if="isOrbit" @click="cancelView" >Go Back</div> -->
     <div id="log" class="log"></div>
-    <div class="message-container" v-if="isOrbit">
-      This is a message.
-    </div>
+
+    <card ref="popUp" class="animated bounceInUp card"  :classId="`${ group.class_id }`" >
+      <div slot="image">
+        <!-- 国字楼 //-->
+        <img src="../static/guozilou.jpeg" class="img-responsive" v-if="group.class_id <= 67">
+        <!-- 学生楼 //-->
+        <img src="../static/xueshenglou.jpeg" class="img-responsive" v-else-if="group.class_id <= 93">
+        <!-- 食堂大楼，商科大楼 -->
+        <img src="../static/shitangdalou.jpeg" class="img-responsive" v-else-if="group.class_id <= 126">
+        <!-- 新楼 -->
+        <img src="../static/xinlou.jpeg" class="img-responsive" v-else-if="group.class_id <= 147">
+        <!-- 工艺喽 -->
+        <img src="../static/gongyilou.jpeg" class="img-responsive" v-else-if="group.class_id <= 157">
+        <!-- 新场 //-->
+        <img src="../static/xinchang.jpeg" class="img-responsive" v-else-if="group.class_id <= 164">
+        <!-- 中华广场 -->
+        <img src="../static/guangchang.jpeg" class="img-responsive" v-else-if="group.class_id == 165"> 
+      </div>
+      <div slot="header">
+        <div class="title">
+          <div class="modal-title h4">{{ group.theme }}</div>
+          <span class="chip">{{ group.society }}</span>
+        </div>
+      </div>
+      <div slot="body">
+        <div class="place">{{ group.cn_class }}</div>
+        <div class="place">{{ group.en_class }}</div>
+      </div>
+      <div slot="footer">
+      </div>
+    </card>
+
   </div>
 </template>
 
@@ -23,12 +58,25 @@ import Stats from '../vendor/stats.js';
 
 import sceneObj from '../static/model/scene_again.json';
 
+import card from '@/components/modal';
+import { getClass } from '@/api/class';
+
 export default {
+  components: {
+    card,
+  },
   mounted() {
     this.init();
     this.animate();
   },
   data: () => ({
+    group: {
+      cn_class: '',
+      en_class: '',
+      theme: '',
+      society: '',
+      detail: ''
+    },
     hideLocation: false,
     isOrbit: false,
     high: false,
@@ -43,6 +91,20 @@ export default {
     theta: 0,
   }),
   methods: {
+    pop(id) {
+      console.log(id);
+      getClass(id).then(({ data }) => {
+        this.$refs.popUp.active = true;
+        this.group = data.data[0];
+        console.log(this.group);
+      }).catch((err) => {
+        this.notification('数据读取失败！请重试！', 'error');
+        if (error.response.status === 401) {
+          router.push('/model')
+        }
+        console.log(err);
+      });
+    },
     init() {
       this.scene = new THREE.Scene();
       this.scene.background = new THREE.Color(0xeeeeee);
@@ -64,9 +126,6 @@ export default {
       this.mouse = new THREE.Vector2(), this.INTERSECTED;
       this.raycaster = new THREE.Raycaster();
 
-      this.stats = new Stats();
-      document.body.appendChild( this.stats.dom );
-
       this.addLight();
 
       this.loadModel();
@@ -78,10 +137,10 @@ export default {
       window.addEventListener( 'keydown', this.keyIsPressed, false );
       
       // mobile events
-      window.addEventListener("touchstart", this.touchStart, false);
-      window.addEventListener("touchend", this.touchEnd, false);
-      window.addEventListener("touchcancel", this.touchCancel, false);
-      window.addEventListener("touchmove", this.touchMove, false);
+      window.addEventListener( "touchstart", this.touchStart, false );
+      window.addEventListener( "touchend", this.touchEnd, false );
+      window.addEventListener( "touchcancel", this.touchCancel, false );
+      window.addEventListener( "touchmove", this.touchMove, false );
     },
     onMouseMove(event) {
       event.preventDefault();
@@ -90,25 +149,29 @@ export default {
     },
     onMouseClick(event) {
       event.preventDefault();
-      if (!this.isOrbit) {
-        console.log(this.intersects[0].object);
-        if (this.intersects[0].object.name.includes('Location')) { this.clicked = this.intersects[0]; }
-        else if (this.intersects[1].object.name.includes('Location')) { this.clicked = this.intersects[1]; }
-        if (this.clicked && (this.intersects[0].object.name.includes('Location') || this.intersects[1].object.name.includes('Location'))) {
-          this.isOrbit = true; this.theta = 100 * Math.random();
-          this.XOffset = this.clicked.point.x; this.ZOffset = this.clicked.point.z;
-          this.cinematic.position.set( 0, this.clicked.point.y + this.depressionHeight, 0 )
-          this.clicked.object.material.emissive = new THREE.Color( 0xff0000 );
-          this.clicked.object.material.opacity = .75;
-          this.clicked.object.material.color.setHex( 0xff0000 );
-          if (this.clicked.object.name == 'Location_67') { this.high = true; this.cinematic.position.set( 0, this.cinematicHeight + 800, 0 ); }
-          else if (this.clicked.object.name == 'Location_165') { this.far = true; this.cinematic.position.set( 0, this.cinematicHeight + 1000, 0 ); }
-          else { this.high = false; this.far = false; }
-
-          // set other locations to transparent
-          this.scene.children[6].children[0].children.forEach((el) => {
-            if (el.name.includes('Location') && el.name != this.clicked.object.name) { el.material.opacity = 0; }
-          })
+      if (this.intersects[0] && !this.hideLocation) {
+        if (!this.isOrbit && this.intersects[0].object && this.intersects[0].object.name != 'Land') {
+          if (this.intersects[0].object.name.includes('Location')) { this.clicked = this.intersects[0]; }
+          else if (this.intersects[1].object.name.includes('Location')) { this.clicked = this.intersects[1]; }
+          if (this.clicked && (this.intersects[0].object.name.includes('Location') || this.intersects[1].object.name.includes('Location'))) {
+            console.log(this.clicked.object.name);
+            //location5
+            this.pop(this.clicked.object.name.slice(9));
+            this.isOrbit = true; this.theta = 100 * Math.random();
+            this.XOffset = this.clicked.point.x; this.ZOffset = this.clicked.point.z;
+            this.cinematic.position.set( 0, this.clicked.point.y + this.depressionHeight, 0 )
+            this.clicked.object.material.emissive = new THREE.Color( 0xff0000 );
+            this.clicked.object.material.opacity = .75;
+            this.clicked.object.material.color.setHex( 0xff0000 );
+            if (this.clicked.object.name == 'Location_67') { this.high = true; this.cinematic.position.set( 0, this.cinematicHeight + 800, 0 ); }
+            else if (this.clicked.object.name == 'Location_165') { this.far = true; this.cinematic.position.set( 0, this.cinematicHeight + 1000, 0 ); }
+            else { this.high = false; this.far = false; }
+  
+            // set other locations to transparent
+            this.scene.children[6].children[0].children.forEach((el) => {
+              if (el.name.includes('Location') && el.name != this.clicked.object.name) { el.material.opacity = 0; }
+            })
+          }
         }
       }
     },
@@ -116,22 +179,35 @@ export default {
       var p = document.getElementById('log');
       p.innerHTML = msg + "\n" + p.innerHTML;
     },
-    touchStart(event) {
-      event.preventDefault();
-      this.log(event);
+    touchStart(ev) {
+      // event.preventDefault();
+      // for (var i=0; i < ev.targetTouches.length; i++) {
+      //   this.log(`${ev.targetTouches[i].clientX}, ${ev.targetTouches[i].clientY}`);
+      // }
+      console.log(ev.targetTouches[0]);
+    },
+    touchEnd() {
+      var timeout;
+      var lastTap = 0;
+      var currentTime = new Date().getTime();
+      var tapLength = currentTime - lastTap;
+      clearTimeout(timeout);
+      if (tapLength < 500 && tapLength > 0) {
+          this.cancelView();
+          event.preventDefault();
+      }
+      lastTap = currentTime;
     },
     keyIsPressed(event) {
-      if (event.keyCode == 27) {
-        this.isOrbit = false;
-        this.clicked.object.material.color.setHex( 0xDBDBDB );
-        this.scene.children[6].children[0].children.forEach((el) => {
-          if (el.name.includes('Location')) { el.material.opacity = .3; }
-        })
-      }
-      if (event.keyCode == 32) {
-        this.camera.position.set(-1700, 1400, 1400);
-        this.camera.lookAt( this.scene.position );
-        this.camera.updateProjectionMatrix();
+      switch (event.keyCode) {
+        case 27:
+          this.cancelView();
+          break;
+        case 32:
+          this.camera.position.set(-1700, 1400, 1400);
+          this.camera.lookAt( this.scene.position );
+          this.camera.updateProjectionMatrix();
+          break;
       }
     },
     render() {
@@ -139,20 +215,23 @@ export default {
       if (!this.hideLocation) {
         this.raycaster.setFromCamera( this.mouse, this.camera );
         this.intersects = this.raycaster.intersectObjects( this.scene.children[6].children[0].children );
+        console.log(this.scene.children[6].children[0].children);
         if ( this.intersects.length > 0 && !this.isOrbit) {
           if ( this.INTERSECTED != this.intersects[0].object && this.intersects[0].object.name != 'Land' ) {
             if ( this.INTERSECTED ) this.INTERSECTED.material.emissive.setHex( this.INTERSECTED.currentHex );
-            if (this.intersects[0].object.name.includes('Location')) {
-              this.inside = false;
-              this.INTERSECTED = this.intersects[0].object;
-              this.INTERSECTED.currentHex = this.INTERSECTED.material.emissive.getHex();
-              this.INTERSECTED.material.emissive.setHex( 0xff0000 );
-            }
-            else if (this.intersects[1].object.name.includes('Location')) {
-              this.inside = true;
-              this.INTERSECTED = this.intersects[1].object;
-              this.INTERSECTED.currentHex = this.INTERSECTED.material.emissive.getHex();
-              this.INTERSECTED.material.emissive.setHex( 0xff0000 );
+            if (this.intersects[0].object && this.intersects[0].object.name != 'Land') {
+              if (this.intersects[0].object.name.includes('Location')) {
+                this.inside = false;
+                this.INTERSECTED = this.intersects[0].object;
+                this.INTERSECTED.currentHex = this.INTERSECTED.material.emissive.getHex();
+                this.INTERSECTED.material.emissive.setHex( 0xff0000 );
+              }
+              else if (this.intersects[1].object.name.includes('Location')) {
+                this.inside = true;
+                this.INTERSECTED = this.intersects[1].object;
+                this.INTERSECTED.currentHex = this.INTERSECTED.material.emissive.getHex();
+                this.INTERSECTED.material.emissive.setHex( 0xff0000 );
+              }
             }
           }
         } else {
@@ -162,7 +241,7 @@ export default {
           
         if (this.isOrbit) {
           this.theta += this.rotateSpeed;
-          let direction = this.cinematic.getWorldDirection(); 
+          let direction = this.cinematic.getWorldDirection(new THREE.Vector3(0, 0, 0)); 
   
           if (this.high) {
             this.cinematic.position.x = this.XOffset + ((this.radius + 50) * Math.cos( this.theta * Math.PI / 180 ));
@@ -243,7 +322,6 @@ export default {
       requestAnimationFrame( this.animate );
       this.controls.update();
       this.render();
-      this.stats.update();
     },
     loadModel() {
       this.loader = new THREE.ObjectLoader();
@@ -289,12 +367,33 @@ export default {
       }
       this.renderer.setSize( window.innerWidth, window.innerHeight );
     },
+    cancelView() {
+      if (this.isOrbit) {
+        this.$refs.popUp.active = false;
+        this.isOrbit = false;
+        this.clicked.object.material.color.setHex( 0xDBDBDB );
+        this.scene.children[6].children[0].children.forEach((el) => {
+          if (el.name.includes('Location')) { el.material.opacity = .3; }
+        })
+      }
+    },
+    back() {
+      if (this.isOrbit) {
+        this.cancelView();
+      }
+      else {
+        this.$router.go(-1);
+      }
+    },
   },
   watch: {
     hideLocation: function() {
       if (this.hideLocation) { this.decolorChild(); }
       else { this.colorChild(); }
     }
+  },
+  beforeDestroy() {
+    location.reload();
   }
 }
 </script>
@@ -307,22 +406,13 @@ export default {
 }
 .dis {
   position: absolute;
-  top: 3rem;
+  top: 1rem;
   left: 1rem;
 }
-.message-container {
-  position: absolute;
-  top: 20%;
+.cancel {
+  position : absolute;
+  top: 1.5rem;
   left: 50%;
-  min-width: 25%;
-  min-height: 20%;
-  opacity: .8;
-  transform: translate(-50%, -50%);
-  background-color: #424242;
-  color: #898989;
-  font-size: 1rem;
-  border-color: #ddd;
-  border-radius: .1rem;
-  box-shadow: 0 0 1.2rem rgba(71, 71, 71, 0.3);
+  transform: translateX(-50%);
 }
 </style>

@@ -6,10 +6,11 @@ Vue.use(Router);
 export default new Router({
   mode: 'history',
   base: process.env.BASE_URL,
+  // base: '192.168.1.101',
   routes: [
     {
       path: '/',
-      redirect: { name: 'home' },
+      redirect: { name: 'model' },
     },
     {
       path: '/home',
@@ -23,7 +24,6 @@ export default new Router({
     },
     {
       path: '/admin/',
-      name: 'admin',
       component: () => import('./pages/homepage.vue'),
       children: [
         {
@@ -41,7 +41,7 @@ export default new Router({
           component: () => import('./pages/admin/users.vue'),
         },
         {
-          path: 'groupDetails',
+          path: 'groupDetails/:action/:id?', //when create there is no id, but when edit there is
           name: 'groupDetails',
           component: () => import('./pages/admin/groupDetails.vue'),
         },
@@ -53,12 +53,12 @@ export default new Router({
     //   component: () => import('./pages/performance.vue'),
     // },
     {
-      path: '/3d',
+      path: '/3d/:id?',
       name: '3d',
       component: () => import('./pages/3d.vue'),
     },
     {
-      path: '/details',
+      path: '/details/:id?',
       name: 'details',
       component: () => import('./pages/details.vue'),
     },
