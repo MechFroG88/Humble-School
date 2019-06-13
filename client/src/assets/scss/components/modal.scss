@@ -1,4 +1,4 @@
-#_model {
+#_modal {
   position: absolute;
   text-align: left;
   border-radius: .5rem;
@@ -14,9 +14,14 @@
     left: 15% !important;
     top: 5rem;
   }
-  @media screen and (min-width: 1000px) {
+  @media screen and (min-width: 1000px) and( max-width: 2000px) {
     left: 70% !important;
     width: 25% !important;
+    height: 18.5rem;
+  }
+  @media screen and (min-width: 2000px){
+    left: 73% !important;
+    width: 22% !important;
     height: 18.5rem;
   }
   @media screen and (orientation:landscape) {

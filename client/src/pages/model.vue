@@ -26,7 +26,7 @@
         <!-- 食堂大楼，商科大楼 -->
         <img src="../static/shitangdalou.jpeg" class="img-responsive" v-else-if="group.class_id <= 126">
         <!-- 新楼 -->
-        <img src="../static/xinlou.jpeg" class="img-responsive" v-else-if="group.class_id <= 147">
+        <img src="../static/xinlou1.jpeg" class="img-responsive" v-else-if="group.class_id <= 147">
         <!-- 工艺喽 -->
         <img src="../static/gongyilou.jpeg" class="img-responsive" v-else-if="group.class_id <= 157">
         <!-- 新场 //-->
