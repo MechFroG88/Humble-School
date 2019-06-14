@@ -25,20 +25,20 @@
 
     <card ref="popUp" class="animated bounceInUp card"  :classId="`${ group.id }`" :image="url" >
       <div slot="image">
-        <!-- 国字楼 -->
-        <img src="../static/guozilou.jpeg" class="img-responsive" v-if="classId <= 67">
-        <!-- 学生楼 -->
-        <img src="../static/xueshenglou.jpeg" class="img-responsive" v-else-if="classId <= 93">
+        <!-- 国字楼 //-->
+        <img src="../static/guozilou.jpeg" class="img-responsive" v-if="group.class_id <= 67">
+        <!-- 学生楼 //-->
+        <img src="../static/xueshenglou.jpeg" class="img-responsive" v-else-if="group.class_id <= 93">
         <!-- 食堂大楼，商科大楼 -->
-        <img src="../static/card.jpg" class="img-responsive" v-else-if="classId <= 126">
+        <img src="../static/shitangdalou.jpeg" class="img-responsive" v-else-if="group.class_id <= 126">
         <!-- 新楼 -->
-        <img src="../static/card.jpg" class="img-responsive" v-else-if="classId <= 147">
+        <img src="../static/xinlou1.jpeg" class="img-responsive" v-else-if="group.class_id <= 147">
         <!-- 工艺喽 -->
-        <img src="../static/card.jpg" class="img-responsive" v-else-if="classId <= 157">
-        <!-- 新场 -->
-        <img src="../static/card.jpg" class="img-responsive" v-else-if="classId <= 164">
+        <img src="../static/gongyilou.jpeg" class="img-responsive" v-else-if="group.class_id <= 157">
+        <!-- 新场 //-->
+        <img src="../static/xinchang.jpeg" class="img-responsive" v-else-if="group.class_id <= 164">
         <!-- 中华广场 -->
-        <img src="../static/card.jpg" class="img-responsive" v-else-if="classId == 165">
+        <img src="../static/guangchang.jpeg" class="img-responsive" v-else-if="group.class_id == 165">
         
       </div>
       <div slot="header">
@@ -77,9 +77,9 @@ export default {
       theme: '',
       society: '',
       picture: '',
-      detail: ''
+      detail: '',
+      class_id: 147,
     },
-    classId: 3,
   }),
   methods: {
     pop(id) {

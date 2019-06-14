@@ -12,7 +12,7 @@
       <div class="input">
         <input type="checkbox" class="mr-2" v-model="showColor"><i>Show Color Selector</i>
       </div>
-      <ColorPicker :width="300" :height="300" startColor="#ff0000" @colorChange="onColorChange" v-if="showColor"></ColorPicker>
+      <ColorPicker :width="150" :height="150" startColor="#ff0000" @colorChange="onColorChange" v-if="showColor"></ColorPicker>
     </div>
     <!-- <div class="btn btn-primary cancel" v-if="isOrbit" @click="cancelView" >Go Back</div> -->
     <div id="log" class="log"></div>
@@ -26,7 +26,7 @@
         <!-- 食堂大楼，商科大楼 -->
         <img src="../static/shitangdalou.jpeg" class="img-responsive" v-else-if="group.class_id <= 126">
         <!-- 新楼 -->
-        <img src="../static/xinlou.jpeg" class="img-responsive" v-else-if="group.class_id <= 147">
+        <img src="../static/xinlou1.jpeg" class="img-responsive" v-else-if="group.class_id <= 147">
         <!-- 工艺喽 -->
         <img src="../static/gongyilou.jpeg" class="img-responsive" v-else-if="group.class_id <= 157">
         <!-- 新场 //-->
@@ -189,24 +189,27 @@ export default {
       p.innerHTML = msg + "\n" + p.innerHTML;
     },
     touchHandler(event) {
-      var touches = event.changedTouches,
+      if (!this.showColor) {
+        var touches = event.changedTouches,
         first = touches[0],
         type = "";
-      switch(event.type) {
-        case "touchstart": type = "mousedown"; break;
-        case "touchmove":  type = "mousemove"; break;        
-        case "touchend":   type = "mouseup";   break;
-        default:           return;
-      }
 
-      var simulatedEvent = document.createEvent("MouseEvent");
-      simulatedEvent.initMouseEvent(type, true, true, window, 1, 
-                                    first.screenX, first.screenY, 
-                                    first.clientX, first.clientY, false, 
-                                    false, false, false, 0/*left*/, null);
-      console.log(simulatedEvent);
-      first.target.dispatchEvent(simulatedEvent);
-      // event.preventDefault();
+        switch(event.type) {
+          case "touchstart": type = "mousedown"; break;
+          case "touchmove":  type = "mousemove"; break;        
+          case "touchend":   type = "mouseup";   break;
+          default:           return;
+        }
+
+        var simulatedEvent = document.createEvent("MouseEvent");
+        simulatedEvent.initMouseEvent(type, true, true, window, 1, 
+                                      first.screenX, first.screenY, 
+                                      first.clientX, first.clientY, false, 
+                                      false, false, false, 0/*left*/, null);
+        console.log(simulatedEvent);
+        first.target.dispatchEvent(simulatedEvent);
+        // event.preventDefault();
+      }
     },
     touchStart(event) {
       event.preventDefault();
@@ -330,19 +333,19 @@ export default {
       this.ambientLight = new THREE.AmbientLight( 0x555555, 0.3 );
       this.scene.add( this.ambientLight );
 
-      this.pointLight1 = new THREE.PointLight( 0xFFFFFF, .15 );
+      this.pointLight1 = new THREE.PointLight( 0xFFFFFF, .35 );
       this.pointLight1.position.set(3000, 5000, 3000);
       this.scene.add( this.pointLight1 );
 
-      this.pointLight2 = new THREE.PointLight( 0xFFFFFF, .15 );
+      this.pointLight2 = new THREE.PointLight( 0xFFFFFF, .35 );
       this.pointLight2.position.set(-3000, 5000, 3000);
       this.scene.add( this.pointLight2 );
 
-      this.pointLight3 = new THREE.PointLight( 0xFFFFFF, .15 );
+      this.pointLight3 = new THREE.PointLight( 0xFFFFFF, .35 );
       this.pointLight3.position.set(3000, 5000, -3000);
       this.scene.add( this.pointLight3 );
 
-      this.pointLight4 = new THREE.PointLight( 0xFFFFFF, .15 );
+      this.pointLight4 = new THREE.PointLight( 0xFFFFFF, .35 );
       this.pointLight4.position.set(-3000, 5000, -3000);
       this.scene.add( this.pointLight4 );
     },

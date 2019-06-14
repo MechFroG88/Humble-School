@@ -4,15 +4,15 @@
       <!-- 国字楼 //-->
       <img src="../static/guozilou.jpeg" class="pic" v-if="group.class_id <= 67">
       <!-- 学生楼 //-->
-      <img src="../static/xueshenglou.jpeg" class="pic" v-else-if="group.class_id <= 93 && group.class_id > 67">
+      <img src="../static/xueshenglou.jpeg" class="pic" v-else-if="group.class_id <= 93 ">
       <!-- 食堂大楼，商科大楼 -->
-      <img src="../static/shitangdalou.jpeg" class="pic" v-else-if="group.class_id <= 126 && group.class_id > 93">
+      <img src="../static/shitangdalou.jpeg" class="pic" v-else-if="group.class_id <= 126 ">
       <!-- 新楼 -->
-      <img src="../static/xinlou.jpeg" class="pic" v-else-if="group.class_id <= 147 && group.class_id > 126">
+      <img src="../static/xinlou1.jpeg" class="pic" v-else-if="group.class_id <= 147 ">
       <!-- 工艺喽 -->
-      <img src="../static/gongyilou.jpeg" class="pic" v-else-if="group.class_id <= 157 && group.class_id > 147">
+      <img src="../static/gongyilou.jpeg" class="pic" v-else-if="group.class_id <= 157 ">
       <!-- 新场 //-->
-      <img src="../static/xinchang.jpeg" class="pic" v-else-if="group.class_id <= 164 && group.class_id > 157">
+      <img src="../static/xinchang.jpeg" class="pic" v-else-if="group.class_id <= 164 ">
       <!-- 中华广场 -->
       <img src="../static/guangchang.jpeg" class="pic" v-else-if="group.class_id == 165">
       <span class="icon-x custom-class closeButton" @click="close"></span>
