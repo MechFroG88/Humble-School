@@ -16,8 +16,8 @@
       <!-- 中华广场 -->
       <img src="../static/guangchang.jpeg" class="pic" v-else-if="group.class_id == 165">
       <span class="icon-x custom-class closeButton" @click="close"></span>
-      <!-- <div class="container">
-      <div class="title">
+      <!-- <div class="container"> -->
+      <!-- <div class="title">
         <div class="modal-title h2">十万个为什么</div>
         <span class="chip">华文学会</span>
       </div>
@@ -52,7 +52,7 @@ export default {
       theme: '',
       society: '',
       detail: '',
-      class_id: 3,
+      class_id: 147,
     }
   }),
   mounted() {
@@ -60,6 +60,9 @@ export default {
     this.group = data.data[0];
     }).catch((err) => {
       this.notification('数据读取失败！请重试！', 'error');
+      if (err.response.status === 401) {
+          this.$router.push('/userManual');
+        }
       console.log(err);
     });
   },
