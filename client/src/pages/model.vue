@@ -205,29 +205,11 @@ export default {
         simulatedEvent.initMouseEvent(type, true, true, window, 1, 
                                       first.screenX, first.screenY, 
                                       first.clientX, first.clientY, false, 
-                                      false, false, false, 0/*left*/, null);
+                                      false, false, false, 0, null);
         console.log(simulatedEvent);
         first.target.dispatchEvent(simulatedEvent);
         // event.preventDefault();
       }
-    },
-    touchStart(event) {
-      event.preventDefault();
-      console.log(event, event.touches[0]);
-      this.onMouseMove(event.touches[0]);
-      this.onMouseClick()
-    },
-    touchEnd() {
-      var timeout;
-      var lastTap = 0;
-      var currentTime = new Date().getTime();
-      var tapLength = currentTime - lastTap;
-      clearTimeout(timeout);
-      if (tapLength < 500 && tapLength > 0) {
-        this.cancelView();
-        event.preventDefault();
-      }
-      lastTap = currentTime;
     },
     keyIsPressed(event) {
       switch (event.keyCode) {
@@ -406,7 +388,6 @@ export default {
       this.renderer.setSize( window.innerWidth, window.innerHeight );
     },
     cancelView() {
-      console.log("Hello");
       if (this.isOrbit) {
         this.$refs.popUp.active = false;
         this.isOrbit = false;
@@ -421,7 +402,7 @@ export default {
         this.cancelView();
       }
       else {
-        this.$router.go(-1);
+        this.$router.push('/userManual');
       }
     },
   },
