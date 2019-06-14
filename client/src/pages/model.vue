@@ -109,7 +109,7 @@ export default {
       }).catch((err) => {
         this.notification('数据读取失败！请重试！', 'error');
         if (err.response.status === 401) {
-          this.$router.push('/model');
+          this.$router.push('/userManual');
         }
         console.log(err);
       });
