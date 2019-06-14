@@ -19,7 +19,9 @@ class Classes extends HS_Controller{
           } else {
               $this->error($response);
           }
-		}
+		    } else{
+          return $this->error(401);
+        }
 	}
 	
     /**
@@ -28,9 +30,12 @@ class Classes extends HS_Controller{
      */
 	public function get()
 	{
-	  	$data = $this->input->post();
-		$this->json($this->class->get());
+    if ($this->auth->is_logged_in()){
+      $this->json($this->class->get());
+    }else{
+      return $this->error(401);
     }
+  }
 
     /**
      * Get single class
@@ -39,7 +44,7 @@ class Classes extends HS_Controller{
 	public function get_single($class_id)
 	{
 		$this->json($this->class->get_single($class_id));
-    }
+  }
     
     /**
      * Find class by cn_class OR theme OR society
