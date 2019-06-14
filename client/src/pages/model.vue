@@ -168,7 +168,6 @@ export default {
       if (!this.isOrbit && this.intersects[0].object && this.intersects[0].object.name != 'Land') {
         if (this.intersects[0].object.name.includes('Location')) { this.upmouse = this.intersects[0]; }
         else if (this.intersects[1].object.name.includes('Location')) { this.upmouse = this.intersects[1]; }
-        console.log(this.clicked, this.upmouse);
         if (this.upmouse && this.upmouse.object.name == this.clicked.object.name && (this.intersects[0].object.name.includes('Location') || this.intersects[1].object.name.includes('Location'))) {
           this.pop(this.clicked.object.name.slice(9));
           this.isOrbit = true; this.theta = 100 * Math.random();
