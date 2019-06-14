@@ -44,7 +44,7 @@
       <div slot="header">
         <div class="title">
           <div class="modal-title h8">十万个为什么水水水水水水杀杀杀</div>
-          <span class="chip">华文学会</span>
+          <span class="chip">华文学会啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊</span>
         </div>
       </div>
       <div slot="body">
@@ -55,12 +55,19 @@
       </div>
     </card>
 
+    <label>
+      <div slot="header"></div>
+      <div slot="body"></div>
+      <div slot="footer"></div>
+    </label>
+
   </div>
   
 </template>
 
 <script>
 import card from '@/components/modal';
+import label from '@/components/label';
 import { getClass } from '@/api/class';
 
 export default {
