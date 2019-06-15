@@ -138,7 +138,7 @@ export default {
       this.renderer.render( this.scene, this.zoomObj.camera );
     },
     levelDown (){
-      this.zoomObj.camera.position.set(this.zoomObj.camera.position.x, this.zoomObj.camera.position.y +  100, this.zoomObj.camera.position.z);
+      this.zoomObj.pos.y -= 100
       this.renderer.render( this.scene, this.zoomObj.camera );
       this.zoomObj.level--;
       this.parent.forEach((c) => {
