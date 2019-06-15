@@ -45,7 +45,12 @@
       <i class="icon icon-arrow-left1"></i>
       <div>back</div>
     </div>
-    <button @click="levelDown" class="leveldownBtn btn btn-primary">leveldown</button>
+    <div class="level-buttons" v-if="!showTag">
+      <button @click="levelDown" class="leveldownBtn btn btn-primary">level DOWN</button>
+      <button @click="levelUp" class="leveldownBtn btn btn-primary">level UP</button>
+      Level {{ zoomObj.level + 1}}
+    </div>
+    
     <!-- <button @click="cancelView" class="cancelViewBtn btn btn-primary">leveldown</button> -->
   </div>
 </template>
@@ -145,6 +150,18 @@ export default {
       this.zoomObj.pos.y -= 100
       this.renderer.render( this.scene, this.zoomObj.camera );
       this.zoomObj.level--;
+      this.parent.forEach((c) => {
+        c.visible = false
+      })
+      this.modelData[this.zoomObj.index].location[this.zoomObj.level].forEach((c) => {
+        this.parent[this.nameToObj[c]].visible = true
+      })
+      this.uncolor(this.zoomObj.index);
+    },
+    levelUp (){
+      this.zoomObj.pos.y += 100
+      this.renderer.render( this.scene, this.zoomObj.camera );
+      this.zoomObj.level++;
       this.parent.forEach((c) => {
         c.visible = false
       })
@@ -356,35 +373,13 @@ export default {
 </script>
 
 <style lang="scss"> 
-.leveldownBtn {
-    position: absolute;
-    display: flex !important;
-    margin-left: 14% !important;
-    align-items: center;
-    
-    border-radius: .2rem !important;
-    
-    margin-top: 2rem;
-    opacity: .8;
-    box-shadow: 0 .2rem 1rem rgba($color: #ff4e6a, $alpha: 0.6);
-    @media screen and (max-width: 500px){
-      width: 5rem;
-      height: 2rem !important;
-      margin-left: 10rem !important;
-    }
-    @media screen and (min-width: 900px){
-      margin-left: 10rem !important;
-    }
-    @media screen and (orientation:landscape) {
-      width: 5rem;
-      margin-left: 10rem;
-      height: 2rem !important;
-    }
-    .icon {
-      font-size: 1rem;
-      margin-right: .5rem;
-      margin-left: .3rem;
-  }
+.level-buttons{
+  position: absolute;
+  top: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  button{
+    margin-right: 1rem;
   }
 }
 .backBtn {
