@@ -69,7 +69,8 @@ export default {
   
   methods: {
     close() {
-      this.$router.push('/model')
+      th
+      this.$router.push('/model1')
     }
   }
 }
