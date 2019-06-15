@@ -411,4 +411,35 @@ export default {
       margin-left: .3rem;
     }
   }
+  .card {
+    float: right;
+    .card-header {
+      .title {
+        align-items: center;
+        margin-bottom: .2rem;
+        .modal-title {
+          font-size: 1.2rem;
+          @media screen and (max-width:700px) {
+            font-size: .9rem;
+          }
+          @media screen and (min-width: 2000px)  {
+            font-size: 1rem;
+          }
+          
+        }
+        .chip {
+          max-width: 11rem;
+          border: .03rem solid #2D4059;
+          border-radius: .2rem;
+          background-color: rgba(0, 0, 0, .05);
+          @media screen and (max-width: 650px) {
+            font-size: .6rem;
+          }
+        }
+      }
+    }
+    .card-body {
+      margin-left: .2rem;
+    }
+  }
 </style>
