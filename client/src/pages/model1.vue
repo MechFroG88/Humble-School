@@ -46,9 +46,9 @@
       <div>back</div>
     </div>
     <div class="level-buttons" v-if="!showTag">
-      <button @click="levelDown" class="leveldownBtn btn btn-primary">DOWN</button>
-      <button @click="levelUp" class="leveldownBtn btn btn-primary">UP</button>
-      Level {{ zoomObj.level + 1}}
+      <p>{{ zoomObj.level + 1}}</p>
+      <button @click="levelUp" class="leveldownBtn btn btn-primary"><i class="icon icon-chevron-up"></i></button>
+      <button @click="levelDown" class="leveldownBtn btn btn-primary"><i class="icon icon-chevron-down"></i></button>
     </div>
     
     <!-- <button @click="cancelView" class="cancelViewBtn btn btn-primary">leveldown</button> -->
@@ -82,6 +82,7 @@ export default {
     renderer: null,
     camera: null,
     controls: null,
+    chosen: null,
     modelData,
     tags: [],
     nameToObj: {},
@@ -106,9 +107,9 @@ export default {
         this.group = data.data[0];
         console.log(this.group);
       }).catch((err) => {
-        this.notification('数据读取失败！请重试！', 'error');
+        //this.notification('数据读取失败！请重试！', 'error');
         if (err.response.status === 401) {
-          this.$router.push('/userManual');
+          //this.$router.push('/userManual');
         }
         console.log(err);
       });
@@ -289,16 +290,49 @@ export default {
 
       window.addEventListener( 'resize', this.onWindowResize, false );
       window.addEventListener( 'mousemove', this.onMouseMove, false );
-      window.addEventListener( 'mousedown', this.onMouseClick, false );
+      window.addEventListener( 'mouseclick', this.onMouseClick, false );
+      window.addEventListener( 'mousedown', this.onMouseDown, false );
+      window.addEventListener( 'mouseup', this.onMouseUp, false );
+
+    //   window.addEventListener( 'touchstart', this.onUserTap, false);
+    //   window.addEventListener( 'touchend', this.onUserTap, false);
+    //   window.addEventListener( 'touchmove', this.onUserTap, false);
+    //   window.addEventListener( 'touchcancel', this.onUserTap, false);
     },
     onMouseMove(event) {
       event.preventDefault();
       this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
       this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
     },
-    onMouseClick(event) {
+    onMouseDown(event) {
       event.preventDefault();
-      this.pop(this.INTERSECTED.name.slice(9))
+      this.chosen = this.INTERSECTED.name.slice(9);
+    },
+    onMouseUp(event) {
+      event.preventDefault();
+      if (this.chosen == this.INTERSECTED.name.slice(9))
+        this.pop(this.chosen);
+    },
+    onUserTap(event) {
+      // event.preventDefault();
+      var touches = event.changedTouches,
+      first = touches[0],
+      type = "";
+
+      switch(event.type) {
+        case "touchstart": type = "mousedown"; break;
+        case "touchmove":  type = "mousemove"; break;        
+        case "touchend":   type = "mouseup";   break;
+        default:           return;
+      }
+
+      var simulatedEvent = document.createEvent("MouseEvent");
+      simulatedEvent.initMouseEvent(type, true, true, window, 1, 
+                                    first.screenX, first.screenY, 
+                                    first.clientX, first.clientY, false, 
+                                    false, false, false, 0, null);
+      console.log(simulatedEvent);
+      first.target.dispatchEvent(simulatedEvent);
     },
     onWindowResize() {
       if (this.isOrbit) {
@@ -378,11 +412,17 @@ export default {
 .level-buttons{
   position: absolute;
   top: 5rem;
-  left: 50%;
-  width: 300px;
-  transform: translateX(-50%);
+  left: 2rem;
+  display: flex;
+  flex-direction: column;
+  p{
+    display: block;
+    padding: .3rem 0;
+    background: grey;
+    color: white;;
+  }
   button{
-    margin-right: 1rem;
+    margin-bottom: .5rem;
   }
 }
 .backBtn {
