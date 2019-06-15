@@ -11,7 +11,7 @@
       :left="tag.left"
       :text="tag.text"/>
     </template>
-    <button @click="levelDown">leveldown</button>
+    <button @click="levelDown" class="btn btn-primary levelDownBtn">leveldown</button>
   </div>
 </template>
 
@@ -202,3 +202,42 @@ export default {
   }
 }
 </script>
+
+<style lang="scss"> 
+.levelDownBtn {
+    position: absolute;
+    display: flex !important;
+    margin-left: 17% !important;
+    align-items: center;
+    
+    border-radius: .2rem !important;
+    
+    margin-top: 2rem;
+    opacity: .8;
+    box-shadow: 0 .2rem 1rem rgba($color: #ff4e6a, $alpha: 0.6);
+    @media screen and (max-width: 500px){
+      width: 5rem;
+      height: 2rem !important;
+      margin-left: 17% !important;
+    }
+    @media screen and (min-width: 900px){
+      margin-left: 17% !important;
+    }
+    @media screen and (orientation:landscape) {
+      width: 5rem;
+      margin-left: 7%;
+      height: 2rem !important;
+    }
+    .icon {
+      font-size: 1rem;
+      margin-right: .5rem;
+      margin-left: .3rem;
+      @media screen and (min-width: 500px) {
+        margin-left: 1rem;
+      }
+      @media screen and (orientation:landscape) {
+        margin-left: .3rem;
+    }
+    }
+}
+</style>
