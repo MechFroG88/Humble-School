@@ -46,9 +46,9 @@
       <div>back</div>
     </div>
     <div class="level-buttons" v-if="!showTag">
-      <button @click="levelDown" class="leveldownBtn btn btn-primary">DOWN</button>
-      <button @click="levelUp" class="leveldownBtn btn btn-primary">UP</button>
-      Level {{ zoomObj.level + 1}}
+      <p>{{ zoomObj.level + 1}}</p>
+      <button @click="levelUp" class="leveldownBtn btn btn-primary"><i class="icon icon-chevron-up"></i></button>
+      <button @click="levelDown" class="leveldownBtn btn btn-primary"><i class="icon icon-chevron-down"></i></button>
     </div>
     
     <!-- <button @click="cancelView" class="cancelViewBtn btn btn-primary">leveldown</button> -->
@@ -107,9 +107,9 @@ export default {
         this.group = data.data[0];
         console.log(this.group);
       }).catch((err) => {
-        this.notification('数据读取失败！请重试！', 'error');
+        //this.notification('数据读取失败！请重试！', 'error');
         if (err.response.status === 401) {
-          this.$router.push('/userManual');
+          //this.$router.push('/userManual');
         }
         console.log(err);
       });
@@ -412,11 +412,17 @@ export default {
 .level-buttons{
   position: absolute;
   top: 5rem;
-  left: 50%;
-  width: 300px;
-  transform: translateX(-50%);
+  left: 2rem;
+  display: flex;
+  flex-direction: column;
+  p{
+    display: block;
+    padding: .3rem 0;
+    background: grey;
+    color: white;;
+  }
   button{
-    margin-right: 1rem;
+    margin-bottom: .5rem;
   }
 }
 .backBtn {
