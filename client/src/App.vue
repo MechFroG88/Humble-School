@@ -7,7 +7,8 @@
           $route.name !== 'groupDetails'&&
           $route.name !== 'details' &&
           $route.name !== 'model' &&
-          $route.name !== 'userManual'">
+          $route.name !== 'userManual' &&
+          $route.name !== 'model1'">
       <i class="icon icon-arrow-left1"></i>
       <div>back</div>
     </div>

@@ -41,14 +41,23 @@
       <div slot="footer">
       </div>
     </card>
-    <button class="levelDownBtn" @click="levelDown">leveldown</button>
-    <button @click="cancelView">Cancel View</button>
+    <div class="btn btn-sm btn-primary backBtn"  @click="back()">
+      <i class="icon icon-arrow-left1"></i>
+      <div>back</div>
+    </div>
+    <div class="level-buttons" v-if="!showTag">
+      <button @click="levelDown" class="leveldownBtn btn btn-primary">DOWN</button>
+      <button @click="levelUp" class="leveldownBtn btn btn-primary">UP</button>
+      Level {{ zoomObj.level + 1}}
+    </div>
+    
+    <!-- <button @click="cancelView" class="cancelViewBtn btn btn-primary">leveldown</button> -->
   </div>
 </template>
 
 <script>
 import tag from '@/components/Tag.vue'
-import card from '@/components/popup.vue'
+import card from '@/components/modal.vue'
 import modelData from '@/model/model.js'
 
 import model from '@/static/model/scene_again.json'
@@ -150,12 +159,35 @@ export default {
       })
       this.uncolor(this.zoomObj.index);
     },
+    levelUp (){
+      this.zoomObj.pos.y += 100
+      this.renderer.render( this.scene, this.zoomObj.camera );
+      this.zoomObj.level++;
+      this.parent.forEach((c) => {
+        c.visible = false
+      })
+      this.modelData[this.zoomObj.index].location[this.zoomObj.level].forEach((c) => {
+        this.parent[this.nameToObj[c]].visible = true
+      })
+      this.uncolor(this.zoomObj.index);
+    },
     cancelView() {
+      
       this.isOrbit = true;
       this.showTag = true;
       this.parent.forEach((c) => c.visible = true)
       this.renderer.render( this.scene, this.camera );
       this.controls.update();
+      this.uncolor(this.zoomObj.index);
+    },
+    back() {
+      this.$refs.popUp.active = false;
+      if (this.isOrbit) {
+        this.$router.push('/userManual');
+      }
+      else {
+        this.cancelView();
+      }
     },
     color (index) {
       this.modelData[index].outside.forEach((name) => {
@@ -377,40 +409,69 @@ export default {
 </script>
 
 <style lang="scss"> 
-.levelDownBtn {
+.level-buttons{
   position: absolute;
-  display: flex !important;
-  margin-left: 17% !important;
-  align-items: center;
-  
-  border-radius: .2rem !important;
-  
-  margin-top: 2rem;
-  opacity: .8;
-  box-shadow: 0 .2rem 1rem rgba($color: #ff4e6a, $alpha: 0.6);
-  @media screen and (max-width: 500px){
-    width: 5rem;
-    height: 2rem !important;
-    margin-left: 17% !important;
-  }
-  @media screen and (min-width: 900px){
-    margin-left: 17% !important;
-  }
-  @media screen and (orientation:landscape) {
-    width: 5rem;
-    margin-left: 7%;
-    height: 2rem !important;
-  }
-  .icon {
-    font-size: 1rem;
-    margin-right: .5rem;
-    margin-left: .3rem;
-    @media screen and (min-width: 500px) {
-      margin-left: 1rem;
-    }
-    @media screen and (orientation:landscape) {
-      margin-left: .3rem;
-  }
+  top: 5rem;
+  left: 50%;
+  width: 300px;
+  transform: translateX(-50%);
+  button{
+    margin-right: 1rem;
   }
 }
+.backBtn {
+    position: absolute;
+    display: flex !important;
+    // margin-left: 7%;
+    left: 2rem;
+    top: 2rem;
+    align-items: center;
+    // margin-bottom: 4rem;
+    width: 5rem !important;
+    height: 2rem !important;
+    border-radius: .2rem !important;
+    box-shadow: 0 .2rem 1rem rgba($color: #ff4e6a, $alpha: 0.6);
+    // margin-top: 2rem;
+    opacity: .8;
+    // box-shadow: 0 .2rem 1rem rgba($color: #ff4e6a, $alpha: 0.6);
+    // @media screen and (orientation:landscape) {
+    //   width: 5rem;
+    //   height: 2rem !important;
+    // }
+    .icon {
+      font-size: 1rem;
+      margin-right: .5rem;
+      margin-left: .3rem;
+    }
+  }
+  .card {
+    float: right;
+    .card-header {
+      .title {
+        align-items: center;
+        margin-bottom: .2rem;
+        .modal-title {
+          font-size: 1.2rem;
+          @media screen and (max-width:700px) {
+            font-size: .9rem;
+          }
+          @media screen and (min-width: 2000px)  {
+            font-size: 1rem;
+          } 
+        }
+        .chip {
+          max-width: 11rem;
+          border: .03rem solid #2D4059;
+          border-radius: .2rem;
+          background-color: rgba(0, 0, 0, .05);
+          @media screen and (max-width: 650px) {
+            font-size: .6rem;
+          }
+        }
+      }
+    }
+    .card-body {
+      margin-left: .2rem;
+    }
+  }
 </style>
