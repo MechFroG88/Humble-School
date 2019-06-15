@@ -41,7 +41,7 @@
       <div slot="footer">
       </div>
     </card>
-    <button @click="levelDown">leveldown</button>
+    <button class="levelDownBtn" @click="levelDown">leveldown</button>
     <button @click="cancelView">Cancel View</button>
   </div>
 </template>
@@ -147,7 +147,7 @@ export default {
       this.modelData[this.zoomObj.index].location[this.zoomObj.level].forEach((c) => {
         this.parent[this.nameToObj[c]].visible = true
       })
-      this.uncolor();
+      this.uncolor(this.zoomObj.index);
     },
     cancelView() {
       this.isOrbit = true;
@@ -255,6 +255,7 @@ export default {
       this.mouse = new THREE.Vector2(), this.INTERSECTED;
       this.raycaster = new THREE.Raycaster();
 
+      window.addEventListener( 'resize', this.onWindowResize, false );
       window.addEventListener( 'mousemove', this.onMouseMove, false );
       window.addEventListener( 'mousedown', this.onMouseClick, false );
     },
@@ -266,6 +267,16 @@ export default {
     onMouseClick(event) {
       event.preventDefault();
       this.pop(this.INTERSECTED.name.slice(9))
+    },
+    onWindowResize() {
+      if (this.isOrbit) {
+        this.camera.aspect = window.innerWidth / window.innerHeight;
+        this.camera.updateProjectionMatrix();
+      } else {
+        this.zoomObj.camera.aspect = window.innerWidth / window.innerHeight;
+				this.zoomObj.camera.updateProjectionMatrix();
+      }
+      this.renderer.setSize( window.innerWidth, window.innerHeight );
     },
     animate (time) {
       requestAnimationFrame( this.animate );
@@ -326,39 +337,39 @@ export default {
 
 <style lang="scss"> 
 .levelDownBtn {
-    position: absolute;
-    display: flex !important;
+  position: absolute;
+  display: flex !important;
+  margin-left: 17% !important;
+  align-items: center;
+  
+  border-radius: .2rem !important;
+  
+  margin-top: 2rem;
+  opacity: .8;
+  box-shadow: 0 .2rem 1rem rgba($color: #ff4e6a, $alpha: 0.6);
+  @media screen and (max-width: 500px){
+    width: 5rem;
+    height: 2rem !important;
     margin-left: 17% !important;
-    align-items: center;
-    
-    border-radius: .2rem !important;
-    
-    margin-top: 2rem;
-    opacity: .8;
-    box-shadow: 0 .2rem 1rem rgba($color: #ff4e6a, $alpha: 0.6);
-    @media screen and (max-width: 500px){
-      width: 5rem;
-      height: 2rem !important;
-      margin-left: 17% !important;
-    }
-    @media screen and (min-width: 900px){
-      margin-left: 17% !important;
+  }
+  @media screen and (min-width: 900px){
+    margin-left: 17% !important;
+  }
+  @media screen and (orientation:landscape) {
+    width: 5rem;
+    margin-left: 7%;
+    height: 2rem !important;
+  }
+  .icon {
+    font-size: 1rem;
+    margin-right: .5rem;
+    margin-left: .3rem;
+    @media screen and (min-width: 500px) {
+      margin-left: 1rem;
     }
     @media screen and (orientation:landscape) {
-      width: 5rem;
-      margin-left: 7%;
-      height: 2rem !important;
-    }
-    .icon {
-      font-size: 1rem;
-      margin-right: .5rem;
       margin-left: .3rem;
-      @media screen and (min-width: 500px) {
-        margin-left: 1rem;
-      }
-      @media screen and (orientation:landscape) {
-        margin-left: .3rem;
-    }
-    }
+  }
+  }
 }
 </style>
