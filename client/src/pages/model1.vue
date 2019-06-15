@@ -46,8 +46,8 @@
       <div>back</div>
     </div>
     <div class="level-buttons" v-if="!showTag">
-      <button @click="levelDown" class="leveldownBtn btn btn-primary">level DOWN</button>
-      <button @click="levelUp" class="leveldownBtn btn btn-primary">level UP</button>
+      <button @click="levelDown" class="leveldownBtn btn btn-primary">DOWN</button>
+      <button @click="levelUp" class="leveldownBtn btn btn-primary">UP</button>
       Level {{ zoomObj.level + 1}}
     </div>
     
@@ -375,8 +375,9 @@ export default {
 <style lang="scss"> 
 .level-buttons{
   position: absolute;
-  top: 3rem;
+  top: 5rem;
   left: 50%;
+  width: 300px;
   transform: translateX(-50%);
   button{
     margin-right: 1rem;
@@ -386,7 +387,7 @@ export default {
     position: absolute;
     display: flex !important;
     // margin-left: 7%;
-    left: 3rem;
+    left: 2rem;
     top: 2rem;
     align-items: center;
     // margin-bottom: 4rem;
