@@ -122,7 +122,7 @@ export default {
       this.zoomObj.pos = center;
       this.zoomObj.obj = obj;
       this.zoomObj.camera = new THREE.PerspectiveCamera( 75, this.width / this.height, 0.1, 5000 );
-      this.zoomObj.camera.position.set(pos.x, pos.y + 900, pos.z);
+      this.zoomObj.camera.position.set(-1200, 1300, -2500);
       this.zoomObj.camera.lookAt( pos );
       this.scene.add( this.zoomObj.camera );
       this.zoomObj.index = this.tags[index].ind
@@ -269,6 +269,13 @@ export default {
     },
     animate (time) {
       requestAnimationFrame( this.animate );
+      if(this.zoomObj.camera){
+          this.zoomObj.camera.position.x += (this.zoomObj.pos.x - this.zoomObj.camera.position.x) / 10;
+          this.zoomObj.camera.position.y += ((900 + this.zoomObj.pos.y) - this.zoomObj.camera.position.y) / 10;
+          this.zoomObj.camera.position.z += (this.zoomObj.pos.z - this.zoomObj.camera.position.z) / 10;
+          this.zoomObj.camera.lookAt( this.zoomObj.pos );
+          this.renderer.render( this.scene, this.zoomObj.camera );
+      }
       if(this.isOrbit){
         this.controls.update();
         this.tags.forEach((c) => {
