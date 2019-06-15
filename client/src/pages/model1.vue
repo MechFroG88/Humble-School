@@ -171,6 +171,7 @@ export default {
       this.uncolor(this.zoomObj.index);
     },
     cancelView() {
+      
       this.isOrbit = true;
       this.showTag = true;
       this.parent.forEach((c) => c.visible = true)
@@ -179,6 +180,7 @@ export default {
       this.uncolor(this.zoomObj.index);
     },
     back() {
+      this.$refs.popUp.active = false;
       if (this.isOrbit) {
         this.$router.push('/userManual');
       }
