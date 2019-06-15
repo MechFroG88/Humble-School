@@ -126,7 +126,7 @@ export default {
       this.zoomObj.pos = center;
       this.zoomObj.obj = obj;
       this.zoomObj.camera = new THREE.PerspectiveCamera( 75, this.width / this.height, 0.1, 5000 );
-      this.zoomObj.camera.position.set(pos.x, pos.y + 900, pos.z);
+      this.zoomObj.camera.position.set(-1200, 1300, -2500);
       this.zoomObj.camera.lookAt( pos );
       this.scene.add( this.zoomObj.camera );
       this.zoomObj.index = this.tags[index].ind
@@ -142,7 +142,7 @@ export default {
       this.renderer.render( this.scene, this.zoomObj.camera );
     },
     levelDown (){
-      this.zoomObj.camera.position.set(this.zoomObj.camera.position.x, this.zoomObj.camera.position.y +  100, this.zoomObj.camera.position.z);
+      this.zoomObj.pos.y -= 100
       this.renderer.render( this.scene, this.zoomObj.camera );
       this.zoomObj.level--;
       this.parent.forEach((c) => {
@@ -151,7 +151,7 @@ export default {
       this.modelData[this.zoomObj.index].location[this.zoomObj.level].forEach((c) => {
         this.parent[this.nameToObj[c]].visible = true
       })
-      this.uncolor();
+      this.uncolor(this.zoomObj.index);
     },
     cancelView() {
       this.isOrbit = true;
@@ -268,6 +268,7 @@ export default {
       this.mouse = new THREE.Vector2(), this.INTERSECTED;
       this.raycaster = new THREE.Raycaster();
 
+      window.addEventListener( 'resize', this.onWindowResize, false );
       window.addEventListener( 'mousemove', this.onMouseMove, false );
       window.addEventListener( 'mousedown', this.onMouseClick, false );
     },
@@ -280,8 +281,25 @@ export default {
       event.preventDefault();
       this.pop(this.INTERSECTED.name.slice(9))
     },
+    onWindowResize() {
+      if (this.isOrbit) {
+        this.camera.aspect = window.innerWidth / window.innerHeight;
+        this.camera.updateProjectionMatrix();
+      } else {
+        this.zoomObj.camera.aspect = window.innerWidth / window.innerHeight;
+				this.zoomObj.camera.updateProjectionMatrix();
+      }
+      this.renderer.setSize( window.innerWidth, window.innerHeight );
+    },
     animate (time) {
       requestAnimationFrame( this.animate );
+      if(this.zoomObj.camera){
+          this.zoomObj.camera.position.x += (this.zoomObj.pos.x - this.zoomObj.camera.position.x) / 10;
+          this.zoomObj.camera.position.y += ((900 + this.zoomObj.pos.y) - this.zoomObj.camera.position.y) / 10;
+          this.zoomObj.camera.position.z += (this.zoomObj.pos.z - this.zoomObj.camera.position.z) / 10;
+          this.zoomObj.camera.lookAt( this.zoomObj.pos );
+          this.renderer.render( this.scene, this.zoomObj.camera );
+      }
       if(this.isOrbit){
         this.controls.update();
         this.tags.forEach((c) => {
@@ -366,13 +384,8 @@ export default {
       font-size: 1rem;
       margin-right: .5rem;
       margin-left: .3rem;
-      @media screen and (min-width: 500px) {
-        margin-left: 1rem;
-      }
-      @media screen and (orientation:landscape) {
-        margin-left: .3rem;
-    }
-    }
+  }
+  }
 }
 .backBtn {
     position: absolute;
