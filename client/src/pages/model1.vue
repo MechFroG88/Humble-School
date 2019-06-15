@@ -57,7 +57,7 @@
 
 <script>
 import tag from '@/components/Tag.vue'
-import card from '@/components/popup.vue'
+import card from '@/components/modal.vue'
 import modelData from '@/model/model.js'
 
 import model from '@/static/model/scene_again.json'
@@ -421,8 +421,7 @@ export default {
           }
           @media screen and (min-width: 2000px)  {
             font-size: 1rem;
-          }
-          
+          } 
         }
         .chip {
           max-width: 11rem;
