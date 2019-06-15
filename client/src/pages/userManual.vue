@@ -19,8 +19,11 @@
           <div class="instruction">4. Click on any class to view details.</div>
         </div>
       </div>
+      <div class="btnGroup">
+        <button class="btn btn-primary nextBtn" @click="next1">Model</button>
+        <button class="btn btn-primary nextBtn" @click="next">Details</button>
+      </div>
 
-      <button class="btn btn-primary nextBtn" @click="next">Next</button>
 
     </div>
   </div>
@@ -32,6 +35,9 @@ export default {
     next() {
       this.$router.push('/model');
     },
+    next1() {
+      this.$router.push('/model1');
+    }
   }
 }
 </script>
