@@ -385,7 +385,6 @@ export default {
       margin-right: .5rem;
       margin-left: .3rem;
   }
-  }
 }
 .backBtn {
     position: absolute;
