@@ -41,8 +41,12 @@
       <div slot="footer">
       </div>
     </card>
-    <button @click="levelDown">leveldown</button>
-    <button @click="cancelView">Cancel View</button>
+    <div class="btn btn-sm btn-primary backBtn"  @click="back()">
+      <i class="icon icon-arrow-left1"></i>
+      <div>back</div>
+    </div>
+    <button @click="levelDown" class="leveldownBtn btn btn-primary">leveldown</button>
+    <!-- <button @click="cancelView" class="cancelViewBtn btn btn-primary">leveldown</button> -->
   </div>
 </template>
 
@@ -155,6 +159,15 @@ export default {
       this.parent.forEach((c) => c.visible = true)
       this.renderer.render( this.scene, this.camera );
       this.controls.update();
+      this.uncolor(this.zoomObj.index);
+    },
+    back() {
+      if (this.isOrbit) {
+        this.$router.push('/userManual');
+      }
+      else {
+        this.cancelView();
+      }
     },
     color (index) {
       this.modelData[index].outside.forEach((name) => {
@@ -325,10 +338,10 @@ export default {
 </script>
 
 <style lang="scss"> 
-.levelDownBtn {
+.leveldownBtn {
     position: absolute;
     display: flex !important;
-    margin-left: 17% !important;
+    margin-left: 14% !important;
     align-items: center;
     
     border-radius: .2rem !important;
@@ -339,14 +352,14 @@ export default {
     @media screen and (max-width: 500px){
       width: 5rem;
       height: 2rem !important;
-      margin-left: 17% !important;
+      margin-left: 10rem !important;
     }
     @media screen and (min-width: 900px){
-      margin-left: 17% !important;
+      margin-left: 10rem !important;
     }
     @media screen and (orientation:landscape) {
       width: 5rem;
-      margin-left: 7%;
+      margin-left: 10rem;
       height: 2rem !important;
     }
     .icon {
@@ -361,4 +374,29 @@ export default {
     }
     }
 }
+.backBtn {
+    position: absolute;
+    display: flex !important;
+    // margin-left: 7%;
+    left: 3rem;
+    top: 2rem;
+    align-items: center;
+    // margin-bottom: 4rem;
+    width: 5rem !important;
+    height: 2rem !important;
+    border-radius: .2rem !important;
+    box-shadow: 0 .2rem 1rem rgba($color: #ff4e6a, $alpha: 0.6);
+    // margin-top: 2rem;
+    opacity: .8;
+    // box-shadow: 0 .2rem 1rem rgba($color: #ff4e6a, $alpha: 0.6);
+    // @media screen and (orientation:landscape) {
+    //   width: 5rem;
+    //   height: 2rem !important;
+    // }
+    .icon {
+      font-size: 1rem;
+      margin-right: .5rem;
+      margin-left: .3rem;
+    }
+  }
 </style>
